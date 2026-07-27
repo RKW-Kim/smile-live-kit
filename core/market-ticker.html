@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><title>SMILE · market ticker</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="smile.css">
+<style>
+  html,body{height:76px}
+  .strip{position:absolute;inset:0;background:var(--ink);border-bottom:2px solid var(--line);display:flex;align-items:stretch}
+  .cap{display:flex;align-items:center;gap:14px;padding:0 22px;flex-shrink:0;border-right:2px solid var(--line)}
+  .cap .brand{font-size:30px}
+  .cap .lbl{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:.22em;color:var(--yellow);padding-left:14px;border-left:1.5px solid var(--line);height:30px;display:flex;align-items:center}
+  .cap.right{border-right:0;border-left:2px solid var(--line);font-family:var(--display);font-weight:700;font-size:21px;color:#fff;gap:8px}
+  .cap.right b{color:var(--yellow);font-variant-numeric:tabular-nums}
+  .cap.right .dot{background:var(--up)}.cap.right .dot::after{border-color:var(--up)}
+  .quotes{flex:1;overflow:hidden;display:flex;align-items:center}
+  .qtrack{display:flex;flex-shrink:0;animation:tick 46s linear infinite}
+  .q .live{width:7px;height:7px;border-radius:50%;background:var(--up);box-shadow:0 0 8px var(--up);margin-left:2px}
+</style></head><body>
+<div class="strip">
+  <div class="cap"><span class="brand"><span class="dw"><svg class="disc" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/><g><ellipse cx="38" cy="40" rx="6.6" ry="8.6"/><ellipse cx="62" cy="40" rx="6.6" ry="8.6"/></g><path d="M31 57 C 34 80, 66 80, 69 57" fill="none" stroke="#0b0b0b" stroke-width="8" stroke-linecap="round"/></svg></span><b>smile</b></span><span class="lbl">MARKETS</span></div>
+  <div class="quotes"><div class="qtrack" id="ta"></div><div class="qtrack" id="tb"></div></div>
+  <div class="cap right"><span class="dot"></span>NBO&nbsp;<b id="clk">--:--</b>&nbsp;EAT</div>
+</div>
+<script src="smile-mark.js"></script>
+<script src="live-feed.js"></script>
+<script>
+  const fmt=(v,d)=>v==null?'—':v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+  const row=f=>`<div class="q"><span class="sym">${f.s}</span><span class="px">${fmt(f.price,f.dec)}</span><span class="chg ${f.chg>=0?'up':'down'}">${f.chg>=0?'+':''}${f.chg.toFixed(2)}%</span>${f.price?'<span class="live"></span>':''}</div>`;
+  function render(){const h=SMILE.feed.map(row).join('');ta.innerHTML=h;tb.innerHTML=h;}
+  const ta=document.getElementById('ta'),tb=document.getElementById('tb');
+  SMILE.on('smile:quotes',render);render();
+  const clk=()=>document.getElementById('clk').textContent=new Date().toLocaleTimeString('en-KE',{timeZone:'Africa/Nairobi',hour:'2-digit',minute:'2-digit',hour12:false});
+  clk();setInterval(clk,10000);
+</script></body></html>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="50" fill="#FFC107"/>
+  <ellipse cx="41" cy="40" rx="6.5" ry="7.6" fill="#0b0b0b"><animate attributeName="ry" values="7.6;7.6;0.6;7.6" keyTimes="0;0.92;0.96;1" dur="4s" repeatCount="indefinite"/></ellipse>
+  <ellipse cx="59" cy="40" rx="6.5" ry="7.6" fill="#0b0b0b"><animate attributeName="ry" values="7.6;7.6;0.6;7.6" keyTimes="0;0.92;0.96;1" dur="4s" repeatCount="indefinite"/></ellipse>
+  <path d="M32 55 C 35 77, 65 77, 68 55" fill="none" stroke="#0b0b0b" stroke-width="10.5" stroke-linecap="round"/>
+</svg>
