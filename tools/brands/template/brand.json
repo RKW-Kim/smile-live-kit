@@ -1,8 +1,7 @@
 {
   "meta": {
-    "channel": "smile",
-    "display": "Smile Trading",
-    "version": "3.0"
+    "channel": "template",
+    "display": "Smile Trading"
   },
   "colors": {
     "primary": "#FFD400",
@@ -10,7 +9,8 @@
     "accent": "#00E676"
   },
   "handles": {
-    "youtube": "@smilecoKe"
+    "youtube": "@smilecoKe",
+    "x": "@smilecoKe"
   },
   "instruments": [
     "AAPL",
@@ -26,14 +26,6 @@
           "y": 810,
           "width": 400,
           "height": 225
-        }
-      },
-      "INTERVIEW": {
-        "camera": {
-          "x": 0,
-          "y": 0,
-          "width": 1280,
-          "height": 720
         }
       }
     }
