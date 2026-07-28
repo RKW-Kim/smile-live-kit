@@ -1,0 +1,23 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://unpkg.com/htmx.org@1.12.2/dist/htmx.min.js"></script>
+<script src="https://unpkg.com/htmx.org@1.12.2/dist/ext/sse.js"></script>
+<script defer src="https://unpkg.com/alpinejs@3.15.0/dist/cdn.min.js"></script>
+<style>
+:root{--p:#FFD400;--bg:#0A0A0A}*{margin:0;padding:0;box-sizing:border-box}
+body{background:transparent;font-family:Inter,system-ui;overflow:hidden}
+.ticker{display:flex;white-space:nowrap;animation:scroll 120s linear infinite;background:var(--bg);color:#fff;border-top:3px solid var(--p)}
+.item{padding:14px 28px;display:flex;gap:10px;align-items:center;border-right:1px solid #222}
+.up{color:#00E676}.down{color:#FF3D57}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+</style></head>
+<body x-data="ticker()" x-init="init()">
+<div hx-ext="sse" sse-connect="/api/stream" sse-swap="price" hx-target="#live">
+  <div id="live" class="ticker">
+    <template x-for="s in prices"><div class="item"><strong x-text="s.symbol"></strong><span x-text="s.price.toFixed(2)"></span><span :class="s.dir" x-text="(s.dir==='up'?'+':'')+s.change+'%'"></span></div></template>
+    <!-- duplicate for seamless scroll -->
+    <template x-for="s in prices"><div class="item"><strong x-text="s.symbol"></strong><span x-text="s.price.toFixed(2)"></span><span :class="s.dir" x-text="s.change"></span></div></template>
+  </div>
+</div>
+<script>function ticker(){return{prices:[],async init(){const b=await fetch('/api/brand').then(r=>r.json());document.documentElement.style.setProperty('--p',b.colors.primary);document.documentElement.style.setProperty('--bg',b.colors.bg);const ws=new WebSocket(`ws://${location.host}`);ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.type==='brand'){document.documentElement.style.setProperty('--p',m.data.colors.primary)} if(m.type==='price'||m.data?.symbols){this.prices=m.data.symbols||m.data}};const p=await fetch('/api/prices').then(r=>r.json());this.prices=p.symbols;document.body.addEventListener('htmx:sseMessage',ev=>{if(ev.detail.type==='price'){try{this.prices=JSON.parse(ev.detail.data).symbols}catch{}}})}}}</script>
+</body></html>

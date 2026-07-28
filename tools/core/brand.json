@@ -1,0 +1,90 @@
+{
+  "meta": {
+    "channel": "smile",
+    "display": "Smile Trading",
+    "version": "2.0"
+  },
+  "colors": {
+    "primary": "#FFD400",
+    "bg": "#0A0A0A",
+    "accent": "#00E676",
+    "text": "#FFFFFF",
+    "danger": "#FF3D57"
+  },
+  "typography": {
+    "heading": "Inter",
+    "mono": "JetBrains Mono"
+  },
+  "wordmark": {
+    "type": "svg_inline",
+    "value": "<svg viewBox='0 0 100 20'><text x='0' y='15' fill='white' font-weight='800'>SMILE</text></svg>"
+  },
+  "handles": {
+    "youtube": "@smilecoKe",
+    "x": "@smilecoKe",
+    "telegram": "t.me/smilecoKe"
+  },
+  "instruments": [
+    "AAPL",
+    "MSFT",
+    "SPX",
+    "XAU/USD",
+    "BTC/USD",
+    "NSE:SCOM"
+  ],
+  "layouts": {
+    "scenes": {
+      "CHART": {
+        "camera": {
+          "x": 1440,
+          "y": 810,
+          "width": 400,
+          "height": 225,
+          "scale": 1,
+          "cornerRadius": 16
+        },
+        "chart": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1000
+        }
+      },
+      "INTERVIEW": {
+        "camera": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720,
+          "scale": 1
+        },
+        "chart": {
+          "x": 1280,
+          "y": 0,
+          "width": 640,
+          "height": 720
+        }
+      },
+      "TICKER": {
+        "camera": {
+          "x": 760,
+          "y": 300,
+          "width": 400,
+          "height": 400,
+          "scale": 1,
+          "circle": true
+        }
+      },
+      "INTRO": {
+        "camera": {
+          "x": 660,
+          "y": 200,
+          "width": 600,
+          "height": 600,
+          "scale": 1,
+          "circle": true
+        }
+      }
+    }
+  }
+}
