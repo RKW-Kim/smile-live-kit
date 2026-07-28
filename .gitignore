@@ -8,3 +8,4 @@ active.json
 dist/
 __pycache__/
 *.log
+*.zip
