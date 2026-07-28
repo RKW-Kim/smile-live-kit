@@ -1,34 +1,18 @@
 {
   "meta": {
     "channel": "smile",
-    "display": "Smile Trading",
-    "version": "4.0"
+    "display": "Smile Trading"
   },
   "colors": {
     "primary": "#FFD400",
     "bg": "#0A0A0A",
-    "accent": "#00E676",
-    "text": "#FFFFFF"
+    "accent": "#00E676"
   },
   "handles": {
     "youtube": "@smilecoKe"
   },
   "instruments": [
     "AAPL",
-    "MSFT",
-    "XAU/USD",
     "SCOM"
-  ],
-  "layouts": {
-    "scenes": {
-      "CHART": {
-        "camera": {
-          "x": 1440,
-          "y": 810,
-          "width": 400,
-          "height": 225
-        }
-      }
-    }
-  }
+  ]
 }
