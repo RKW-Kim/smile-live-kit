@@ -1,0 +1,23 @@
+<!doctype html><html><head><meta charset="utf-8">
+<script defer src="./vendor/alpine.min.js" onerror="this.src='https://unpkg.com/alpinejs@3.15.0/dist/cdn.min.js'"></script>
+<style>
+:root{--p:#FFD400;--bg:#111}body{margin:0;background:transparent;font-family:Inter;overflow:hidden}
+.wrap{position:absolute;left:60px;bottom:60px}
+.lt{background:linear-gradient(90deg,var(--p),#fff0);padding:2px;border-radius:14px;box-shadow:0 20px 60px #0008}
+.inner{background:var(--bg);border-radius:12px;padding:18px 28px;min-width:420px;display:flex;gap:16px;align-items:center}
+.mark{width:48px;height:48px;flex-shrink:0} /* 1:1 container */
+.mark object, .mark svg{width:100%;height:100%;display:block}
+.handle{color:var(--p);font:700 13px;letter-spacing:.12em;text-transform:uppercase}
+.title{color:#fff;font:800 26px/1.1 Inter;margin-top:6px}
+</style></head>
+<body x-data="lt()" x-init="init()">
+<div class="wrap">
+  <div class="lt" x-show="show" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-300" x-transition:leave-end="opacity-0 translate-y-4">
+    <div class="inner">
+      <div class="mark"><object data="./assets/smile-mark.svg" type="image/svg+xml"></object></div>
+      <div><div class="handle" x-text="data.handle"></div><div class="title" x-text="data.title"></div><div style="color:#aaa;font:500 14px" x-text="data.subtitle"></div></div>
+    </div>
+  </div>
+</div>
+<script>function lt(){return{show:false,data:{handle:'@smile.co.ke',title:'NSE LIVE',subtitle:'Safaricom +2.3%'},init(){setTimeout(()=>this.show=true,400); fetch('./brand.json').then(r=>r.json()).then(b=>document.documentElement.style.setProperty('--p',b.colors.primary))}}}</script>
+</body></html>
