@@ -1,18 +1,9 @@
 {
   "meta": {
-    "channel": "smile",
-    "display": "Smile Trading"
+    "channel": "smile"
   },
   "colors": {
     "primary": "#FFD400",
-    "bg": "#0A0A0A",
-    "accent": "#00E676"
-  },
-  "handles": {
-    "youtube": "@smilecoKe"
-  },
-  "instruments": [
-    "AAPL",
-    "SCOM"
-  ]
+    "bg": "#0A0A0A"
+  }
 }
