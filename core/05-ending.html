@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><title>SMILE · session closed</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="smile.css">
+<style>
+  .wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center}
+  h1{font-family:var(--display);font-weight:800;font-size:146px;letter-spacing:-.03em;line-height:.95}h1 .y{color:var(--yellow)}
+  .discbig{width:150px;height:150px;margin-top:-6px}
+  .sub{font-size:27px;font-weight:500;color:var(--muted);max-width:780px;line-height:1.4}
+  .socials{display:flex;gap:16px;margin-top:8px}.next{font-size:25px;margin-top:6px}
+  .cf{position:absolute;top:-40px;width:13px;height:23px;border-radius:4px;animation:fall linear infinite}
+  @keyframes fall{to{transform:translateY(1180px) rotate(560deg)}}
+</style></head><body>
+<div class="stage">
+  <div class="bg"></div><div id="confetti"></div>
+  <div class="wrap">
+    <span class="chip ghost">✓ MARKET CLOSED</span>
+    <h1>session <span class="y">closed</span>.</h1>
+    <svg class="discbig disc" data-mood="spin" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/><g><ellipse cx="38" cy="40" rx="6.6" ry="8.6"/><ellipse cx="62" cy="40" rx="6.6" ry="8.6"/></g><path d="M31 57 C 34 80, 66 80, 69 57" fill="none" stroke="#0b0b0b" stroke-width="8" stroke-linecap="round"/></svg>
+    <p class="sub">Asante for trading with us today — books balanced, smile intact. Same desk next time.</p>
+    <div class="socials"><span class="chip dark">▶ YouTube · /smileke</span><span class="chip dark">◉ Twitch · /smileke</span><span class="chip dark">♪ TikTok · @smileke</span></div>
+    <span class="chip solid next">NEXT SESSION · FRIDAY 8PM EAT</span>
+  </div>
+</div>
+<script src="smile-mark.js"></script>
+<script>
+  const cols=['#FFC107','#0ECB81','#F6465D','#FFFFFF','#3FB6FF'],box=document.getElementById('confetti');
+  for(let i=0;i<36;i++){const s=document.createElement('span');s.className='cf';s.style.left=Math.random()*100+'%';s.style.background=cols[i%cols.length];s.style.animationDuration=(3.5+Math.random()*3)+'s';s.style.animationDelay=(Math.random()*4)+'s';s.style.width=(9+Math.random()*9)+'px';box.appendChild(s);}
+</script></body></html>
