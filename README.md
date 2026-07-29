@@ -1,7 +1,8 @@
-# Smile Live Kit v5 - No localhost, pure file://
+# Smile Live Kit - Both Devices
 
-OBS uses local files only. No bridge needed.
+ASUS: C:/Users/Asus/Documents/W21/smile-live-kit
+MAC: /Users/RigBone_69/Documents/Black-Box/10_PROJECTS_🏗/smile-live-kit
 
-1. node core/setup-obs.mjs
-2. Import obs/Smile-Trading-Kit-FINAL.json into OBS
-3. WEBCAM-1 pick camera
+OBS Imports:
+- obs/Smile-Trading-Kit-ASUS.json
+- obs/Smile-Trading-Kit-MAC-10_PROJECT.json

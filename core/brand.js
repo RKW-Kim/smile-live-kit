@@ -1,1 +1,1 @@
-window.BRAND = {"meta": {"channel": "smile", "display": "Smile Trading"}, "colors": {"primary": "#FFD400", "bg": "#0A0A0A", "accent": "#00E676"}, "handles": {"youtube": "@smilecoKe"}, "instruments": ["AAPL", "SCOM"]};
+window.BRAND = {"meta": {"channel": "smile"}, "colors": {"primary": "#FFD400", "bg": "#0A0A0A"}};
