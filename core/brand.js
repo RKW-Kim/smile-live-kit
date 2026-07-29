@@ -1,1 +1,0 @@
-window.BRAND = {"meta": {"channel": "smile"}, "colors": {"primary": "#FFD400", "bg": "#0A0A0A"}};

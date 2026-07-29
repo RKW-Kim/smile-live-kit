@@ -1,1 +1,67 @@
-<!doctype html><html><head><meta charset="utf-8"><script src="./core/brand.js"></script><style>body{margin:0;background:#0A0A0A;color:#fff;display:grid;place-items:center;height:100vh;font-family:Inter}</style></head><body><h1>market-ticker</h1></body></html>
+<!doctype html><html><head><meta charset="utf-8"><title>SMILE · market ticker</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="smile.css">
+<style>
+  html,body{height:76px}
+  .strip{position:absolute;inset:0;background:var(--ink);border-bottom:3px solid var(--yellow);
+    display:flex;align-items:stretch;box-shadow:0 10px 30px rgba(4,10,24,.4)}
+  .cap{display:flex;align-items:center;gap:12px;padding:0 24px;background:var(--yellow);color:var(--ink);
+    font-family:var(--display);font-weight:700;font-size:25px;flex-shrink:0}
+  .cap .mark{display:flex;flex-direction:column;line-height:.8}
+  .cap .mark svg{width:46px;margin-top:3px}
+  .cap .mark svg path{fill:none;stroke:var(--ink);stroke-width:20;stroke-linecap:round}
+  .cap .dot{background:var(--ink)}.cap .dot::after{border-color:var(--ink)}
+  .cap.right{background:var(--navy-3);color:#fff;font-size:22px;font-weight:600}
+  .cap.right b{color:var(--yellow);font-variant-numeric:tabular-nums}
+  .quotes{flex:1;overflow:hidden;display:flex;align-items:center}
+  .qtrack{display:flex;flex-shrink:0;animation:tick 45s linear infinite}
+</style></head><body>
+<div class="strip">
+  <div class="cap"><span class="dot"></span>
+    <span class="mark">smile<svg viewBox="0 0 220 60"><path d="M12 10 C 60 56, 160 56, 208 10"/></svg></span>
+    MARKETS
+  </div>
+  <div class="quotes"><div class="qtrack" id="ta"></div><div class="qtrack" id="tb"></div></div>
+  <div class="cap right">NBO&nbsp;<b id="clk">--:--</b>&nbsp;EAT</div>
+</div>
+<script>
+/* ══ EDIT YOUR INSTRUMENTS HERE ══════════════════════════════
+   s: label · p: last price · c: %change · d: decimals
+   live:1 items auto-refresh every 15s from Binance (crypto).
+   For FX/indices: edit before stream, or push live values from
+   any script via  window.setQuote('USD/KES', 129.51, 0.12)     */
+const FEED=[
+  {s:'BTC/USD', p:118240,  c: 2.14, d:2, live:1, sym:'BTCUSDT'},
+  {s:'ETH/USD', p:4215.3,  c:-0.82, d:2, live:1, sym:'ETHUSDT'},
+  {s:'USD/KES', p:129.42,  c: 0.11, d:2},
+  {s:'EUR/USD', p:1.0846,  c:-0.21, d:4},
+  {s:'GBP/USD', p:1.2934,  c: 0.08, d:4},
+  {s:'XAU/USD', p:2718.6,  c: 0.45, d:1},
+  {s:'BRENT',   p:82.40,   c:-1.02, d:2},
+  {s:'NSE 20',  p:1992.4,  c: 0.33, d:2},
+  {s:'S&P 500', p:5448.2,  c: 0.27, d:1},
+  {s:'NAS100',  p:17920.5, c: 0.51, d:1},
+];
+const HOSTS=['https://data-api.binance.vision','https://api.binance.com']; let host=0;
+const fmt=(v,d)=>v.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
+const item=(f,i)=>`<div class="q" data-i="${i}"><span class="sym">${f.s}</span><span class="px">${fmt(f.p,f.d)}</span><span class="chg ${f.c>=0?'up':'down'}">${f.c>=0?'+':''}${f.c.toFixed(2)}%</span></div>`;
+function render(){const h=FEED.map(item).join('');ta.innerHTML=h;tb.innerHTML=h;}
+function paint(i){document.querySelectorAll(`.q[data-i="${i}"]`).forEach(el=>{
+  const f=FEED[i];el.querySelector('.px').textContent=fmt(f.p,f.d);
+  const c=el.querySelector('.chg');c.className='chg '+(f.c>=0?'up':'down');
+  c.textContent=(f.c>=0?'+':'')+f.c.toFixed(2)+'%';
+  el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump');});}
+window.setQuote=(s,p,c)=>{const i=FEED.findIndex(f=>f.s===s);if(i<0)return;
+  FEED[i].p=p;if(c!=null)FEED[i].c=c;paint(i);};
+async function poll(){for(const[i,f]of FEED.entries()){if(!f.live)continue;
+  try{const r=await fetch(`${HOSTS[host]}/api/v3/ticker/24hr?symbol=${f.sym}`);
+    if(!r.ok)throw 0;const d=await r.json();
+    if(d.lastPrice){f.p=+d.lastPrice;f.c=+d.priceChangePercent;paint(i);}}
+  catch(e){host=(host+1)%HOSTS.length;}}}
+const ta=document.getElementById('ta'),tb=document.getElementById('tb');
+render();poll();setInterval(poll,15000);
+const clk=()=>document.getElementById('clk').textContent=
+  new Date().toLocaleTimeString('en-KE',{timeZone:'Africa/Nairobi',hour:'2-digit',minute:'2-digit',hour12:false});
+clk();setInterval(clk,10000);
+</script>
+</body></html>
