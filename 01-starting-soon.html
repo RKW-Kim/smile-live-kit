@@ -1,1 +1,91 @@
-<!doctype html><html><head><meta charset="utf-8"><script src="./core/brand.js"></script><style>body{margin:0;background:#0A0A0A;color:#fff;display:grid;place-items:center;height:100vh;font-family:Inter}</style></head><body><h1>01-starting-soon</h1></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<title>SMILE · starting soon</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="smile.css">
+<style>
+  .topbar{position:absolute;top:56px;left:120px;right:120px;display:flex;justify-content:space-between;align-items:center}
+  .clock{font-size:26px}
+  .left{position:absolute;left:120px;top:250px;z-index:3}
+  .kicker{margin-bottom:28px}
+  h1{font-family:var(--display);font-weight:700;font-size:150px;line-height:.92;letter-spacing:-.02em}
+  h1 .y{color:var(--yellow)} h1 .c{color:var(--coral)}
+  .sub{margin-top:28px;max-width:680px;font-size:27px;font-weight:700;color:rgba(255,255,255,.78)}
+  .load{margin-top:44px;width:560px}
+  .load .track{height:22px;border-radius:999px;background:var(--navy-2);border:2px solid rgba(255,255,255,.14);overflow:hidden}
+  .load .fill{height:100%;width:0%;background:var(--yellow);border-radius:999px;transition:width .35s ease}
+  .load .meta{display:flex;justify-content:space-between;margin-top:12px;font-family:var(--display);font-weight:600;font-size:20px;color:rgba(255,255,255,.66)}
+  .load .pct{color:var(--yellow)}
+  .socials{margin-top:36px;display:flex;gap:14px}
+  .right{position:absolute;right:210px;top:196px;display:flex;flex-direction:column;align-items:center;gap:44px;z-index:3}
+  .orbit{position:relative;padding:36px}
+  .orbit::before{content:"";position:absolute;inset:0;border:3px dashed rgba(255,199,44,.5);border-radius:50%;animation:spin 22s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .cbars{display:flex;gap:14px;align-items:flex-end;height:130px}
+  .cbars span{position:relative;width:26px;border-radius:6px;transform-origin:bottom;animation:bar 1.5s ease-in-out infinite}
+  .cbars span::before{content:"";position:absolute;left:50%;top:-14%;bottom:-10%;width:4px;transform:translateX(-50%);background:inherit;filter:brightness(.65)}
+  .cbars span:nth-child(1){height:36px;background:var(--down)}
+  .cbars span:nth-child(2){height:62px;background:var(--up);animation-delay:.12s}
+  .cbars span:nth-child(3){height:48px;background:var(--down);animation-delay:.24s}
+  .cbars span:nth-child(4){height:88px;background:var(--up);animation-delay:.36s}
+  .cbars span:nth-child(5){height:70px;background:var(--down);animation-delay:.48s}
+  .cbars span:nth-child(6){height:112px;background:var(--up);animation-delay:.6s}
+  .cbars span:nth-child(7){height:130px;background:var(--yellow);animation-delay:.72s}
+  #skyline{position:absolute;left:0;right:0;bottom:64px;height:340px;opacity:.5;z-index:1}
+</style></head><body>
+<div class="stage">
+  <div class="bg"></div>
+  <div id="skyline"></div>
+  <span class="spark" style="left:10%;top:20%;--d:0s"></span>
+  <span class="spark" style="left:46%;top:10%;--d:1.4s;background:var(--sky)"></span>
+  <span class="spark" style="left:88%;top:16%;--d:.8s;background:var(--coral)"></span>
+
+  <div class="topbar">
+    <div class="logo" style="color:var(--yellow)"><b style="font-size:64px">smile</b>
+      <svg viewBox="0 0 220 60"><path d="M12 10 C 60 56, 160 56, 208 10"/></svg></div>
+    <div class="chip dark clock"><span id="clock">--:--</span>&nbsp;· NAIROBI DESK</div>
+  </div>
+
+  <div class="left">
+    <span class="chip solid kicker">● PRE-MARKET · STREAM LOADING</span>
+    <h1>markets open<br><span class="y">soon</span><span class="c">.</span></h1>
+    <p class="sub">Charts are loading, coffee is brewing. Grab your seat before the opening bell — forex, crypto &amp; good vibes only.</p>
+    <div class="load">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <div class="meta"><span>LOADING CHARTS &amp; CANDLES…</span><span class="pct" id="pct">0%</span></div>
+    </div>
+    <div class="socials">
+      <span class="chip ghost">@smileke</span><span class="chip ghost">smile.co.ke</span><span class="chip ghost">#SmileSquad</span>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="orbit"><div class="face">
+      <span class="eye l"></span><span class="eye r"></span>
+      <svg class="mouth" viewBox="0 0 150 70"><path d="M12 12 C 45 62, 105 62, 138 12"/></svg>
+    </div></div>
+    <div class="cbars"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  </div>
+
+  <div class="ticker">
+    <div class="tk"><span>✦ OPENING SOON</span><span>BTC · ETH · USD/KES · XAU</span><span>@smileke</span><span>smile.co.ke</span><span>#SmileSquad</span><span>not financial advice — just good vibes</span></div>
+    <div class="tk"><span>✦ OPENING SOON</span><span>BTC · ETH · USD/KES · XAU</span><span>@smileke</span><span>smile.co.ke</span><span>#SmileSquad</span><span>not financial advice — just good vibes</span></div>
+  </div>
+</div>
+<script>
+  // candle skyline
+  const sky=document.getElementById('skyline'),
+        cols=['#1FB35F','#FF4757','#123059','#1FB35F','#FF4757','#123059'];
+  for(let i=0;i<26;i++){const c=document.createElement('span');c.className='cndl';
+    c.style.left=(i*76+Math.random()*20)+'px';c.style.width=(22+Math.random()*14)+'px';
+    c.style.height=(70+Math.random()*240)+'px';c.style.background=cols[i%6];
+    c.style.setProperty('--d',(i*0.06)+'s');sky.appendChild(c);}
+  const clock=()=>document.getElementById('clock').textContent=
+    new Date().toLocaleTimeString('en-KE',{timeZone:'Africa/Nairobi',hour:'2-digit',minute:'2-digit',hour12:false});
+  clock();setInterval(clock,10000);
+  let p=0;const f=document.getElementById('fill'),x=document.getElementById('pct');
+  (function step(){p=Math.min(100,p+Math.random()*9+2);
+    f.style.width=p+'%';x.textContent=Math.floor(p)+'%';
+    if(p>=100){setTimeout(()=>{p=14;step();},2200);}
+    else setTimeout(step,260+Math.random()*380);})();
+</script>
+</body></html>

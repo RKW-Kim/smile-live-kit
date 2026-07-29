@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><title>SMILE · transition signal</title>
+<!-- TIMELINE: 1.5s total · fully covered ~600–950ms → CUT at ~750ms -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="smile.css">
+<style>
+  body{pointer-events:none}
+  .p{position:absolute;inset:0;transform:translateY(112%);
+    animation:wipeY 1.5s cubic-bezier(.83,0,.17,1) both}
+  .p.navy{background:var(--navy-2);z-index:2}
+  .p.yellow{background:var(--yellow);z-index:3;animation-delay:.09s;
+    background-image:radial-gradient(rgba(10,31,60,.13) 3px,transparent 3.5px);background-size:44px 44px}
+  @keyframes wipeY{0%{transform:translateY(112%)}42%{transform:translateY(0)}
+    72%{transform:translateY(0)}100%{transform:translateY(-112%)}}
+  .mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:34px;z-index:4;animation:bp 1.5s .09s both}
+  .mid .bars i{background:var(--navy)}
+  .mid .chip{background:var(--navy);color:var(--yellow);font-size:28px}
+  @keyframes bp{0%,26%{opacity:0;transform:scale(.6)}40%{opacity:1;transform:scale(1.05)}
+    48%{transform:scale(1)}74%{opacity:1}94%,100%{opacity:0}}
+</style></head><body>
+<div class="stage">
+  <div class="p navy"></div>
+  <div class="p yellow"></div>
+  <div class="mid">
+    <div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="chip">smile.co.ke · 4G</span>
+  </div>
+</div>
+</body></html>

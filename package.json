@@ -1,8 +1,0 @@
-{
-  "name": "smile-live-kit",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Smile.co.ke OBS broadcast kit - brand-agnostic, multi-channel, live data, portable.",
-  "scripts": { "validate": "python scripts/validate.py", "bridge": "python core/bridge.py", "watch": "node core/watch-smile.js" },
-  "optionalDependencies": { "puppeteer": "^23.0.0" }
-}

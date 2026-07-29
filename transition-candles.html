@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><title>SMILE · candle transition</title>
+<!-- TIMELINE ~2.0s incl. stagger · screen fully covered 850–1200ms → CUT at ~1000ms -->
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="smile.css">
+<style>
+  body{pointer-events:none}
+  .c{position:absolute;top:0;bottom:0;width:161px;transform:scaleY(0);transform-origin:bottom;
+    animation:cw 1.7s cubic-bezier(.83,0,.17,1) both}
+  .c::before{content:"";position:absolute;left:50%;top:5%;bottom:5%;width:6px;
+    transform:translateX(-50%);background:rgba(6,18,37,.55);border-radius:4px}
+  @keyframes cw{0%{transform:scaleY(0)}30%{transform:scaleY(1)}72%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+  .badge{position:absolute;inset:0;display:grid;place-items:center;z-index:5;animation:bp 1.7s .15s both}
+  .badge .disc{width:430px;height:430px;border-radius:50%;background:var(--ink);border:8px solid var(--yellow);
+    display:grid;place-items:center;box-shadow:0 30px 80px rgba(4,10,24,.55)}
+  .badge .logo svg path{stroke-dashoffset:0;animation:none}
+  @keyframes bp{0%,22%{opacity:0;transform:scale(.5)}36%{opacity:1;transform:scale(1.07)}
+    44%{transform:scale(1)}74%{opacity:1}94%,100%{opacity:0}}
+</style></head><body>
+<div class="stage" id="st">
+  <div class="badge"><div class="disc">
+    <div class="logo" style="color:var(--yellow)"><b style="font-size:118px">smile</b>
+      <svg viewBox="0 0 220 60"><path d="M12 10 C 60 56, 160 56, 208 10"/></svg></div>
+  </div></div>
+</div>
+<script>
+  const cols=['#1FB35F','#0F2A50','#FF4757','#123059'];
+  const st=document.getElementById('st'),badge=st.querySelector('.badge');
+  for(let i=0;i<12;i++){const d=document.createElement('div');d.className='c';
+    d.style.left=(i*160)+'px';d.style.background=cols[i%4];
+    d.style.animationDelay=(i*0.03)+'s';st.insertBefore(d,badge);}
+</script>
+</body></html>
