@@ -1,179 +1,134 @@
-<!doctype html><html><head><meta charset="utf-8"><title>SMILE · adaptive live HUD</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="smile.css">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, height=1080">
+<title>Live Overlay</title>
 <style>
-  .topstrip{position:absolute;left:0;right:0;top:0;height:76px;background:var(--ink);border-bottom:2px solid var(--line);display:flex;align-items:stretch;z-index:6}
-  .topstrip .cap{display:flex;align-items:center;gap:12px;padding:0 20px;border-right:2px solid var(--line);flex-shrink:0}
-  .topstrip .cap .brand{font-size:27px}
-  .topstrip .cap .lbl{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.16em;color:var(--yellow);padding-left:12px;border-left:1.5px solid var(--line);height:28px;display:flex;align-items:center;max-width:340px}
-  .tqwrap{flex:1;overflow:hidden;display:flex}
-  .tq{display:flex;align-items:center;gap:10px;padding:0 17px;height:76px;border-right:1.5px solid var(--line);cursor:pointer;white-space:nowrap;transition:background .2s}
-  .tq:hover{background:rgba(255,255,255,.04)}.tq.active{background:rgba(255,193,7,.10);box-shadow:inset 0 -3px 0 var(--yellow)}
-  .tq .s{font-family:var(--display);font-weight:700;font-size:18px}.tq .p{font-weight:700;font-size:18px;font-variant-numeric:tabular-nums}
-  .tq .c{font-family:var(--display);font-weight:700;font-size:15px}.tq .c.up{color:var(--up)}.tq .c.down{color:var(--down)}
-  .brandpill{position:absolute;top:92px;left:48px;display:flex;gap:14px;align-items:center;z-index:5}
-  .brandpill .brand{font-size:32px;background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:10px 17px}
-  .pill{display:inline-flex;align-items:center;gap:10px;padding:9px 18px;border-radius:13px;font-family:var(--display);font-weight:700;font-size:20px}
-  .pill.live{background:var(--live)}.pill.up{background:var(--panel-2);border:1.5px solid var(--line)}
-  .pill.pg{background:var(--panel-2);border:1.5px solid rgba(255,193,7,.4);color:var(--yellow)}
-  .pill .dot{background:#fff}.pill .dot::after{border-color:#fff}
-  .frame{position:absolute;border:5px solid var(--yellow);border-radius:22px;box-shadow:0 22px 60px rgba(0,0,0,.5);z-index:3}
-  .frame .tag{position:absolute;left:18px;top:14px;background:var(--yellow);color:#0b0b0b;padding:6px 16px;border-radius:10px;font-family:var(--display);font-weight:800;font-size:18px}
-  .frame .nm{position:absolute;right:18px;top:14px;background:rgba(10,10,10,.78);color:#fff;border:1.5px solid var(--line);padding:6px 16px;border-radius:10px;font-family:var(--display);font-weight:700;font-size:18px}
-  .frame .gd{position:absolute;inset:0;display:none;align-items:center;justify-content:center;color:var(--yellow);font-family:var(--display);font-weight:700;font-size:20px;text-align:center}
-  body.guides .frame .gd{display:flex}
-  .chartbox{position:absolute;background:var(--panel);border:1.5px solid var(--line);border-radius:16px;overflow:hidden;z-index:3}
-  .chartbox canvas{display:block;width:100%;height:100%}
-  .chartbox .ch{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-family:var(--display);font-weight:800;font-size:18px;background:linear-gradient(var(--panel),rgba(20,20,20,0));z-index:2}
-  .chartbox .ch small{color:var(--muted);font-weight:600;font-size:14px}
-  .panel{position:absolute;background:var(--panel-2);border:1.5px solid var(--line);border-radius:16px;padding:16px 20px;overflow:hidden;z-index:3}
-  .panel .h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-  .panel .h .t{font-family:var(--display);font-weight:800;font-size:20px;display:flex;align-items:center}
-  .panel .h .px{font-weight:800;font-size:24px;font-variant-numeric:tabular-nums}
-  .panel .h .px .c{font-size:16px;margin-left:8px}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chips span{padding:6px 12px;border-radius:9px;background:var(--panel);border:1.5px solid var(--line);font-family:var(--display);font-weight:700;font-size:14px;color:var(--muted)}
-  .chips .bull{color:var(--up);border-color:rgba(14,203,129,.45);background:rgba(14,203,129,.10)}
-  .chips .bear{color:var(--down);border-color:rgba(246,70,93,.45);background:rgba(246,70,93,.10)}
-  .chips .y{color:var(--yellow);border-color:rgba(255,193,7,.4)}
-  .bias{height:8px;border-radius:999px;background:rgba(255,255,255,.08);margin-top:13px;position:relative}
-  .bias i{position:absolute;top:0;bottom:0;left:50%;width:6px;border-radius:3px;background:var(--yellow);transition:left .6s cubic-bezier(.2,.8,.2,1),background .3s}
-  .chathead{position:absolute;background:var(--panel-2);border:1.5px solid var(--line);border-radius:16px 16px 0 0;display:flex;align-items:center;padding:0 20px;font-family:var(--display);font-weight:700;font-size:21px;z-index:3;height:56px}
-  .lt{position:absolute;display:flex;border-radius:16px;overflow:hidden;box-shadow:0 18px 46px rgba(0,0,0,.5);z-index:4;animation:slideR .8s .4s cubic-bezier(.2,.9,.25,1.15) both}
-  .lt .tab{background:var(--yellow);color:#0b0b0b;display:flex;align-items:center;gap:10px;padding:0 24px;font-family:var(--display);font-weight:800;font-size:22px}
-  .lt .txt{background:rgba(20,20,20,.92);border:1.5px solid var(--line);border-left:0;padding:13px 26px}
-  .lt h3{font-family:var(--display);font-weight:700;font-size:25px}.lt p{font-size:16px;font-weight:600;color:var(--muted)}
-  @keyframes slideR{from{transform:translateX(-120%);opacity:0}to{transform:none;opacity:1}}
-  .posrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:700;font-size:16px}
-  .posrow:last-child{border-bottom:0}.posrow .up{color:var(--up)}.posrow .down{color:var(--down)}
-  .pnl{font-family:var(--display);font-weight:800;font-size:34px;margin:6px 0 12px}
-  .mover{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:16px;font-weight:700}
-  .mover:last-child{border-bottom:0}.mover .up{color:var(--up)}.mover .down{color:var(--down)}
-  .br{position:absolute;right:48px;bottom:78px;display:flex;flex-direction:column;align-items:flex-end;gap:10px;z-index:5}
-  .sessrow{display:flex;gap:10px}
-  .risk{padding:8px 16px;border-radius:11px;background:rgba(10,10,10,.85);border:1.5px solid rgba(255,193,7,.35);color:var(--muted);font-weight:700;font-size:14px;letter-spacing:.04em}
-</style></head><body>
-<div class="stage" id="stage">
-  <div class="topstrip">
-    <div class="cap"><span class="brand"><span class="dw"><svg class="disc" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/><g><ellipse cx="38" cy="40" rx="6.6" ry="8.6"/><ellipse cx="62" cy="40" rx="6.6" ry="8.6"/></g><path d="M31 57 C 34 80, 66 80, 69 57" fill="none" stroke="#0b0b0b" stroke-width="8" stroke-linecap="round"/></svg></span><b>smile</b></span><span class="lbl" id="caplbl">LIVE MARKETS · click to focus</span></div>
-    <div class="tqwrap" id="tq"></div>
-  </div>
-  <div class="ticker">
-    <div class="tk"><span>✦ say hi in chat</span><span>@smileke</span><span>smile.co.ke — Kenya's all-in-one finance hub</span><span>#SmileSquad</span><span>drop a 🙂 if you're new</span></div>
-    <div class="tk"><span>✦ say hi in chat</span><span>@smileke</span><span>smile.co.ke — Kenya's all-in-one finance hub</span><span>#SmileSquad</span><span>drop a 🙂 if you're new</span></div>
-  </div>
-</div>
-<script src="smile-mark.js"></script>
-<script src="live-feed.js"></script>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: transparent;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.frame {
+  position: absolute;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  pointer-events: none;
+  transition: border-color 0.3s ease;
+}
+.frame.active {
+  border-color: rgba(99, 220, 150, 0.7);
+  box-shadow: 0 0 12px rgba(99, 220, 150, 0.2);
+}
+.frame .label {
+  position: absolute;
+  bottom: 8px;
+  left: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 3px 10px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.frame.active .label { opacity: 1; }
+
+/* Layout: single */
+.layout-single .frame-main { left: 0; top: 0; width: 1920px; height: 1080px; border: none; }
+
+/* Layout: duo */
+.layout-duo .frame-left  { left: 0; top: 0; width: 960px; height: 1080px; }
+.layout-duo .frame-right { left: 960px; top: 0; width: 960px; height: 1080px; }
+
+/* Layout: grid4 */
+.layout-grid4 .frame-tl { left: 0; top: 0; width: 960px; height: 540px; }
+.layout-grid4 .frame-tr { left: 960px; top: 0; width: 960px; height: 540px; }
+.layout-grid4 .frame-bl { left: 0; top: 540px; width: 960px; height: 540px; }
+.layout-grid4 .frame-br { left: 960px; top: 540px; width: 960px; height: 540px; }
+
+/* Layout: autotalk */
+.layout-autotalk .frame-main    { left: 0; top: 0; width: 1440px; height: 1080px; }
+.layout-autotalk .frame-strip_0 { left: 1440px; top: 0; width: 480px; height: 270px; }
+.layout-autotalk .frame-strip_1 { left: 1440px; top: 270px; width: 480px; height: 270px; }
+.layout-autotalk .frame-strip_2 { left: 1440px; top: 540px; width: 480px; height: 270px; }
+.layout-autotalk .frame-strip_3 { left: 1440px; top: 810px; width: 480px; height: 270px; }
+
+.ticker-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 1920px;
+  height: 76px;
+  pointer-events: none;
+}
+</style>
+</head>
+<body>
+<div id="overlay"></div>
+<div class="ticker-zone"></div>
+
 <script>
-const q=new URLSearchParams(location.search);
-if(q.has('guides'))document.body.classList.add('guides');
-const layout=q.get('layout')||'solo';
-const stage=document.getElementById('stage');
-const NAMES=['CASTER','GUEST','TRADER 2','TRADER 3'];
-const LTAG={duo:'2-UP · TALKING',panel:'PANEL · LIVE',video:'VIDEO + YOUR PROGRESS',fullface:'ON AIR · smile LIVE'};
-/* rect tables [x,y,w,h] (lower-third = [x,y,w]) — mirrored exactly in the OBS JSON for cam/chat placement */
-const T={
- solo:{cam1:[48,150,760,430],chart:[48,600,760,360],struct:[1432,150,440,210],chat:[1432,380,440,560],lt:[48,520,760]},
- chart:{chart:[48,150,1336,800],struct:[1432,150,440,800]},
- duo:{cam1:[48,150,900,760],cam2:[972,150,900,760]},
- panel:{cam1:[48,150,654,383],cam2:[726,150,654,383],cam3:[48,557,654,383],cam4:[726,557,654,383],struct:[1432,150,440,790]},
- video:{media:[48,150,1100,620],chart:[48,790,1100,150],progress:[1432,150,440,790]},
- nocam:{chart:[48,150,900,800],struct:[1432,150,440,360],chat:[1432,530,440,410]},
- nochat:{cam1:[48,150,760,430],chart:[48,600,760,360],struct:[1432,150,440,380],board:[1432,550,440,390]},
- fullface:{cam1:[240,120,1440,810],lt:[240,850,1440]}
-}[layout]||{cam1:[48,150,760,430],chart:[48,600,760,360],struct:[1432,150,440,210],chat:[1432,380,440,560],lt:[48,520,760]};
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  var layout = params.get('layout') || 'single';
+  var overlay = document.getElementById('overlay');
+  overlay.className = 'layout-' + layout;
 
-const UP='#0ECB81',DN='#F6465D',Y='#FFC107',SK='#3FB6FF';
-let chartCv,chartCx,structChips,structBias,structSym,structPx,boardEl,progEl,pagePill,ltT,ltS;
-const box=(cls,r)=>{const d=document.createElement('div');d.className=cls;d.style.left=r[0]+'px';d.style.top=r[1]+'px';d.style.width=r[2]+'px';d.style.height=r[3]+'px';return d;};
+  var SLOT_NAMES = {
+    single: ['main'],
+    duo: ['left', 'right'],
+    grid4: ['tl', 'tr', 'bl', 'br'],
+    autotalk: ['main', 'strip_0', 'strip_1', 'strip_2', 'strip_3'],
+  };
 
-/* brand pill + page tag */
-const bp=document.createElement('div');bp.className='brandpill';
-bp.innerHTML=`<span class="brand"><span class="dw"><svg class="disc" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/><g><ellipse cx="38" cy="40" rx="6.6" ry="8.6"/><ellipse cx="62" cy="40" rx="6.6" ry="8.6"/></g><path d="M31 57 C 34 80, 66 80, 69 57" fill="none" stroke="#0b0b0b" stroke-width="8" stroke-linecap="round"/></svg></span><b>smile</b></span><span class="pill live"><span class="dot"></span>LIVE</span><span class="pill up" id="up">0:00:00</span><span class="pill pg" id="pg">${LTAG[layout]||'SPOT · Crypto'}</span>`;
-stage.appendChild(bp);pagePill=bp.querySelector('#pg');
+  var names = SLOT_NAMES[layout] || SLOT_NAMES.single;
+  names.forEach(function(name) {
+    var el = document.createElement('div');
+    el.className = 'frame frame-' + name;
+    el.dataset.slot = name;
+    el.innerHTML = '<span class="label"></span>';
+    overlay.appendChild(el);
+  });
 
-/* cam / media frames */
-['cam1','cam2','cam3','cam4','media'].forEach((k,i)=>{if(!T[k])return;const r=T[k];const f=box('frame',r);
-  f.innerHTML=`<span class="tag">${k==='media'?'MEDIA':'ON AIR'}</span><span class="nm">${k==='media'?'VIDEO / REPLAY':NAMES[i]}</span><div class="gd">${k==='media'?'MEDIA / VIDEO SOURCE':'WEBCAM / smile.co.ke'}</div>`;
-  stage.appendChild(f);});
+  function connectWS() {
+    var wsUrl = 'ws://' + window.location.host + '/api/autotalk/state';
+    var ws = new WebSocket(wsUrl);
+    ws.onmessage = function(evt) {
+      var state = JSON.parse(evt.data);
+      document.querySelectorAll('.frame').forEach(function(f) {
+        f.classList.remove('active');
+        f.querySelector('.label').textContent = '';
+      });
+      if (state.main) {
+        var mainEl = document.querySelector('.frame-' + state.main_slot);
+        if (mainEl) {
+          mainEl.classList.add('active');
+          mainEl.querySelector('.label').textContent = state.main;
+        }
+      }
+      (state.strip || []).forEach(function(s, i) {
+        var el = document.querySelector('.frame-strip_' + i);
+        if (el) {
+          el.classList.add('active');
+          el.querySelector('.label').textContent = s;
+        }
+      });
+    };
+    ws.onclose = function() { setTimeout(connectWS, 3000); };
+    ws.onerror = function() { ws.close(); };
+  }
 
-/* chart box */
-if(T.chart){const r=T.chart;const cb=box('chartbox',r);cb.innerHTML=`<div class="ch"><span><span class="tick"></span><span id="wsym">—</span> <small id="wmode">live</small></span><span id="wpx" style="font-variant-numeric:tabular-nums">—</span></div>`;
-  chartCv=document.createElement('canvas');cb.appendChild(chartCv);stage.appendChild(cb);
-  chartCv.width=r[2];chartCv.height=r[3];chartCx=chartCv.getContext('2d');}
-
-/* structure panel */
-if(T.struct){const r=T.struct;const p=box('panel',r);p.innerHTML=`<div class="h"><span class="t"><span class="tick"></span><span id="ssym">—</span></span><span class="px" id="spx">—</span></div><div class="chips" id="schips"><span>building structure…</span></div><div class="bias"><i id="sbias"></i></div>`;
-  stage.appendChild(p);structChips=p.querySelector('#schips');structBias=p.querySelector('#sbias');structSym=p.querySelector('#ssym');structPx=p.querySelector('#spx');}
-
-/* progress rail (video layout) */
-if(T.progress){const r=T.progress;const p=box('panel',r);
-  p.innerHTML=`<div class="h"><span class="t"><span class="tick"></span>YOUR PROGRESS</span></div><div class="pnl up" id="pnl">+ KES 0</div><div class="chips" style="margin-bottom:10px"><span class="y">SESSION P&amp;L</span></div><div id="poslist"></div><div style="height:14px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;margin-top:14px"><div id="gfill" style="height:100%;width:0;background:var(--yellow);transition:width 1.2s"></div></div><div style="display:flex;justify-content:space-between;margin-top:8px;font-family:var(--display);font-weight:700;font-size:15px;color:var(--muted)"><span id="glabel">GOAL</span><span id="gnums">0/0</span></div>`;
-  stage.appendChild(p);progEl=p;renderPositions();}
-
-/* board (no-chat layout) */
-if(T.board){const r=T.board;const p=box('panel',r);p.innerHTML=`<div class="h"><span class="t"><span class="tick"></span>TOP MOVERS</span></div><div id="movers"></div>`;stage.appendChild(p);boardEl=p.querySelector('#movers');}
-
-/* chat header */
-if(T.chat){const r=T.chat;const h=document.createElement('div');h.className='chathead';h.style.left=r[0]+'px';h.style.top=r[1]+'px';h.style.width=r[2]+'px';h.innerHTML='<span class="tick"></span>trading floor chat';stage.appendChild(h);}
-
-/* lower third */
-if(T.lt){const r=T.lt;const d=document.createElement('div');d.className='lt';d.style.left=r[0]+'px';d.style.top=r[1]+'px';d.style.width=r[2]+'px';
-  d.innerHTML=`<div class="tab"><span class="dot"></span>LIVE</div><div class="txt"><h3 id="ltt">Nairobi Desk · Spot · Futures · MT5</h3><p id="lts">@smileke · smile.co.ke · #SmileSquad</p></div>`;stage.appendChild(d);ltT=d.querySelector('#ltt');ltS=d.querySelector('#lts');}
-
-/* sessions + risk */
-const br=document.createElement('div');br.className='br';
-br.innerHTML=`<div class="sessrow"><span class="sess" id="s-tokyo"><i></i>TOKYO</span><span class="sess" id="s-london"><i></i>LONDON</span><span class="sess" id="s-ny"><i></i>NEW YORK</span></div><span class="risk">TRADING INVOLVES RISK · NOT FINANCIAL ADVICE</span>`;
-stage.appendChild(br);
-
-/* ---- top strip ---- */
-const tq=document.getElementById('tq');
-function strip(){tq.innerHTML=SMILE.feed.filter(f=>f.price).map(f=>`<div class="tq ${f.s===SMILE.active?'active':''}" data-s="${f.s}"><span class="s">${f.s}</span><span class="p">${f.price.toLocaleString('en-US',{maximumFractionDigits:f.dec})}</span><span class="c ${f.chg>=0?'up':'down'}">${f.chg>=0?'+':''}${f.chg.toFixed(2)}%</span></div>`).join('');}
-tq.addEventListener('click',e=>{const el=e.target.closest('.tq');if(el)SMILE.setActive(el.dataset.s);});
-SMILE.on('smile:quotes',f=>{strip();if(boardEl)renderBoard();});strip();
-function renderBoard(){const top=[...SMILE.feed].filter(f=>f.price).sort((a,b)=>Math.abs(b.chg)-Math.abs(a.chg)).slice(0,6);
-  boardEl.innerHTML=top.map(f=>`<div class="mover"><span>${f.s}</span><span class="${f.chg>=0?'up':'down'}">${f.chg>=0?'+':''}${f.chg.toFixed(2)}%</span></div>`).join('');}
-function renderPositions(){if(!progEl)return;const goal=+q.get('goal')||1000,cur=+q.get('current')||0;
-  progEl.querySelector('#glabel').textContent=q.get('label')||'FOLLOWER GOAL';progEl.querySelector('#gnums').textContent=cur+' / '+goal;
-  setTimeout(()=>progEl.querySelector('#gfill').style.width=Math.min(100,cur/goal*100)+'%',400);
-  const demo=SMILE.positions&&SMILE.positions.length?SMILE.positions:[{s:'BTC/USDT',side:'LONG',pnl:2.4},{s:'ETH/USDT',side:'SHORT',pnl:-0.6},{s:'CRASH500',side:'LONG',pnl:1.1}];
-  progEl.querySelector('#poslist').innerHTML=demo.map(p=>`<div class="posrow"><span>${p.s} · ${p.side}</span><span class="${p.pnl>=0?'up':'down'}">${p.pnl>=0?'+':''}${p.pnl.toFixed(2)}%</span></div>`).join('');
-  const tot=demo.reduce((a,p)=>a+p.pnl,0);const pn=progEl.querySelector('#pnl');pn.textContent=(tot>=0?'+ ':'- ')+Math.abs(tot).toFixed(2)+'%';pn.className='pnl '+(tot>=0?'up':'down');}
-SMILE.on('smile:positions',renderPositions);
-
-/* ---- chart draw ---- */
-function drawChart(d){if(!chartCx)return;const w=chartCv.width,h=chartCv.height,pad=18;chartCx.clearRect(0,0,w,h);
-  chartCx.strokeStyle='rgba(255,255,255,.05)';chartCx.lineWidth=1;for(let i=1;i<6;i++){const y=pad+(h-2*pad)*i/6;chartCx.beginPath();chartCx.moveTo(0,y);chartCx.lineTo(w,y);chartCx.stroke();}
-  const ws=document.getElementById('wsym'),wm=document.getElementById('wmode'),wp=document.getElementById('wpx');
-  if(ws)ws.textContent=d.sym;if(wp)wp.textContent=d.price==null?'—':d.price.toLocaleString('en-US',{maximumFractionDigits:2});
-  if(d.candles&&d.candles.length>4){if(wm)wm.textContent='· 1m · EMA9/21';
-    const hi=Math.max(...d.candles.map(c=>c[2])),lo=Math.min(...d.candles.map(c=>c[3])),Yv=v=>pad+(h-2*pad)*(1-(v-lo)/((hi-lo)||1)),cw=w/d.candles.length;
-    d.candles.forEach((c,i)=>{const o=c[1],cl=c[4],x=i*cw+cw/2,col=cl>=o?UP:DN;chartCx.strokeStyle=col;chartCx.lineWidth=2;chartCx.beginPath();chartCx.moveTo(x,Yv(c[2]));chartCx.lineTo(x,Yv(c[3]));chartCx.stroke();const bw=Math.max(3,cw*.5);chartCx.fillStyle=col;chartCx.fillRect(x-bw/2,Math.min(Yv(o),Yv(cl)),bw,Math.max(2,Math.abs(Yv(o)-Yv(cl))));});
-    const cls=d.candles.map(c=>c[4]),ema=(v,p)=>{const k=2/(p+1);let e=v[0];const o=[e];for(let i=1;i<v.length;i++){e=v[i]*k+e*(1-k);o.push(e);}return o;};
-    const a9=ema(cls,9),a21=ema(cls,21),ln=(a,col)=>{chartCx.strokeStyle=col;chartCx.lineWidth=2.4;chartCx.beginPath();a.forEach((v,i)=>{const x=i*cw+cw/2;i?chartCx.lineTo(x,Yv(v)):chartCx.moveTo(x,Yv(v));});chartCx.stroke();};ln(a9,Y);ln(a21,SK);
-  }else if(d.spark&&d.spark.length>1){if(wm)wm.textContent='· live spot line';
-    const hi=Math.max(...d.spark),lo=Math.min(...d.spark),Yv=v=>pad+(h-2*pad)*(1-(v-lo)/((hi-lo)||1));
-    const g=chartCx.createLinearGradient(0,0,0,h);g.addColorStop(0,'rgba(255,193,7,.22)');g.addColorStop(1,'rgba(255,193,7,0)');
-    chartCx.beginPath();d.spark.forEach((v,i)=>{const x=i/(d.spark.length-1)*w;i?chartCx.lineTo(x,Yv(v)):chartCx.moveTo(x,Yv(v));});chartCx.lineTo(w,h);chartCx.lineTo(0,h);chartCx.closePath();chartCx.fillStyle=g;chartCx.fill();
-    chartCx.beginPath();d.spark.forEach((v,i)=>{const x=i/(d.spark.length-1)*w;i?chartCx.lineTo(x,Yv(v)):chartCx.moveTo(x,Yv(v));});chartCx.strokeStyle=Y;chartCx.lineWidth=3;chartCx.stroke();}}
-
-/* ---- structure + context + face ---- */
-let lastChg=0;
-function onChart(d){drawChart(d);
-  if(structSym){structSym.textContent=d.sym;structPx.innerHTML=`${d.price==null?'—':d.price.toLocaleString('en-US',{maximumFractionDigits:2})}<span class="c" style="color:${d.chg>=0?UP:DN}">${d.chg>=0?'+':''}${d.chg.toFixed(2)}%</span>`;}
-  if(structChips&&d.ind){const t=d.ind.trend,tc=t==='BULL'?'bull':t==='BEAR'?'bear':'y',r=d.ind.rsi||50;
-    structChips.innerHTML=`<span class="${tc}">${t==='BULL'?'▲ BULLISH':t==='BEAR'?'▼ BEARISH':'◆ RANGING'}</span><span>RSI ${d.ind.rsi?d.ind.rsi.toFixed(0):'—'}</span><span class="${d.ind.cross?'bull':'bear'}">EMA9 ${d.ind.cross?'>':'<'} 21</span><span>MOM ${d.ind.mom.toFixed(1)}</span>`;
-    structBias.style.left=Math.max(2,Math.min(96,r))+'%';structBias.style.background=r>60?UP:r<40?DN:Y;
-    if(ltT)ltT.textContent=`${d.sym} · ${t==='BULL'?'bullish structure':t==='BEAR'?'bearish structure':'consolidating'} · RSI ${r.toFixed(0)}`;}
-  if(Math.abs(d.chg-lastChg)>0.9)smileMood(d.chg>lastChg?'celebrate':'shake',900);lastChg=d.chg;}
-SMILE.on('smile:chart',onChart);
-SMILE.on('smile:active',s=>{if(!LTAG[layout]&&pagePill)pagePill.textContent=SMILE.ctxFrom(s).t;
-  document.getElementById('caplbl').textContent=(LTAG[layout]||SMILE.ctxFrom(s).t)+' · click to focus';
-  smileMood('look',420);setTimeout(()=>smileMood('nod',700),360);});
-
-/* ---- uptime + sessions ---- */
-const since=q.get('since')?new Date(q.get('since')):new Date();
-setInterval(()=>{const s=Math.max(0,Math.floor((Date.now()-since)/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=n=>String(n).padStart(2,'0');document.getElementById('up').textContent=`${h}:${p(m)}:${p(x)}`;},1000);
-function sess(){const d=new Date(new Date().toLocaleString('en-US',{timeZone:'Africa/Nairobi'})),m=d.getHours()*60+d.getMinutes(),wk=d.getDay()>=1&&d.getDay()<=5;const set=(id,o)=>document.getElementById(id).classList.toggle('open',wk&&o);set('s-tokyo',m>=180&&m<660);set('s-london',m>=660&&m<1170);set('s-ny',m>=990&&m<1380);}sess();setInterval(sess,30000);
-</script></body></html>
+  if (layout === 'autotalk') {
+    connectWS();
+  }
+})();
+</script>
+</body>
+</html>
