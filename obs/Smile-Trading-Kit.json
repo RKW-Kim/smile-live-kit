@@ -81,11 +81,11 @@
         {
             "prev_ver": 520093700,
             "name": "ambient",
-            "uuid": "85731b8a-a7aa-4073-bb1b-fddcc93cdf54",
+            "uuid": "4f101ca3-ce41-48e8-a207-63e7d65b8c1d",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/00-bg.html",
+                "url": "http://127.0.0.1:8787/core/00-bg.html",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -113,11 +113,11 @@
         {
             "prev_ver": 520093700,
             "name": "ticker",
-            "uuid": "f3eef193-a911-40a3-a966-a816158c2800",
+            "uuid": "b794e14c-e1b7-4857-a13d-b6a6f4c48d41",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/market-ticker.html",
+                "url": "http://127.0.0.1:8787/core/market-ticker.html",
                 "width": 1920,
                 "height": 76,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -145,11 +145,11 @@
         {
             "prev_ver": 520093700,
             "name": "alerts",
-            "uuid": "24c75b9b-adf9-46a9-9109-bc5f49d6bc33",
+            "uuid": "c25f9070-776b-42b1-9f28-c707a105cf84",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/08-alerts.html",
+                "url": "http://127.0.0.1:8787/core/08-alerts.html",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -177,11 +177,11 @@
         {
             "prev_ver": 520093700,
             "name": "CAM-1",
-            "uuid": "1e06f64c-6210-42c3-a666-29cf7fe4d512",
+            "uuid": "a7930bae-98c5-44df-81ef-9bdd64708fcf",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/test-cam.html?cam=1&hue=210",
+                "url": "http://127.0.0.1:8787/core/test-cam.html?cam=1&hue=210",
                 "width": 1440,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -209,11 +209,11 @@
         {
             "prev_ver": 520093700,
             "name": "CAM-2",
-            "uuid": "b4974632-a988-4469-ad63-15c5e3cfa26a",
+            "uuid": "737dff58-6639-4515-a487-b316a5a6d64b",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/test-cam.html?cam=2&hue=280",
+                "url": "http://127.0.0.1:8787/core/test-cam.html?cam=2&hue=280",
                 "width": 480,
                 "height": 270,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -241,11 +241,11 @@
         {
             "prev_ver": 520093700,
             "name": "CAM-3",
-            "uuid": "2c8495fd-f08f-4383-b4b2-f2160af6072c",
+            "uuid": "6da8f75c-a4a6-487b-bfa5-52fa1264ac64",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/test-cam.html?cam=3&hue=150",
+                "url": "http://127.0.0.1:8787/core/test-cam.html?cam=3&hue=150",
                 "width": 480,
                 "height": 270,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -273,11 +273,11 @@
         {
             "prev_ver": 520093700,
             "name": "CAM-4",
-            "uuid": "4cde9b5d-16ba-4408-b077-f61943af9c3e",
+            "uuid": "dbf1451e-ae24-4a5b-a416-4bc1445d7454",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/test-cam.html?cam=4&hue=30",
+                "url": "http://127.0.0.1:8787/core/test-cam.html?cam=4&hue=30",
                 "width": 480,
                 "height": 270,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -305,11 +305,11 @@
         {
             "prev_ver": 520093700,
             "name": "CAM-5",
-            "uuid": "c401fab1-412c-4ba5-8078-2a60ace3b619",
+            "uuid": "9cce4da9-7c45-4021-9aa0-b4e35580f5f5",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/test-cam.html?cam=5&hue=340",
+                "url": "http://127.0.0.1:8787/core/test-cam.html?cam=5&hue=340",
                 "width": 480,
                 "height": 270,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -337,11 +337,11 @@
         {
             "prev_ver": 520093700,
             "name": "01-starting-soon-overlay",
-            "uuid": "32d8c6d7-e3b3-4f6a-af36-4d9cce429883",
+            "uuid": "c0977dc0-20d3-4f42-b59c-465c35ce7f17",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/01-starting-soon.html",
+                "url": "http://127.0.0.1:8787/core/01-starting-soon.html",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -369,7 +369,7 @@
         {
             "prev_ver": 520093700,
             "name": "01-starting-soon",
-            "uuid": "ac4484b3-3576-4454-932a-ae7ca8dc7b27",
+            "uuid": "4b2d54b5-c5ba-4da7-b05e-d5fd804b797d",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -378,7 +378,7 @@
                 "items": [
                     {
                         "name": "ambient",
-                        "source_uuid": "85731b8a-a7aa-4073-bb1b-fddcc93cdf54",
+                        "source_uuid": "4f101ca3-ce41-48e8-a207-63e7d65b8c1d",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -433,7 +433,7 @@
                     },
                     {
                         "name": "01-starting-soon-overlay",
-                        "source_uuid": "32d8c6d7-e3b3-4f6a-af36-4d9cce429883",
+                        "source_uuid": "c0977dc0-20d3-4f42-b59c-465c35ce7f17",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -488,7 +488,7 @@
                     },
                     {
                         "name": "ticker",
-                        "source_uuid": "f3eef193-a911-40a3-a966-a816158c2800",
+                        "source_uuid": "b794e14c-e1b7-4857-a13d-b6a6f4c48d41",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -543,7 +543,7 @@
                     },
                     {
                         "name": "alerts",
-                        "source_uuid": "24c75b9b-adf9-46a9-9109-bc5f49d6bc33",
+                        "source_uuid": "c25f9070-776b-42b1-9f28-c707a105cf84",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -628,11 +628,11 @@
         {
             "prev_ver": 520093700,
             "name": "02-countdown-overlay",
-            "uuid": "14f3124f-afa7-48b1-9d3d-122454d929a3",
+            "uuid": "729957e2-c82e-4f10-ae3b-94517a28205a",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/02-countdown.html",
+                "url": "http://127.0.0.1:8787/core/02-countdown.html",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -660,7 +660,7 @@
         {
             "prev_ver": 520093700,
             "name": "02-countdown",
-            "uuid": "c90aa92d-6dd5-42ac-ae58-470dc3d9977f",
+            "uuid": "32a268e0-00e9-4ac9-b31e-08d683529e93",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -669,7 +669,7 @@
                 "items": [
                     {
                         "name": "ambient",
-                        "source_uuid": "85731b8a-a7aa-4073-bb1b-fddcc93cdf54",
+                        "source_uuid": "4f101ca3-ce41-48e8-a207-63e7d65b8c1d",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -724,7 +724,7 @@
                     },
                     {
                         "name": "02-countdown-overlay",
-                        "source_uuid": "14f3124f-afa7-48b1-9d3d-122454d929a3",
+                        "source_uuid": "729957e2-c82e-4f10-ae3b-94517a28205a",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -779,7 +779,7 @@
                     },
                     {
                         "name": "ticker",
-                        "source_uuid": "f3eef193-a911-40a3-a966-a816158c2800",
+                        "source_uuid": "b794e14c-e1b7-4857-a13d-b6a6f4c48d41",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -834,7 +834,7 @@
                     },
                     {
                         "name": "alerts",
-                        "source_uuid": "24c75b9b-adf9-46a9-9109-bc5f49d6bc33",
+                        "source_uuid": "c25f9070-776b-42b1-9f28-c707a105cf84",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -919,11 +919,11 @@
         {
             "prev_ver": 520093700,
             "name": "03-live-overlay",
-            "uuid": "bb027563-17db-457f-9b83-35a874dcf19d",
+            "uuid": "0eaa19de-4f04-4b79-82fa-ed130419c3a9",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/03-live.html?layout=autotalk",
+                "url": "http://127.0.0.1:8787/core/03-live.html?layout=autotalk",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -951,7 +951,7 @@
         {
             "prev_ver": 520093700,
             "name": "03-live",
-            "uuid": "95cdfd69-3009-43aa-a644-1c3293190150",
+            "uuid": "0521c264-8e44-4e40-9bb3-bbe741d096da",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -960,7 +960,7 @@
                 "items": [
                     {
                         "name": "ambient",
-                        "source_uuid": "85731b8a-a7aa-4073-bb1b-fddcc93cdf54",
+                        "source_uuid": "4f101ca3-ce41-48e8-a207-63e7d65b8c1d",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1015,7 +1015,7 @@
                     },
                     {
                         "name": "CAM-1",
-                        "source_uuid": "1e06f64c-6210-42c3-a666-29cf7fe4d512",
+                        "source_uuid": "a7930bae-98c5-44df-81ef-9bdd64708fcf",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -1070,7 +1070,7 @@
                     },
                     {
                         "name": "CAM-2",
-                        "source_uuid": "b4974632-a988-4469-ad63-15c5e3cfa26a",
+                        "source_uuid": "737dff58-6639-4515-a487-b316a5a6d64b",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -1125,7 +1125,7 @@
                     },
                     {
                         "name": "CAM-3",
-                        "source_uuid": "2c8495fd-f08f-4383-b4b2-f2160af6072c",
+                        "source_uuid": "6da8f75c-a4a6-487b-bfa5-52fa1264ac64",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -1180,7 +1180,7 @@
                     },
                     {
                         "name": "CAM-4",
-                        "source_uuid": "4cde9b5d-16ba-4408-b077-f61943af9c3e",
+                        "source_uuid": "dbf1451e-ae24-4a5b-a416-4bc1445d7454",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -1235,7 +1235,7 @@
                     },
                     {
                         "name": "CAM-5",
-                        "source_uuid": "c401fab1-412c-4ba5-8078-2a60ace3b619",
+                        "source_uuid": "9cce4da9-7c45-4021-9aa0-b4e35580f5f5",
                         "visible": true,
                         "locked": false,
                         "rot": 0.0,
@@ -1290,7 +1290,7 @@
                     },
                     {
                         "name": "03-live-overlay",
-                        "source_uuid": "bb027563-17db-457f-9b83-35a874dcf19d",
+                        "source_uuid": "0eaa19de-4f04-4b79-82fa-ed130419c3a9",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1345,7 +1345,7 @@
                     },
                     {
                         "name": "ticker",
-                        "source_uuid": "f3eef193-a911-40a3-a966-a816158c2800",
+                        "source_uuid": "b794e14c-e1b7-4857-a13d-b6a6f4c48d41",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1400,7 +1400,7 @@
                     },
                     {
                         "name": "alerts",
-                        "source_uuid": "24c75b9b-adf9-46a9-9109-bc5f49d6bc33",
+                        "source_uuid": "c25f9070-776b-42b1-9f28-c707a105cf84",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1495,11 +1495,11 @@
         {
             "prev_ver": 520093700,
             "name": "04-brb-overlay",
-            "uuid": "f39b7e83-d4f7-411c-9903-53b1252ac8fc",
+            "uuid": "756580a7-417b-48a1-a9ae-fff1b07a6935",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/04-brb.html",
+                "url": "http://127.0.0.1:8787/core/04-brb.html",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -1527,7 +1527,7 @@
         {
             "prev_ver": 520093700,
             "name": "04-brb",
-            "uuid": "5f638640-77d5-4ca2-bf5b-22c796787e49",
+            "uuid": "fa29f088-ca8f-48b1-8716-42e4067d0e83",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -1536,7 +1536,7 @@
                 "items": [
                     {
                         "name": "ambient",
-                        "source_uuid": "85731b8a-a7aa-4073-bb1b-fddcc93cdf54",
+                        "source_uuid": "4f101ca3-ce41-48e8-a207-63e7d65b8c1d",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1591,7 +1591,7 @@
                     },
                     {
                         "name": "04-brb-overlay",
-                        "source_uuid": "f39b7e83-d4f7-411c-9903-53b1252ac8fc",
+                        "source_uuid": "756580a7-417b-48a1-a9ae-fff1b07a6935",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1646,7 +1646,7 @@
                     },
                     {
                         "name": "ticker",
-                        "source_uuid": "f3eef193-a911-40a3-a966-a816158c2800",
+                        "source_uuid": "b794e14c-e1b7-4857-a13d-b6a6f4c48d41",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1701,7 +1701,7 @@
                     },
                     {
                         "name": "alerts",
-                        "source_uuid": "24c75b9b-adf9-46a9-9109-bc5f49d6bc33",
+                        "source_uuid": "c25f9070-776b-42b1-9f28-c707a105cf84",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1786,11 +1786,11 @@
         {
             "prev_ver": 520093700,
             "name": "05-ending-overlay",
-            "uuid": "60a5dd00-e917-4edb-924d-0541564ecfab",
+            "uuid": "7c41b135-3a8d-4de7-9de0-c40c2dbc7c76",
             "id": "browser_source",
             "versioned_id": "browser_source",
             "settings": {
-                "url": "http://192.168.1.125:8787/core/05-ending.html",
+                "url": "http://127.0.0.1:8787/core/05-ending.html",
                 "width": 1920,
                 "height": 1080,
                 "css": "body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }",
@@ -1818,7 +1818,7 @@
         {
             "prev_ver": 520093700,
             "name": "05-ending",
-            "uuid": "18dbbd03-46d4-4a7d-855b-3155ef4751c8",
+            "uuid": "c93c2a2b-8065-4d08-a764-e6ccff5af5bb",
             "id": "scene",
             "versioned_id": "scene",
             "settings": {
@@ -1827,7 +1827,7 @@
                 "items": [
                     {
                         "name": "ambient",
-                        "source_uuid": "85731b8a-a7aa-4073-bb1b-fddcc93cdf54",
+                        "source_uuid": "4f101ca3-ce41-48e8-a207-63e7d65b8c1d",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1882,7 +1882,7 @@
                     },
                     {
                         "name": "05-ending-overlay",
-                        "source_uuid": "60a5dd00-e917-4edb-924d-0541564ecfab",
+                        "source_uuid": "7c41b135-3a8d-4de7-9de0-c40c2dbc7c76",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1937,7 +1937,7 @@
                     },
                     {
                         "name": "ticker",
-                        "source_uuid": "f3eef193-a911-40a3-a966-a816158c2800",
+                        "source_uuid": "b794e14c-e1b7-4857-a13d-b6a6f4c48d41",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
@@ -1992,7 +1992,7 @@
                     },
                     {
                         "name": "alerts",
-                        "source_uuid": "24c75b9b-adf9-46a9-9109-bc5f49d6bc33",
+                        "source_uuid": "c25f9070-776b-42b1-9f28-c707a105cf84",
                         "visible": true,
                         "locked": true,
                         "rot": 0.0,
