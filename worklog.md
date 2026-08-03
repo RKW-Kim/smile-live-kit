@@ -109,3 +109,62 @@ Stage Summary:
 - The useClock hook is now production-safe (SSR-safe, no infinite loops, lint-clean). This is a reusable hook for all time-based scene/console elements.
 - LESSON FOR FUTURE AGENTS: useSyncExternalStore requires (a) a CACHED getSnapshot (same reference until the store actually changes) and (b) a STABLE subscribe identity (useCallback, not a factory call). Violating either causes "Maximum update depth exceeded." Document in docs/handoff/12-KNOWN_ISSUES.md.
 - Next agent: if you add any hook using useSyncExternalStore, follow the pattern in src/hooks/use-clock.ts exactly. Do NOT return `new Date()` or any fresh object from getSnapshot.
+
+---
+Task ID: REVERT-1
+Agent: zai-code (opus, main orchestrator)
+Task: REVERT the cold W21 Bloomberg-terminal aesthetic back to the original smile.co.ke design language (warm, friendly, yellow, smiley-face mark) — improved with the broader concepts (channels, 24/7 streaming, education).
+
+Work Log:
+- User feedback on the W21 v2 build (Task CODE-1): "old and washed out." User wants the original smile.co.ke aesthetic restored — warm yellow, smiley face, friendly Kenyan finance-hub energy — NOT a cold institutional Bloomberg terminal.
+- Deleted the entire W21 visual layer (kept docs/AGENTS/CONTRIBUTING/.github/scripts untouched as instructed):
+  • `src/components/w21/` (W21Mark, W21Lockup, SignalCard, Ticker, index) — DELETED.
+  • `src/lib/w21/channels.ts` (ChannelKey/ChannelConfig/w21System) — DELETED.
+  • `src/app/scenes/trading-live/page.tsx` (W21 hero scene) — DELETED, rebuilt.
+- Created the Smile design system as code:
+  • `src/lib/smile/channels.ts` — SmileBrand theming system (smile, w21trading, w21news, w21education, w21culture, w21sports). KEY INSIGHT (from v1 theming.md): the mark SHAPE never changes — only CSS variables (`--yellow` → cyan, amber, etc.) swap per channel. Each brand has `tokens` (CSS var overrides), `handles` (text find-replace like "#SmileSquad" → "#TradeSquad"), `wordmark`, `tagline`. Exports `getBrand`, `brandKeys`, `applyBrandTokens`, `applyHandles`.
+  • `src/components/smile/SmileMark.tsx` — SACRED smiley face. Inline SVG, viewBox 0 0 100 100: yellow disc (radial gradient #FFD451→#FFC107→#F5A623), two ellipses for eyes (cx=38/cx=62, rx=6.6 ry=8.6 — close together), thick-stroke mouth path M31 57 C 34 80, 66 80, 69 57 (stroke-width 9, linecap round — the thick stroke is what reads as ONE smile; thinner splits into two ball ends). PERSONALITY: 10 moods (idle/blink/wink/smirk/look/nod/spin/bounce/celebrate/shake) toggled via CSS classes on the SVG. Idle auto-blink every ~2.2-4.4s via ref-based setTimeout scheduler (NEVER setInterval-in-render). Props: size, mood (lock), pulse (yellow glow), static (disable blink). Uses useId for stable SVG gradient/mask ids.
+  • `src/components/smile/SmileLockup.tsx` — SmileMark + wordmark (Manrope 800, lowercase). Optional accent stripe under the wordmark.
+  • `src/components/smile/SignalCard.tsx` — restyled. Panel bg, hairline border, BUY=green left border (--up), SELL=red (--down). Inter for labels, tabular-nums for prices. Same data shape as the W21 card so scenes don't need rewriting.
+  • `src/components/smile/Ticker.tsx` — smile-style market ticker. Left: clock section (green-tinted bg, var(--live)). Right: infinite-scroll marquee of symbol/price/change% with green ▲ / red ▼. Inter font, tabular-nums. CSS animation `.smile-ticker__track` (38s linear infinite, pauses on hover).
+  • `src/components/smile/Chip.tsx` — pill-shaped chip (dark/ghost/solid variants) from v1 smile.css. Manrope 700, uppercase, letter-spaced.
+  • `src/components/smile/index.ts` — barrel export.
+- Rewrote `src/app/globals.css` — replaced ALL W21 tokens (Terminal Black, Grid White, JetBrains Mono, --ch-* channel colors) with smile brand truth:
+  • `--yellow: #FFC107` (primary), `--yellow-hot: #F5A623`, `--ink: #0a0a0a`, `--panel: #141414`, `--panel-2: #1b1b1b`, `--line: #2a2a2a`, `--muted: #8c8c8c`, `--paper: #ffffff`, `--up: #0ECB81`, `--down: #F6465D`, `--up-soft`, `--down-soft`, `--sky: #3FB6FF`, `--live: #3ddc84`.
+  • Fonts: `--font-display: var(--font-manrope)`, `--font-body / --font-sans: var(--font-inter)`. NO JetBrains Mono.
+  • `.dark` is default — `--background: var(--ink)`, `--primary: var(--yellow)`.
+  • Removed W21 utilities (.w21-grid, .w21-crosshairs, .w21-scanlines, .w21-noise, .w21-led, .w21-blink, .w21-ticker-track, .w21-scene-root).
+  • Added smile utilities: `.chip` (dark/ghost/solid), `.spark` (floating animated dot, with .green/.red/.sky variants + floatSpark keyframe), `.orbit` (dashed rotating ring), `.face`, `.smile-ticker__track` (marquee scroll), `.smile-led` (radial pulse), `.smile-blink`, `.smile-slide-in` (alert box), `.smile-scroll` (custom scrollbar), `.smile-scene-root` (1920×1080 OBS viewport), `.smile-frame` + `.smile-frame--active` (rectangular scene zones with hairline border; active = green border + glow), `.smile-corner` (corner brackets), `.smile-panel` + `.smile-panel--bracket` (panel card with green top-left bracket), `.smile-stripe` (yellow 2px bottom edge).
+  • SmileMark mood animations: `--blink` (eyes scaleY 0.08), `--wink` (right eye only), `--smirk` (mouth skewX), `--look` (eyes translateX), `--nod` (translateY bounce), `--spin` (rotate 360), `--bounce`, `--celebrate` (rotate+scale), `--shake` (translateX wobble). All on the SVG, never on the shape — the smiley face geometry is invariant.
+- Rewrote `src/app/layout.tsx` — Manrope (500/700/800) + Inter (500/700/800) via next/font/google (replaced JetBrains Mono + Geist). `--font-manrope` for display, `--font-inter` for body/sans. Metadata: "Smile Live Kit — Broadcast Console", description referencing smile.co.ke + channels + 24/7 streaming + education. Kept `dark` default + Toaster.
+- Rebuilt `src/app/scenes/trading-live/page.tsx` — HERO SCENE at 1920×1080. Frame-slot layout (v1 03-live.html + 01-starting-soon.html inspired):
+  • Background: radial gradient at 50% 38% (warm dark center → ink). 4 floating sparks (yellow/green/red/sky) with staggered delays. Decorative dashed orbit ring (top-right).
+  • Top bar (y=0, h=72): SmileLockup (mark + "smile" wordmark, pulse) left · centered chip.ghost "LIVE" + "London Session — Live Analysis" · chip.dark "NAIROBI DESK" + clock chip right.
+  • Alert box (top-center, slides in): chip.solid "⚡ SIGNAL · EUR/USD · BUY @ 1.0864 · TP 1.0921".
+  • Frame slots: Chart (48,128, 1180×560) with EUR/USD — H4 header, BID/ASK, candle placeholder (36 bars green/red), price scale ruler. Chat (1252,128, 620×860) with #SmileSquad tag + 12 mock chat lines (@smileke, @trader_ke, @nairobi_fx, etc. — Kenyan usernames, friendly tone). CAM (48,712, 420×276) — ACTIVE frame (green border + glow + ON AIR tag + REC indicator). Market Structure (488,712, 740×276) — 3 SignalCards in a grid + Session P&L / Open Risk / Daily Range strip.
+  • Lower bar (y=1020, h=60): SmileTicker (clock section + marquee, 12 instruments).
+  • Bottom edge: 2px yellow stripe with glow.
+- Rebuilt `src/app/page.tsx` — control console (v1 control.html "SMILE//CONTROL" aesthetic):
+  • Background: --ink with subtle radial glows (green top-left, yellow bottom-right) + faint scanline texture overlay.
+  • Header: SmileLockup (mark + "smile" wordmark, pulse) · "SMILE // CONTROL" wordmark (Manrope 800, green // separator) · "live kit command centre · v1" subtitle. Right: ON AIR/STANDBY badge (green pulse dot when live, yellow when standby) + date badge.
+  • Left column (320px): Scene list with 7 scenes. Each card: SmileMark (mood="bounce" when selected, idle otherwise, pulse when selected) + title (Manrope 700) + status pill (LIVE=green, READY=cyan, SOON=muted) + tagline. Selected card: green border + green glow.
+  • Right column: live preview (iframe 1920×1080 scaled via CSS transform + ResizeObserver — kept the existing scaling logic). Header: SmileMark + scene title + LIVE PREVIEW badge. Bottom: scale % + clock. Below: OBS URL bar (dark panel, yellow-hover buttons) with Copy + Open Fullscreen.
+  • Footer (sticky via `min-h-screen flex flex-col` + `mt-auto`): Go Live/Stop toggle (green when go-live, red when stop) + Stop + Refresh Scene + clock (yellow, tabular-nums) + SmileMark.
+  • Panel cards use `.smile-panel--bracket` for the green top-left corner bracket detail.
+  • 7 scenes: Starting Soon (smile), Trading Live (w21trading, LIVE, route built), Break/BRB (smile), News (w21news), Interview (w21culture), Education (w21education), Ending (smile).
+- Lint fixes during dev:
+  • `src/app/page.tsx:212` — JSX text ` // ` (in "SMILE // CONTROL") parsed as a comment. Wrapped in braces: `{" // "}`.
+  • `src/components/smile/SmileMark.tsx:71` — `react-hooks/set-state-in-effect` rule fired on `setActive(mood)` inside the effect when `mood` was provided. Refactored: `lockedMood` (from props) wins via `const active = lockedMood ?? idleMood` — no setState in the effect when mood is locked. The effect now ONLY runs the idle scheduler when `lockedMood === undefined && !isStatic`. setState happens only inside setTimeout callbacks (external-system pattern, not synchronous-in-effect).
+- Verification:
+  • `bun run lint` → 0 errors, 0 warnings.
+  • `curl /` → 200, SSR contains "SMILE", "CONTROL", "Go Live", "ON AIR", "STANDBY", "Trading Live", "good vibes", "live kit command centre", "smile".
+  • `curl /scenes/trading-live` → 200, SSR contains "NAIROBI DESK", "EUR/USD", "LIVE CHAT", "CAM", "MARKET STRUCTURE", "SmileSquad", "ON AIR", "London Session", "SIGNAL", "chip", "spark", "ticker", plus DOM classes smile-frame, smile-frame--active.
+  • DOM contains smile-mark, smile-mark--bounce, smile-mark--idle, smile-mark--pulse on `/` — confirms the SmileMark + mood system renders.
+  • Dev log: clean (no compile errors, no fast-reload runtime errors after the lint fixes).
+
+Stage Summary:
+- The smile.co.ke design language is RESTORED as code: warm yellow (#FFC107) + dark ink canvas, smiley-face mark with personality (10 moods + idle auto-blink), Manrope display + Inter body, friendly Kenyan finance-hub tone (#SmileSquad, NAIROBI DESK, "good vibes under one Smile desk").
+- The SmileMark is the new SACRED component — shape NEVER changes per channel. Channel theming swaps CSS variables (yellow → cyan/amber/green/orange/lime) on a wrapper; the smiley stays yellow + smiling. This is the v1 theming.md philosophy, properly implemented.
+- The SmileBrand theming system (tokens + handles + wordmark + tagline) is smarter than the W21 ChannelConfig: it supports text find-replace (#SmileSquad → #TradeSquad) AND CSS-variable overrides, so one component kit serves 6+ channels without forking the mark.
+- The control console (`/`) and the hero scene (`/scenes/trading-live`) are both production-clean: lint passes, routes return 200, SSR contains expected strings, DOM has the right classes, no runtime errors.
+- Next agent: the SmileMark is sacred (Rule 2 of AGENTS.md should be updated to "The SmileMark is sacred" — that's a docs change, not in scope here). To add a new channel: add an entry to `brands` in `src/lib/smile/channels.ts` (id, wordmark, tokens, handles, tagline, accent). To add a new scene: copy `trading-live/page.tsx` as a template, swap the brand + frame layout. Use `applyBrandTokens(brand)` on a wrapper div to theme all descendants.

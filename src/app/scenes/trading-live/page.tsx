@@ -1,38 +1,38 @@
 "use client";
 
 /**
- * W21 Trading Live — Scene 07  (HERO SCENE)
+ * Smile Trading Live — HERO SCENE  (1920×1080, OBS-ready)
  * ─────────────────────────────────────────────────────────────
- * Renders at EXACTLY 1920×1080 for OBS Browser Source consumption.
+ * The warm, friendly Smile desk — "good vibes under one Smile desk."
  *
- * Layout grid (absolute, pixel-perfect):
+ * Layout (frame-slot style, v1 03-live.html + 01-starting-soon.html inspired):
  *
  *   ┌─────────────────────────────────────────────────────── y=0
- *   │ TOP BAR  36px — mark · "LONDON SESSION — LIVE ANALYSIS" · elapsed   │
- *   ├─────────────────────────────────────────────────────── y=36
- *   │                                            ┌──────────┐
- *   │  ┌────────────────────────────────────┐    │ SIGNALS  │
- *   │  │ EUR/USD — H4   [chart frame]       │    │  panel   │
- *   │  │                                    │    │          │
- *   │  │                                    │    │          │
- *   │  └────────────────────────────────────┘    │          │
- *   │  ┌──────────┐  ┌──────────────────────┐    │          │
- *   │  │ CAM—01   │  │ SESSION / RISK       │    │          │
- *   │  │ webcam   │  │                      │    │          │
- *   │  └──────────┘  └──────────────────────┘    └──────────┘
- *   ├─────────────────────────────────────────────────────── y=1023
- *   │ LOWER BAR 55px — lockup · ticker · clock                            │
+ *   │ TOP BAR — SmileLockup · live clock · NAIROBI DESK chip  │
+ *   ├─────────────────────────────────────────────────────── y=72
+ *   │                                  ┌──────────────────┐  │
+ *   │  ┌────────────────────────────┐  │ LIVE CHAT        │  │
+ *   │  │ EUR/USD — H4 (chart)       │  │                  │  │
+ *   │  │                            │  │                  │  │
+ *   │  │                            │  │                  │  │
+ *   │  └────────────────────────────┘  │                  │  │
+ *   │  ┌──────────┐  ┌──────────────┐  │                  │  │
+ *   │  │ CAM—01   │  │ MARKET       │  │                  │  │
+ *   │  │ (ON AIR) │  │ STRUCTURE    │  │                  │  │
+ *   │  └──────────┘  └──────────────┘  └──────────────────┘  │
+ *   ├─────────────────────────────────────────────────────── y=1020
+ *   │ LOWER BAR — Ticker (clock + marquee)                   │
  *   ├─────────────────────────────────────────────────────── y=1078
- *   │ ████████████ 2px signal-cyan stripe                                  │
+ *   │ ████ 2px yellow stripe                                  │
  *   └─────────────────────────────────────────────────────── y=1080
  *
- * Mock data is used throughout — real feeds arrive in a later milestone.
+ * Mock data throughout — real feeds arrive in a later milestone.
  */
 
 import { useRef } from "react";
-import { W21Lockup, W21Mark } from "@/components/w21";
-import { SignalCard, Ticker } from "@/components/w21";
-import type { SignalCardProps, TickerProps } from "@/components/w21";
+import { SmileLockup } from "@/components/smile/SmileLockup";
+import { SignalCard, Ticker } from "@/components/smile";
+import type { SignalCardProps, TickerProps } from "@/components/smile";
 import { useClock } from "@/hooks/use-clock";
 
 // ─── Mock data ───────────────────────────────────────────────
@@ -88,12 +88,6 @@ function pad(n: number) {
 function fmtClock(d: Date) {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
-function fmtElapsed(seconds: number) {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = Math.floor(seconds % 60);
-  return `${pad(h)}:${pad(m)}:${pad(s)}`;
-}
 
 export default function TradingLiveScene() {
   const now = useClock(1000);
@@ -103,803 +97,594 @@ export default function TradingLiveScene() {
     ? Math.floor((now.getTime() - startTimeRef.current) / 1000)
     : 0;
   const clock = now ? fmtClock(now) : "--:--:--";
-  const elapsed = fmtElapsed(elapsedSec);
-  const tsEAT = now ? `${fmtClock(now)} EAT` : "--:--:-- EAT";
+  void elapsedSec; // reserved for a future elapsed readout
 
   return (
     <div
-      className="w21-scene-root w21-scanlines w21-noise"
-      style={{ position: "relative" }}
+      className="smile-scene-root"
+      style={{
+        background:
+          "radial-gradient(circle at 50% 38%, rgba(28,28,28,0.85) 0%, var(--ink) 70%)",
+      }}
     >
-      {/* ── Background layers ─────────────────────────────── */}
-      <div
+      {/* ── Floating sparks — personality ──────────────────────── */}
+      <span
+        className="spark"
+        style={{ top: 180, left: 320, "--d": "0s" } as React.CSSProperties}
         aria-hidden
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #151515 1px, transparent 1px)",
-          backgroundSize: "calc(100% / 12) 100%",
-          opacity: 0.05,
-        }}
       />
-      <div
+      <span
+        className="spark green"
+        style={{ top: 460, left: 1480, "--d": "1.4s" } as React.CSSProperties}
         aria-hidden
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "linear-gradient(to bottom, #151515 1px, transparent 1px)",
-          backgroundSize: "100% 80px",
-          opacity: 0.05,
-        }}
       />
-      {/* Cross-hair + markers at major intersections (7%) */}
-      <div
+      <span
+        className="spark red"
+        style={{ top: 720, left: 880, "--d": "2.6s" } as React.CSSProperties}
         aria-hidden
-        className="absolute inset-0"
+      />
+      <span
+        className="spark sky"
+        style={{ top: 260, left: 1180, "--d": "0.8s" } as React.CSSProperties}
+        aria-hidden
+      />
+
+      {/* ── Decorative orbit ring (top-right, behind content) ──── */}
+      <div
+        className="orbit"
+        aria-hidden
         style={{
-          backgroundImage:
-            "radial-gradient(circle, rgba(245,245,245,0.07) 1px, transparent 1.5px)",
-          backgroundSize: "160px 160px",
+          width: 360,
+          height: 360,
+          top: -120,
+          right: -120,
+          opacity: 0.4,
         }}
       />
 
-      {/* ══════════════ TOP BAR (y=0, h=36) ══════════════ */}
+      {/* ══════════════ TOP BAR (y=0, h=72) ══════════════ */}
       <header
-        className="absolute left-0 right-0 flex items-center justify-between px-6"
-        style={{ top: 0, height: 36 }}
+        className="absolute left-0 right-0 flex items-center justify-between px-8"
+        style={{ top: 0, height: 72 }}
       >
-        {/* Left: small W21Mark */}
-        <div className="flex items-center gap-3">
-          <W21Mark channel="trading" size={22} />
+        <div className="flex items-center gap-5">
+          <SmileLockup brand="smile" size={42} pulse mood="idle" />
           <span
-            className="font-mono uppercase tracking-[0.18em] text-grid-white/55"
-            style={{ fontSize: 10 }}
-          >
-            W21 · TRADING DESK
-          </span>
+            className="hidden"
+            style={{ display: "none" }}
+            aria-hidden
+          />
         </div>
 
-        {/* Center: session title */}
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
           <span
-            className="font-mono font-bold uppercase tracking-[0.28em] text-grid-white"
-            style={{ fontSize: 12 }}
+            className="chip ghost"
+            style={{ padding: "8px 16px", fontSize: 12 }}
+          >
+            <span
+              className="smile-led inline-block rounded-full"
+              style={{
+                width: 7,
+                height: 7,
+                background: "var(--live)",
+                color: "var(--live)",
+              }}
+              aria-hidden
+            />
+            LIVE
+          </span>
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 800,
+              fontSize: 16,
+              letterSpacing: "0.02em",
+              color: "var(--paper)",
+            }}
           >
             London Session — Live Analysis
           </span>
         </div>
 
-        {/* Right: elapsed time + pulsing dot */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           <span
-            className="w21-led inline-block rounded-full"
-            style={{
-              width: 7,
-              height: 7,
-              background: "#00F0FF",
-              color: "#00F0FF",
-            }}
-            aria-hidden
-          />
-          <span
-            className="font-mono uppercase tracking-wider text-grid-white/55"
-            style={{ fontSize: 9 }}
+            className="chip dark"
+            style={{ padding: "8px 14px", fontSize: 11 }}
           >
-            ELAPSED
+            <span
+              aria-hidden
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: 999,
+                background: "var(--yellow)",
+                display: "inline-block",
+              }}
+            />
+            NAIROBI DESK
           </span>
           <span
-            className="font-mono font-bold tabular-nums"
-            style={{ fontSize: 12, color: "#00F0FF" }}
+            className="chip dark"
+            style={{
+              padding: "8px 14px",
+              fontSize: 14,
+              fontWeight: 800,
+              letterSpacing: "0.05em",
+              fontFamily: "var(--font-body)",
+              fontFeatureSettings: '"tnum" 1, "zero" 1',
+            }}
           >
-            {elapsed}
+            {clock} EAT
           </span>
         </div>
       </header>
 
-      {/* ══════════════ MAIN AREA ══════════════ */}
-      {/* Geometry constants (top-level for legibility) */}
-      {/* Chart:        x=24,  y=56,  w=1640, h=640                */}
-      {/* Signal panel: x=1684, y=56,  w=212,  h=924 (full main ht) */}
-      {/* Webcam:       x=24,  y=716, w=420,  h=240                */}
-      {/* Risk/Session: x=460, y=716, w=1204, h=240                */}
+      {/* ══════════════ ALERT BOX (top-center, slide-in) ══════════════ */}
+      <div
+        className="absolute left-1/2 -translate-x-1/2 smile-slide-in"
+        style={{ top: 88, zIndex: 5 }}
+      >
+        <div
+          className="chip solid"
+          style={{ padding: "10px 20px", fontSize: 13 }}
+        >
+          <span aria-hidden style={{ fontSize: 14 }}>⚡</span>
+          SIGNAL · EUR/USD · BUY @ 1.0864 · TP 1.0921
+        </div>
+      </div>
 
-      {/* ── CHART AREA ────────────────────────────────────── */}
+      {/* ══════════════ MAIN GRID (frame slots) ══════════════ */}
+      {/* Geometry constants:
+          Chart:        x=48,  y=128, w=1180, h=560
+          Chat:         x=1252,y=128, w=620,  h=860
+          Cam:          x=48,  y=712, w=420,  h=276  (ON AIR — active)
+          Structure:    x=488, y=712, w=740,  h=276  */}
+
+      {/* ── CHART FRAME ─────────────────────────────────────── */}
       <section
-        className="absolute"
+        className="smile-frame"
         style={{
-          left: 24,
-          top: 56,
-          width: 1640,
-          height: 640,
-          border: "1px solid #27272A",
-          background: "rgba(10,10,10,0.6)",
+          left: 48,
+          top: 128,
+          width: 1180,
+          height: 560,
         }}
         aria-label="EUR/USD H4 chart frame"
       >
-        {/* Gold L-corner brackets */}
-        <CornerBrackets color="#F5A623" thickness={2} len={28} inset={0} />
-
-        {/* Chart header bar */}
+        <FrameHeader
+          label="EUR/USD — H4"
+          live
+          right={
+            <div className="flex items-center gap-6">
+              <BidAsk label="BID" value="1.0864" />
+              <BidAsk label="ASK" value="1.0866" />
+              <span
+                className="tabular-nums font-bold"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontSize: 13,
+                  color: "var(--yellow)",
+                }}
+              >
+                {clock} EAT
+              </span>
+            </div>
+          }
+        />
         <div
-          className="absolute left-0 right-0 top-0 flex items-center justify-between px-4"
-          style={{ height: 30, borderBottom: "1px solid #27272A" }}
+          className="absolute left-0 right-0 bottom-0"
+          style={{ top: 40 }}
         >
-          <div className="flex items-baseline gap-3">
-            <span
-              className="font-mono font-bold tracking-wider text-grid-white"
-              style={{ fontSize: 13 }}
-            >
-              EUR/USD
-            </span>
-            <span
-              className="font-mono uppercase tracking-widest text-grid-white/55"
-              style={{ fontSize: 10 }}
-            >
-              — H4
-            </span>
-            <span
-              className="font-mono uppercase tracking-widest"
-              style={{ fontSize: 9, color: "#22C55E" }}
-            >
-              ▲ LIVE
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <span
-              className="font-mono uppercase tracking-wider text-grid-white/55"
-              style={{ fontSize: 9 }}
-            >
-              BID
-            </span>
-            <span
-              className="font-mono font-bold tabular-nums text-grid-white"
-              style={{ fontSize: 12 }}
-            >
-              1.0864
-            </span>
-            <span
-              className="font-mono uppercase tracking-wider text-grid-white/55"
-              style={{ fontSize: 9 }}
-            >
-              ASK
-            </span>
-            <span
-              className="font-mono font-bold tabular-nums text-grid-white"
-              style={{ fontSize: 12 }}
-            >
-              1.0866
-            </span>
-            <span
-              className="font-mono font-bold tabular-nums"
-              style={{ fontSize: 12, color: "#00F0FF" }}
-            >
-              {tsEAT}
-            </span>
-          </div>
-        </div>
-
-        {/* Chart body — left clear for OBS chart source, render subtle placeholder candles */}
-        <div className="absolute inset-0" style={{ top: 30 }}>
           <PlaceholderCandles />
         </div>
-
-        {/* Bottom scale ruler */}
+        {/* faint price scale ruler on the right */}
         <div
-          className="absolute left-0 right-0 bottom-0 flex items-center justify-between px-4"
-          style={{
-            height: 22,
-            borderTop: "1px solid #27272A",
-            background: "rgba(10,10,10,0.4)",
-          }}
+          className="absolute top-0 bottom-0 right-0 flex flex-col justify-between py-2 pr-2 text-right"
+          style={{ width: 80, borderLeft: "1px solid var(--line)" }}
+          aria-hidden
         >
-          <span
-            className="font-mono tabular-nums text-grid-white/40"
-            style={{ fontSize: 9 }}
-          >
-            1.0800
-          </span>
-          <span
-            className="font-mono tabular-nums text-grid-white/40"
-            style={{ fontSize: 9 }}
-          >
-            1.0840
-          </span>
-          <span
-            className="font-mono tabular-nums text-grid-white/40"
-            style={{ fontSize: 9 }}
-          >
-            1.0880
-          </span>
-          <span
-            className="font-mono tabular-nums text-grid-white/40"
-            style={{ fontSize: 9 }}
-          >
-            1.0920
-          </span>
-          <span
-            className="font-mono tabular-nums text-grid-white/40"
-            style={{ fontSize: 9 }}
-          >
-            1.0960
-          </span>
+          {[1.0920, 1.0890, 1.0864, 1.0840, 1.0810].map((p) => (
+            <span
+              key={p}
+              className="tabular-nums"
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: 11,
+                color: "var(--muted)",
+              }}
+            >
+              {p.toFixed(4)}
+            </span>
+          ))}
         </div>
       </section>
 
-      {/* ── SIGNAL PANEL (right side, full main height) ──── */}
-      <aside
-        className="absolute flex flex-col"
+      {/* ── CHAT FRAME ──────────────────────────────────────── */}
+      <section
+        className="smile-frame"
         style={{
-          left: 1684,
-          top: 56,
-          width: 212,
-          height: 924,
-          background: "#27272A",
-          border: "1px solid #1F1F22",
+          left: 1252,
+          top: 128,
+          width: 620,
+          height: 860,
         }}
-        aria-label="Signals panel"
+        aria-label="Live chat frame"
       >
-        {/* Panel header */}
+        <FrameHeader label="LIVE CHAT" right={<Tag>#SmileSquad</Tag>} />
         <div
-          className="flex items-center justify-between px-3"
+          className="absolute left-0 right-0 bottom-0 px-4 py-3 smile-scroll overflow-y-auto"
+          style={{ top: 40 }}
+        >
+          <ChatLines />
+        </div>
+      </section>
+
+      {/* ── CAM FRAME (ON AIR — active) ─────────────────────── */}
+      <section
+        className="smile-frame smile-frame--active"
+        style={{
+          left: 48,
+          top: 712,
+          width: 420,
+          height: 276,
+        }}
+        aria-label="Webcam frame — CAM-01 ON AIR"
+      >
+        <FrameHeader
+          label="CAM—01"
+          active
+          right={
+            <span
+              className="chip"
+              style={{
+                background: "var(--live)",
+                color: "var(--ink)",
+                padding: "3px 10px",
+                fontSize: 10,
+                fontWeight: 800,
+              }}
+            >
+              ON AIR
+            </span>
+          }
+        />
+        <div
+          className="absolute inset-0 flex items-center justify-center"
+          style={{ top: 36, bottom: 28 }}
+        >
+          <div
+            className="flex flex-col items-center gap-2"
+            style={{ opacity: 0.5 }}
+          >
+            <span
+              style={{
+                fontSize: 48,
+                lineHeight: 1,
+                color: "var(--live)",
+              }}
+              aria-hidden
+            >
+              ●
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: 12,
+                color: "var(--muted)",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}
+            >
+              Camera source — OBS Layer
+            </span>
+          </div>
+        </div>
+        <div
+          className="absolute left-0 right-0 bottom-0 flex items-center justify-between px-3"
           style={{
-            height: 30,
-            borderBottom: "1px solid #1F1F22",
-            background: "#1B1B1E",
+            height: 28,
+            borderTop: "1px solid var(--line)",
+            background: "rgba(10,10,10,0.5)",
           }}
         >
           <span
-            className="font-mono font-bold uppercase tracking-widest"
-            style={{ fontSize: 10, color: "#00F0FF" }}
-          >
-            Signals
-          </span>
-          <span
-            className="font-mono font-bold tabular-nums"
-            style={{ fontSize: 10, color: "#F5A623" }}
-          >
-            (3)
-          </span>
-        </div>
-
-        {/* Stacked signal cards */}
-        <div className="flex flex-col gap-2 p-2">
-          {SIGNALS.map((s) => (
-            <SignalCard key={s.pair} {...s} compact />
-          ))}
-        </div>
-
-        {/* Live activity log */}
-        <div
-          className="mt-auto flex flex-col gap-1 px-3 py-3"
-          style={{ borderTop: "1px solid #1F1F22" }}
-        >
-          <span
-            className="font-mono uppercase tracking-widest text-grid-white/55"
-            style={{ fontSize: 9 }}
-          >
-            Activity
-          </span>
-          {[
-            { t: "14:31:58", m: "EUR/USD ↑ entry tag", c: "#22C55E" },
-            { t: "14:30:12", m: "GBP/JPY signal fired", c: "#00F0FF" },
-            { t: "14:28:04", m: "XAU/USD TP1 hit", c: "#F5A623" },
-            { t: "14:25:33", m: "USD/JPY reversion", c: "#DC2626" },
-          ].map((row) => (
-            <div
-              key={row.t}
-              className="flex items-center gap-2 font-mono"
-              style={{ fontSize: 9 }}
-            >
-              <span className="tabular-nums text-grid-white/40">{row.t}</span>
-              <span
-                className="inline-block rounded-full"
-                style={{
-                  width: 4,
-                  height: 4,
-                  background: row.c,
-                  flexShrink: 0,
-                }}
-              />
-              <span className="truncate text-grid-white/80">{row.m}</span>
-            </div>
-          ))}
-        </div>
-      </aside>
-
-      {/* ── WEBCAM ZONE (lower-left, 420×240) ────────────── */}
-      <section
-        className="absolute"
-        style={{
-          left: 24,
-          top: 716,
-          width: 420,
-          height: 240,
-          border: "1px solid #00F0FF",
-          background: "rgba(0,240,255,0.025)",
-        }}
-        aria-label="Camera feed zone"
-      >
-        <CornerBrackets color="#00F0FF" thickness={2} len={22} inset={0} />
-        {/* CAM—01 label */}
-        <div className="absolute left-3 top-2.5 flex items-center gap-1.5">
-          <span
-            className="w21-led inline-block rounded-full"
-            style={{ width: 5, height: 5, background: "#00F0FF", color: "#00F0FF" }}
-            aria-hidden
-          />
-          <span
-            className="font-mono uppercase tracking-widest"
-            style={{ fontSize: 9, color: "#00F0FF" }}
-          >
-            CAM—01
-          </span>
-        </div>
-        {/* REC indicator */}
-        <div className="absolute right-3 top-2.5 flex items-center gap-1.5">
-          <span
-            className="w21-blink inline-block rounded-full"
-            style={{ width: 5, height: 5, background: "#DC2626" }}
-            aria-hidden
-          />
-          <span
-            className="font-mono uppercase tracking-widest"
-            style={{ fontSize: 9, color: "#DC2626" }}
-          >
-            REC
-          </span>
-        </div>
-        {/* Inner placeholder crosshair (camera target) */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            aria-hidden
-            className="relative"
-            style={{ width: 36, height: 36, opacity: 0.4 }}
-          >
-            <div
-              className="absolute left-1/2 top-0 bottom-0"
-              style={{ width: 1, background: "#00F0FF", transform: "translateX(-50%)" }}
-            />
-            <div
-              className="absolute top-1/2 left-0 right-0"
-              style={{ height: 1, background: "#00F0FF", transform: "translateY(-50%)" }}
-            />
-            <div
-              className="absolute left-1/2 top-1/2 rounded-full"
-              style={{
-                width: 8,
-                height: 8,
-                border: "1px solid #00F0FF",
-                transform: "translate(-50%, -50%)",
-              }}
-            />
-          </div>
-        </div>
-        {/* Bottom info strip */}
-        <div
-          className="absolute left-0 right-0 bottom-0 flex items-center justify-between px-3"
-          style={{ height: 20, borderTop: "1px solid #00F0FF33" }}
-        >
-          <span
-            className="font-mono uppercase tracking-widest text-grid-white/55"
-            style={{ fontSize: 8 }}
+            className="tabular-nums"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 11,
+              color: "var(--paper)",
+              opacity: 0.8,
+            }}
           >
             1080p · 60fps
           </span>
           <span
-            className="font-mono tabular-nums text-grid-white/55"
-            style={{ fontSize: 8 }}
+            className="flex items-center gap-1.5"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 10,
+              color: "var(--down)",
+              textTransform: "uppercase",
+              letterSpacing: "0.1em",
+            }}
           >
-            {clock}
+            <span className="smile-blink" aria-hidden>●</span> REC
           </span>
         </div>
       </section>
 
-      {/* ── SESSION / RISK PANEL (lower-middle, fills webcam-right space) */}
+      {/* ── MARKET STRUCTURE FRAME ──────────────────────────── */}
       <section
-        className="absolute"
+        className="smile-frame"
         style={{
-          left: 460,
-          top: 716,
-          width: 1204,
-          height: 240,
-          border: "1px solid #27272A",
-          background: "rgba(20,20,22,0.4)",
+          left: 488,
+          top: 712,
+          width: 740,
+          height: 276,
         }}
-        aria-label="Session and risk metrics"
+        aria-label="Market structure frame"
       >
-        <CornerBrackets color="#F5A623" thickness={2} len={20} inset={0} />
-        <div className="flex h-full">
-          {/* Daily P&L block */}
-          <MetricBlock
-            label="SESSION P&L"
-            value="+2,481.55"
-            unit="USD"
-            color="#22C55E"
-            sub="R: 3.1 · Win 64%"
-            width={240}
-          />
-          <Divider />
-          <MetricBlock
-            label="OPEN RISK"
-            value="1.8"
-            unit="%"
-            color="#F5A623"
-            sub="Max 3.0% · Cap 2.5%"
-            width={200}
-          />
-          <Divider />
-          <MetricBlock
-            label="DAILY RANGE"
-            value="1.0832–1.0891"
-            unit=""
-            color="#F5F5F5"
-            sub="ATR H4 · 42 pips"
-            width={260}
-          />
-          <Divider />
-          {/* Watchlist */}
-          <div className="flex-1 flex flex-col px-4 py-3">
-            <div className="flex items-center justify-between">
-              <span
-                className="font-mono uppercase tracking-widest text-grid-white/55"
-                style={{ fontSize: 9 }}
-              >
-                Watchlist
-              </span>
-              <span
-                className="font-mono uppercase tracking-widest"
-                style={{ fontSize: 9, color: "#00F0FF" }}
-              >
-                6 pairs
-              </span>
-            </div>
-            <div className="mt-2 grid grid-cols-3 gap-x-4 gap-y-1.5">
-              {[
-                { p: "EUR/USD", v: "1.0864", d: 0.32 },
-                { p: "GBP/USD", v: "1.2718", d: -0.14 },
-                { p: "USD/JPY", v: "157.21", d: 0.45 },
-                { p: "XAU/USD", v: "2418.55", d: 0.82 },
-                { p: "BTC/USD", v: "64,218", d: 1.46 },
-                { p: "WTI", v: "81.34", d: 0.55 },
-              ].map((row) => {
-                const up = row.d >= 0;
-                return (
-                  <div key={row.p} className="flex items-center justify-between gap-2 font-mono">
-                    <span className="text-grid-white/85" style={{ fontSize: 10 }}>
-                      {row.p}
-                    </span>
-                    <span
-                      className="tabular-nums text-grid-white"
-                      style={{ fontSize: 10 }}
-                    >
-                      {row.v}
-                    </span>
-                    <span
-                      className="tabular-nums"
-                      style={{ fontSize: 9, color: up ? "#22C55E" : "#DC2626" }}
-                    >
-                      {up ? "+" : ""}
-                      {row.d.toFixed(2)}%
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
+        <FrameHeader
+          label="MARKET STRUCTURE"
+          right={<Tag>BIAS · BULLISH</Tag>}
+        />
+        <div
+          className="absolute left-0 right-0 bottom-0 px-3 py-2.5"
+          style={{ top: 36 }}
+        >
+          <div className="grid grid-cols-3 gap-2.5">
+            {SIGNALS.map((s) => (
+              <SignalCard key={s.pair} {...s} compact />
+            ))}
+          </div>
+          <div
+            className="mt-2.5 flex items-center justify-between"
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 11,
+              color: "var(--muted)",
+            }}
+          >
+            <span className="uppercase" style={{ letterSpacing: "0.08em" }}>
+              Session P&amp;L
+            </span>
+            <span
+              className="tabular-nums font-bold"
+              style={{ color: "var(--up)" }}
+            >
+              +2,481.55
+            </span>
+            <span className="uppercase" style={{ letterSpacing: "0.08em" }}>
+              Open Risk
+            </span>
+            <span
+              className="tabular-nums font-bold"
+              style={{ color: "var(--yellow)" }}
+            >
+              1.8%
+            </span>
+            <span className="uppercase" style={{ letterSpacing: "0.08em" }}>
+              Daily Range
+            </span>
+            <span
+              className="tabular-nums font-bold"
+              style={{ color: "var(--paper)" }}
+            >
+              1.0800 — 1.0921
+            </span>
           </div>
         </div>
       </section>
 
-      {/* ══════════════ LOWER BAR (y=1023, h=55) ══════════════ */}
-      <footer
-        className="absolute left-0 right-0 flex items-center"
-        style={{
-          top: 1023,
-          height: 55,
-          background: "#27272A",
-          borderTop: "1px solid #1F1F22",
-        }}
-      >
-        {/* Left: W21Lockup (trading) */}
-        <div className="flex items-center pl-5 pr-4" style={{ minWidth: 320 }}>
-          <W21Lockup channel="trading" size={32} pulse />
-        </div>
-
-        {/* Pipe divider */}
-        <div
-          aria-hidden
-          style={{ width: 1, height: 32, background: "#00F0FF55" }}
-        />
-
-        {/* Center: scrolling ticker (fills remaining space) */}
-        <div className="flex-1 flex items-center px-4">
-          <Ticker items={TICKER_ITEMS} height={32} fontSize={12} />
-        </div>
-
-        {/* Pipe divider */}
-        <div
-          aria-hidden
-          style={{ width: 1, height: 32, background: "#00F0FF55" }}
-        />
-
-        {/* Right: live clock */}
-        <div className="flex items-center gap-3 px-5">
-          <span
-            className="w21-led inline-block rounded-full"
-            style={{ width: 6, height: 6, background: "#00F0FF", color: "#00F0FF" }}
-            aria-hidden
-          />
-          <span
-            className="font-mono uppercase tracking-widest text-grid-white/55"
-            style={{ fontSize: 9 }}
-          >
-            EAT
-          </span>
-          <span
-            className="font-mono font-bold tabular-nums"
-            style={{ fontSize: 16, color: "#00F0FF" }}
-          >
-            {clock}
-          </span>
-        </div>
-      </footer>
-
-      {/* ══════════════ BOTTOM EDGE STRIPE (y=1078, h=2) ══════════════ */}
+      {/* ══════════════ LOWER BAR — Ticker (y=1020, h=60) ══════════════ */}
       <div
-        aria-hidden
         className="absolute left-0 right-0"
         style={{
-          top: 1078,
-          height: 2,
-          background: "#00F0FF",
-          boxShadow: "0 0 10px #00F0FF88",
+          top: 1020,
+          height: 60,
+          borderTop: "1px solid var(--line)",
+          background: "var(--panel)",
         }}
-      />
+      >
+        <Ticker
+          items={TICKER_ITEMS}
+          height={60}
+          fontSize={14}
+          clock={clock}
+          clockLabel="EAT"
+        />
+      </div>
+
+      {/* ══════════════ BOTTOM EDGE — 2px yellow stripe ══════════════ */}
+      <div className="smile-stripe" aria-hidden />
     </div>
   );
 }
 
 /* ════════════════════════════════════════════════════════════
-   Sub-components — local to the scene
+   Sub-components
    ════════════════════════════════════════════════════════════ */
 
-function CornerBrackets({
-  color,
-  thickness = 2,
-  len = 24,
-  inset = 0,
-}: {
-  color: string;
-  thickness?: number;
-  len?: number;
-  inset?: number;
-}) {
-  const cornerStyle = {
-    position: "absolute" as const,
-    width: len,
-    height: len,
-    borderColor: color,
-    borderStyle: "solid" as const,
-    pointerEvents: "none" as const,
-  };
-  return (
-    <>
-      <div
-        aria-hidden
-        style={{
-          ...cornerStyle,
-          top: inset,
-          left: inset,
-          borderTopWidth: thickness,
-          borderLeftWidth: thickness,
-          borderBottomWidth: 0,
-          borderRightWidth: 0,
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          ...cornerStyle,
-          top: inset,
-          right: inset,
-          borderTopWidth: thickness,
-          borderRightWidth: thickness,
-          borderBottomWidth: 0,
-          borderLeftWidth: 0,
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          ...cornerStyle,
-          bottom: inset,
-          left: inset,
-          borderBottomWidth: thickness,
-          borderLeftWidth: thickness,
-          borderTopWidth: 0,
-          borderRightWidth: 0,
-        }}
-      />
-      <div
-        aria-hidden
-        style={{
-          ...cornerStyle,
-          bottom: inset,
-          right: inset,
-          borderBottomWidth: thickness,
-          borderRightWidth: thickness,
-          borderTopWidth: 0,
-          borderLeftWidth: 0,
-        }}
-      />
-    </>
-  );
-}
-
-function MetricBlock({
+function FrameHeader({
   label,
-  value,
-  unit,
-  color,
-  sub,
-  width,
+  right,
+  live,
+  active,
 }: {
   label: string;
-  value: string;
-  unit: string;
-  color: string;
-  sub: string;
-  width: number;
+  right?: React.ReactNode;
+  live?: boolean;
+  active?: boolean;
 }) {
   return (
     <div
-      className="flex flex-col justify-center px-4 py-3"
-      style={{ width }}
+      className="absolute left-0 right-0 top-0 flex items-center justify-between px-4"
+      style={{
+        height: 36,
+        borderBottom: "1px solid var(--line)",
+        background: "rgba(10,10,10,0.45)",
+      }}
     >
-      <span
-        className="font-mono uppercase tracking-widest text-grid-white/55"
-        style={{ fontSize: 9, letterSpacing: "0.12em" }}
-      >
-        {label}
-      </span>
-      <div className="mt-1 flex items-baseline gap-1.5">
-        <span
-          className="font-mono font-bold tabular-nums"
-          style={{ fontSize: 20, color, lineHeight: 1 }}
-        >
-          {value}
-        </span>
-        {unit && (
+      <div className="flex items-center gap-2.5">
+        {active && (
           <span
-            className="font-mono uppercase"
-            style={{ fontSize: 10, color: "#8B8B8E" }}
+            className="smile-led inline-block rounded-full"
+            style={{
+              width: 7,
+              height: 7,
+              background: "var(--live)",
+              color: "var(--live)",
+            }}
+            aria-hidden
+          />
+        )}
+        <span
+          style={{
+            fontFamily: "var(--font-display)",
+            fontWeight: 800,
+            fontSize: 13,
+            color: active ? "var(--live)" : "var(--paper)",
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+          }}
+        >
+          {label}
+        </span>
+        {live && (
+          <span
+            style={{
+              fontFamily: "var(--font-display)",
+              fontWeight: 700,
+              fontSize: 10,
+              color: "var(--up)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+            }}
           >
-            {unit}
+            ▲ LIVE
           </span>
         )}
       </div>
-      <span
-        className="mt-1.5 font-mono uppercase tracking-wider text-grid-white/55"
-        style={{ fontSize: 9 }}
-      >
-        {sub}
-      </span>
+      {right}
     </div>
   );
 }
 
-function Divider() {
+function BidAsk({ label, value }: { label: string; value: string }) {
   return (
-    <div
-      aria-hidden
-      style={{ width: 1, background: "#27272A", alignSelf: "stretch" }}
-    />
+    <span className="flex items-baseline gap-1.5">
+      <span
+        className="uppercase"
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: 10,
+          color: "var(--muted)",
+          letterSpacing: "0.1em",
+        }}
+      >
+        {label}
+      </span>
+      <span
+        className="tabular-nums font-bold"
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: 13,
+          color: "var(--paper)",
+        }}
+      >
+        {value}
+      </span>
+    </span>
   );
 }
 
-/**
- * PlaceholderCandles — a subtle, static candlestick pattern rendered
- * in the chart frame so the scene looks alive even before OBS injects
- * a real chart source. Colors respect W21 bull/bear semantics.
- */
-function PlaceholderCandles() {
-  // Deterministic pseudo-random candle series (no hydration drift).
-  const candles = [
-    { o: 30, h: 28, l: 50, c: 38, up: true },
-    { o: 38, h: 33, l: 56, c: 44, up: true },
-    { o: 44, h: 40, l: 62, c: 50, up: true },
-    { o: 50, h: 46, l: 70, c: 60, up: true },
-    { o: 60, h: 54, l: 78, c: 68, up: true },
-    { o: 68, h: 62, l: 88, c: 78, up: true },
-    { o: 78, h: 70, l: 100, c: 90, up: true },
-    { o: 90, h: 84, l: 112, c: 96, up: true },
-    { o: 96, h: 92, l: 120, c: 88, up: false },
-    { o: 88, h: 84, l: 116, c: 78, up: false },
-    { o: 78, h: 70, l: 104, c: 84, up: true },
-    { o: 84, h: 78, l: 110, c: 92, up: true },
-    { o: 92, h: 86, l: 120, c: 100, up: true },
-    { o: 100, h: 94, l: 130, c: 108, up: true },
-    { o: 108, h: 102, l: 138, c: 116, up: true },
-    { o: 116, h: 108, l: 148, c: 110, up: false },
-    { o: 110, h: 104, l: 140, c: 118, up: true },
-    { o: 118, h: 112, l: 150, c: 126, up: true },
-    { o: 126, h: 118, l: 158, c: 132, up: true },
-    { o: 132, h: 126, l: 168, c: 140, up: true },
-    { o: 140, h: 132, l: 178, c: 134, up: false },
-    { o: 134, h: 128, l: 168, c: 142, up: true },
-    { o: 142, h: 136, l: 178, c: 150, up: true },
-    { o: 150, h: 144, l: 188, c: 158, up: true },
-    { o: 158, h: 152, l: 198, c: 166, up: true },
-    { o: 166, h: 158, l: 208, c: 160, up: false },
-    { o: 160, h: 154, l: 200, c: 168, up: true },
-    { o: 168, h: 162, l: 212, c: 176, up: true },
-    { o: 176, h: 168, l: 220, c: 184, up: true },
-    { o: 184, h: 176, l: 228, c: 192, up: true },
-    { o: 192, h: 184, l: 236, c: 186, up: false },
-    { o: 186, h: 180, l: 232, c: 194, up: true },
-    { o: 194, h: 186, l: 240, c: 202, up: true },
-    { o: 202, h: 194, l: 248, c: 210, up: true },
-    { o: 210, h: 200, l: 256, c: 216, up: true },
-  ];
-
-  const chartH = 610 - 30 - 22; // available height inside chart body
-  const chartW = 1640;
-  const gap = 8;
-  const candleW = (chartW - gap * (candles.length + 1)) / candles.length;
-  const maxV = 280;
-  const yScale = (v: number) => chartH - (v / maxV) * chartH + 30;
-
+function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute inset-0" aria-hidden>
-      {/* Horizontal price gridlines */}
-      {[0.25, 0.5, 0.75].map((p) => (
-        <div
-          key={p}
-          aria-hidden
-          className="absolute left-0 right-0"
-          style={{
-            top: `${p * 100}%`,
-            height: 1,
-            background: "rgba(245,245,245,0.04)",
-          }}
-        />
-      ))}
-      {/* Candles */}
-      {candles.map((c, i) => {
-        const x = gap + i * (candleW + gap);
-        const color = c.up ? "#22C55E" : "#DC2626";
-        const bodyTop = yScale(Math.max(c.o, c.c));
-        const bodyH = Math.max(2, Math.abs(c.o - c.c) * 1.2);
-        const wickTop = yScale(c.h);
-        const wickBottom = yScale(c.l);
-        return (
-          <div key={i}>
-            {/* Wick */}
+    <span
+      className="chip dark"
+      style={{ padding: "3px 10px", fontSize: 10 }}
+    >
+      {children}
+    </span>
+  );
+}
+
+function PlaceholderCandles() {
+  // Deterministic seed-ish series — green/red bars across the chart body
+  const candles = Array.from({ length: 36 }, (_, i) => {
+    const up = (i * 7 + 3) % 5 < 3;
+    const h = 36 + ((i * 13) % 70);
+    const y = 60 + ((i * 17) % 40);
+    return { up, h, y };
+  });
+  return (
+    <div
+      className="relative h-full w-full"
+      style={{ padding: "12px 16px" }}
+      aria-hidden
+    >
+      <div className="flex items-end gap-[6px] h-full">
+        {candles.map((c, i) => (
+          <div
+            key={i}
+            className="flex-1 flex flex-col items-center"
+            style={{ height: "100%", justifyContent: "flex-end" }}
+          >
             <div
-              className="absolute"
               style={{
-                left: x + candleW / 2 - 0.5,
-                top: wickTop,
-                width: 1,
-                height: wickBottom - wickTop,
-                background: color,
-                opacity: 0.7,
-              }}
-            />
-            {/* Body */}
-            <div
-              className="absolute"
-              style={{
-                left: x,
-                top: bodyTop,
-                width: candleW,
-                height: bodyH,
-                background: c.up ? `${color}33` : `${color}55`,
-                border: `1px solid ${color}`,
+                width: "70%",
+                height: c.h,
+                background: c.up
+                  ? "color-mix(in srgb, var(--up) 70%, transparent)"
+                  : "color-mix(in srgb, var(--down) 70%, transparent)",
+                border: `1px solid ${c.up ? "var(--up)" : "var(--down)"}`,
+                borderRadius: 2,
+                marginBottom: c.y,
+                opacity: 0.65,
               }}
             />
           </div>
-        );
-      })}
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ChatLines() {
+  const lines = [
+    { user: "@smileke", text: "Good morning #SmileSquad ☀️", color: "var(--yellow)" },
+    { user: "@trader_ke", text: "EUR/USD looking strong above 1.086", color: "var(--sky)" },
+    { user: "@nairobi_fx", text: "Long bias holding — nice structure 🔥", color: "var(--up)" },
+    { user: "@muthoni", text: "First target 1.0921?", color: "var(--paper)" },
+    { user: "@smileke", text: "Yes — and SL just below 1.0832.", color: "var(--yellow)" },
+    { user: "@kcb_fan", text: "Smile desk is 🔛 today 🚀", color: "var(--up-soft)" },
+    { user: "@_jay", text: "Gold signal hit TP overnight 💰", color: "var(--up)" },
+    { user: "@wanjiku", text: "What's the read on GBP/JPY?", color: "var(--paper)" },
+    { user: "@smileke", text: "Reversion play — see the card on the right.", color: "var(--yellow)" },
+    { user: "@trader_ke", text: "Educational content after the session 📚", color: "var(--sky)" },
+    { user: "@nairobi_fx", text: "W21 Trading channel going brrr 📈", color: "var(--up)" },
+    { user: "@muthoni", text: "Replay will be on smile.co.ke later", color: "var(--paper)" },
+  ];
+  return (
+    <div className="flex flex-col gap-2.5">
+      {lines.map((l, i) => (
+        <div
+          key={i}
+          className="flex items-baseline gap-2"
+          style={{ fontFamily: "var(--font-body)", fontSize: 13 }}
+        >
+          <span
+            className="font-bold shrink-0"
+            style={{ color: l.color }}
+          >
+            {l.user}
+          </span>
+          <span style={{ color: "var(--paper)", opacity: 0.92 }}>
+            {l.text}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }

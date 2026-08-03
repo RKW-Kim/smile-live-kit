@@ -6,8 +6,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-jetbrains-mono);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-manrope);
+  --font-mono: var(--font-inter);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -42,31 +43,27 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* ─────────── W21 System Tokens ─────────── */
-  --color-terminal: var(--terminal);
-  --color-grid-white: var(--grid-white);
-  --color-zinc-panel: var(--zinc-panel);
-  --color-alert: var(--alert);
-  --color-bull: var(--bull);
-  --color-bear: var(--bear);
-
-  /* Channel signature colors (exposed as Tailwind utilities) */
-  --color-ch-parent: var(--ch-parent);
-  --color-ch-trading: var(--ch-trading);
-  --color-ch-news: var(--ch-news);
-  --color-ch-politics: var(--ch-politics);
-  --color-ch-agriculture: var(--ch-agriculture);
-  --color-ch-innovation: var(--ch-innovation);
-  --color-ch-impact: var(--ch-impact);
-  --color-ch-health: var(--ch-health);
-  --color-ch-education: var(--ch-education);
-  --color-ch-culture: var(--ch-culture);
-  --color-ch-sports: var(--ch-sports);
-  --color-ch-tech: var(--ch-tech);
+  /* ─── Smile brand tokens (exposed as Tailwind utilities) ─── */
+  --color-yellow: var(--yellow);
+  --color-yellow-hot: var(--yellow-hot);
+  --color-ink: var(--ink);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-smile-muted: var(--muted);
+  --color-paper: var(--paper);
+  --color-up: var(--up);
+  --color-down: var(--down);
+  --color-up-soft: var(--up-soft);
+  --color-down-soft: var(--down-soft);
+  --color-sky: var(--sky);
+  --color-live: var(--live);
 }
 
 :root {
   --radius: 0.625rem;
+
+  /* shadcn light-mode mirrors (kept for theme parity) */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -99,80 +96,72 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* W21 System — light mode mirrors (kept for theme parity) */
-  --terminal: #0A0A0A;
-  --grid-white: #F5F5F5;
-  --zinc-panel: #27272A;
-  --alert: #FF006E;
-  --bull: #22C55E;
-  --bear: #DC2626;
-  --ch-parent: #F5A623;
-  --ch-trading: #00F0FF;
-  --ch-news: #FF8C00;
-  --ch-politics: #DC2626;
-  --ch-agriculture: #22C55E;
-  --ch-innovation: #6366F1;
-  --ch-impact: #F0EDE5;
-  --ch-health: #14B8A6;
-  --ch-education: #3B82F6;
-  --ch-culture: #F97316;
-  --ch-sports: #84CC16;
-  --ch-tech: #8B5CF6;
+  /* Smile brand truth (smile.co.ke) — light-mode mirrors */
+  --yellow: #FFC107;
+  --yellow-hot: #F5A623;
+  --ink: #0a0a0a;
+  --panel: #141414;
+  --panel-2: #1b1b1b;
+  --line: #2a2a2a;
+  --muted: #8c8c8c;
+  --paper: #ffffff;
+  --up: #0ECB81;
+  --down: #F6465D;
+  --up-soft: #5BE9B0;
+  --down-soft: #FF8A98;
+  --sky: #3FB6FF;
+  --live: #3ddc84;
 }
 
 .dark {
-  /* W21 default — Terminal Black is the canvas. */
-  --background: #0A0A0A;
-  --foreground: #F5F5F5;
-  --card: #161616;
-  --card-foreground: #F5F5F5;
-  --popover: #161616;
-  --popover-foreground: #F5F5F5;
-  --primary: #F5F5F5;
-  --primary-foreground: #0A0A0A;
-  --secondary: #27272A;
-  --secondary-foreground: #F5F5F5;
-  --muted: #1F1F22;
-  --muted-foreground: #8B8B8E;
-  --accent: #27272A;
-  --accent-foreground: #F5F5F5;
-  --destructive: #DC2626;
-  --border: #27272A;
-  --input: #1F1F22;
-  --ring: #F5A623;
-  --chart-1: #F5A623;
-  --chart-2: #00F0FF;
-  --chart-3: #22C55E;
-  --chart-4: #DC2626;
+  /* Smile default — warm dark canvas, yellow accents. */
+  --background: var(--ink);
+  --foreground: var(--paper);
+  --card: var(--panel);
+  --card-foreground: var(--paper);
+  --popover: var(--panel);
+  --popover-foreground: var(--paper);
+  --primary: var(--yellow);
+  --primary-foreground: var(--ink);
+  --secondary: var(--panel-2);
+  --secondary-foreground: var(--paper);
+  --muted: var(--panel-2);
+  --muted-foreground: var(--muted);
+  --accent: var(--panel-2);
+  --accent-foreground: var(--paper);
+  --destructive: var(--down);
+  --border: var(--line);
+  --input: var(--panel-2);
+  --ring: var(--yellow);
+  --chart-1: var(--yellow);
+  --chart-2: var(--sky);
+  --chart-3: var(--up);
+  --chart-4: var(--down);
   --chart-5: #8B5CF6;
-  --sidebar: #0F0F0F;
-  --sidebar-foreground: #F5F5F5;
-  --sidebar-primary: #F5A623;
-  --sidebar-primary-foreground: #0A0A0A;
-  --sidebar-accent: #27272A;
-  --sidebar-accent-foreground: #F5F5F5;
-  --sidebar-border: #27272A;
-  --sidebar-ring: #F5A623;
+  --sidebar: #0d0d0d;
+  --sidebar-foreground: var(--paper);
+  --sidebar-primary: var(--yellow);
+  --sidebar-primary-foreground: var(--ink);
+  --sidebar-accent: var(--panel-2);
+  --sidebar-accent-foreground: var(--paper);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--yellow);
 
-  /* W21 channel + system palette */
-  --terminal: #0A0A0A;
-  --grid-white: #F5F5F5;
-  --zinc-panel: #27272A;
-  --alert: #FF006E;
-  --bull: #22C55E;
-  --bear: #DC2626;
-  --ch-parent: #F5A623;
-  --ch-trading: #00F0FF;
-  --ch-news: #FF8C00;
-  --ch-politics: #DC2626;
-  --ch-agriculture: #22C55E;
-  --ch-innovation: #6366F1;
-  --ch-impact: #F0EDE5;
-  --ch-health: #14B8A6;
-  --ch-education: #3B82F6;
-  --ch-culture: #F97316;
-  --ch-sports: #84CC16;
-  --ch-tech: #8B5CF6;
+  /* Smile brand truth — the only source of color truth */
+  --yellow: #FFC107;
+  --yellow-hot: #F5A623;
+  --ink: #0a0a0a;
+  --panel: #141414;
+  --panel-2: #1b1b1b;
+  --line: #2a2a2a;
+  --muted: #8c8c8c;
+  --paper: #ffffff;
+  --up: #0ECB81;
+  --down: #F6465D;
+  --up-soft: #5BE9B0;
+  --down-soft: #FF8A98;
+  --sky: #3FB6FF;
+  --live: #3ddc84;
 }
 
 @layer base {
@@ -181,161 +170,362 @@
   }
   html,
   body {
-    background: var(--terminal);
-    color: var(--grid-white);
+    background: var(--ink);
+    color: var(--paper);
   }
   body {
     @apply antialiased;
-    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   }
-  /* Numbers and code always monospaced */
-  .font-mono,
-  [data-mono],
-  .w21-num {
-    font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  /* Display / heading utility */
+  .font-display,
+  [data-display] {
+    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  }
+  /* Numbers always tabular-nums (Inter supports tnum + zero) */
+  .tabular-nums,
+  [data-mono] {
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "tnum" 1, "zero" 1;
   }
 }
 
 /* ════════════════════════════════════════════════════════════════
-   W21 UTILITIES — the grid never sleeps (Rule 6)
+   SMILE UTILITIES — warm, friendly, personality-driven
    ════════════════════════════════════════════════════════════════ */
 
-/* Faint 12-column structural grid. Use on a full-bleed wrapper. */
-.w21-grid {
-  background-image:
-    linear-gradient(to right, #151515 1px, transparent 1px);
-  background-size: calc(100% / 12) 100%;
-  background-position: 0 0;
+/* ─── Chip — pill-shaped label (display font, uppercase) ─── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.1;
+  white-space: nowrap;
 }
-.w21-grid-dense {
-  background-image:
-    linear-gradient(to right, rgba(245, 245, 245, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(245, 245, 245, 0.04) 1px, transparent 1px);
-  background-size: 80px 80px, 80px 80px;
+.chip.dark {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--paper);
+}
+.chip.ghost {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid var(--yellow);
+  color: var(--yellow);
+}
+.chip.solid {
+  background: var(--yellow);
+  color: var(--ink);
 }
 
-/* Cross-hair + markers at major grid intersections (7% opacity) */
-.w21-crosshairs {
-  position: relative;
-}
-.w21-crosshairs::before,
-.w21-crosshairs::after {
-  content: "";
+/* ─── Spark — floating animated dot (background personality) ─── */
+.spark {
   position: absolute;
-  inset: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 12px var(--yellow);
   pointer-events: none;
-  background-image:
-    radial-gradient(circle, rgba(245, 245, 245, 0.07) 1px, transparent 1.5px);
-  background-size: 160px 160px;
-  background-position: 0 0;
+  animation: floatSpark 4s infinite ease-in-out var(--d, 0s);
+}
+.spark.green {
+  background: var(--up);
+  box-shadow: 0 0 12px var(--up);
+}
+.spark.red {
+  background: var(--down);
+  box-shadow: 0 0 12px var(--down);
+}
+.spark.sky {
+  background: var(--sky);
+  box-shadow: 0 0 12px var(--sky);
+}
+@keyframes floatSpark {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-30px) scale(1.5);
+    opacity: 0.8;
+  }
 }
 
-/* Scan lines — 2% opacity CRT veil */
-.w21-scanlines {
-  position: relative;
-}
-.w21-scanlines::after {
-  content: "";
+/* ─── Orbit — dashed rotating ring (decorative) ─── */
+.orbit {
   position: absolute;
-  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--yellow) 40%, transparent);
+  animation: orbitSpin 24s linear infinite;
   pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(245, 245, 245, 0.02) 0px,
-    rgba(245, 245, 245, 0.02) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  z-index: 50;
+}
+@keyframes orbitSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Noise grain — 2% opacity film texture */
-.w21-noise {
+/* ─── Face container — wraps SmileMark with optional ring ─── */
+.face {
   position: relative;
-}
-.w21-noise::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.02;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   W21 ANIMATIONS
-   ════════════════════════════════════════════════════════════════ */
-
-/* LED status dot — soft radial pulse */
-@keyframes w21-led-pulse {
-  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
-  50% { opacity: 0.75; box-shadow: 0 0 6px 1px currentColor; }
-}
-.w21-led {
-  animation: w21-led-pulse 2.4s ease-in-out infinite;
-}
-
-/* Slow ambient blink for "LIVE" indicators */
-@keyframes w21-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-.w21-blink {
-  animation: w21-blink 1.6s steps(2, end) infinite;
-}
-
-/* Scrolling ticker — infinite left marquee */
-@keyframes w21-ticker-scroll {
+/* ─── Ticker — smile-style marquee ─── */
+@keyframes smile-ticker-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-.w21-ticker-track {
+.smile-ticker__track {
   display: inline-flex;
+  align-items: center;
+  height: 100%;
   white-space: nowrap;
-  animation: w21-ticker-scroll 38s linear infinite;
+  animation: smile-ticker-scroll 38s linear infinite;
 }
-.w21-ticker-wrap:hover .w21-ticker-track {
+.smile-ticker:hover .smile-ticker__track {
   animation-play-state: paused;
 }
 
-/* Subtle caret blink for terminal cursor */
-@keyframes w21-caret {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+/* ─── LED pulse — soft radial throb (live dots) ─── */
+@keyframes smile-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
 }
-.w21-caret {
-  animation: w21-caret 1.05s step-end infinite;
+.smile-led {
+  animation: smile-pulse 2.4s ease-in-out infinite;
 }
 
-/* Custom scrollbar — terminal feel */
-.w21-scroll::-webkit-scrollbar {
+/* ─── Blink — slow ambient blink for "LIVE" tags ─── */
+@keyframes smile-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.smile-blink {
+  animation: smile-blink 1.6s steps(2, end) infinite;
+}
+
+/* ─── Slide-in — for alert boxes ─── */
+@keyframes smile-slide-in {
+  0% { opacity: 0; transform: translateY(-12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.smile-slide-in {
+  animation: smile-slide-in 0.5s ease-out both;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SmileMark mood animations
+   The mark shape NEVER changes — these animate eyes/mouth/transform
+   ════════════════════════════════════════════════════════════════ */
+.smile-mark__svg {
+  transition: transform 0.2s ease-out;
+}
+
+/* idle: nothing — the SVG renders as drawn */
+
+/* blink: both eyes scale Y to 0.08 */
+.smile-mark--blink .smile-mark__eyes ellipse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: smile-eye-blink 0.16s ease-in-out;
+}
+@keyframes smile-eye-blink {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.08); }
+}
+
+/* wink: only the right eye blinks */
+.smile-mark--wink .smile-mark__eye--right {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: smile-eye-blink 0.22s ease-in-out;
+}
+
+/* smirk: the mouth skews slightly */
+.smile-mark--smirk .smile-mark__mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: skewX(-12deg) translateY(-1px);
+  transition: transform 0.25s ease;
+}
+
+/* look: eyes translate horizontally (peek right) */
+.smile-mark--look .smile-mark__eyes ellipse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: smile-look 1.4s ease-in-out infinite;
+}
+@keyframes smile-look {
+  0%, 100% { transform: translateX(0); }
+  30%, 70% { transform: translateX(3px); }
+}
+
+/* nod: whole SVG bounces vertically */
+.smile-mark--nod .smile-mark__svg {
+  animation: smile-nod 0.7s ease-in-out;
+}
+@keyframes smile-nod {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8%); }
+}
+
+/* spin: whole SVG rotates 360 */
+.smile-mark--spin .smile-mark__svg {
+  animation: smile-spin 0.7s ease-in-out;
+}
+@keyframes smile-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* bounce: whole SVG bounces up */
+.smile-mark--bounce .smile-mark__svg {
+  animation: smile-bounce 0.6s ease-out;
+}
+@keyframes smile-bounce {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-22%); }
+  60% { transform: translateY(-22%); }
+}
+
+/* celebrate: rotate + scale */
+.smile-mark--celebrate .smile-mark__svg {
+  animation: smile-celebrate 0.8s ease-in-out;
+}
+@keyframes smile-celebrate {
+  0% { transform: rotate(0deg) scale(1); }
+  30% { transform: rotate(-12deg) scale(1.18); }
+  60% { transform: rotate(10deg) scale(1.12); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+/* shake: horizontal wobble */
+.smile-mark--shake .smile-mark__svg {
+  animation: smile-shake 0.5s ease-in-out;
+}
+@keyframes smile-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8%); }
+  40% { transform: translateX(8%); }
+  60% { transform: translateX(-6%); }
+  80% { transform: translateX(6%); }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Custom scrollbar — friendly but tidy
+   ════════════════════════════════════════════════════════════════ */
+.smile-scroll::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-.w21-scroll::-webkit-scrollbar-track {
+.smile-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-.w21-scroll::-webkit-scrollbar-thumb {
-  background: #27272A;
+.smile-scroll::-webkit-scrollbar-thumb {
+  background: var(--line);
   border-radius: 3px;
 }
-.w21-scroll::-webkit-scrollbar-thumb:hover {
-  background: #3F3F46;
+.smile-scroll::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--yellow) 35%, var(--line));
 }
-.w21-scroll {
+.smile-scroll {
   scrollbar-width: thin;
-  scrollbar-color: #27272A transparent;
+  scrollbar-color: var(--line) transparent;
 }
 
-/* 1920×1080 scene viewport — used by OBS Browser Sources */
-.w21-scene-root {
+/* ════════════════════════════════════════════════════════════════
+   1920×1080 scene viewport — used by OBS Browser Sources
+   ════════════════════════════════════════════════════════════════ */
+.smile-scene-root {
   width: 1920px;
   height: 1080px;
   overflow: hidden;
   position: relative;
-  background: #0A0A0A;
-  color: #F5F5F5;
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Frame slot — rectangular scene zone with hairline border */
+.smile-frame {
+  position: absolute;
+  border: 2px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  background: rgba(20, 20, 20, 0.6);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.smile-frame--active {
+  border-color: rgba(61, 220, 132, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(61, 220, 132, 0.25),
+    0 0 28px rgba(61, 220, 132, 0.35),
+    inset 0 0 24px rgba(61, 220, 132, 0.06);
+}
+
+/* Corner bracket — green accent at the top-left of a panel */
+.smile-corner {
+  position: relative;
+}
+.smile-corner::before,
+.smile-corner::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+.smile-corner::before {
+  top: 8px;
+  left: 8px;
+  border-top: 2px solid var(--live);
+  border-left: 2px solid var(--live);
+  border-top-left-radius: 3px;
+}
+.smile-corner::after {
+  bottom: 8px;
+  right: 8px;
+  border-bottom: 2px solid color-mix(in srgb, var(--yellow) 65%, transparent);
+  border-right: 2px solid color-mix(in srgb, var(--yellow) 65%, transparent);
+  border-bottom-right-radius: 3px;
+}
+
+/* Panel card with bracket accent (control console) */
+.smile-panel {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.smile-panel--bracket::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 18px;
+  height: 18px;
+  border-top: 2px solid var(--live);
+  border-left: 2px solid var(--live);
+  border-top-left-radius: 10px;
+  pointer-events: none;
+}
+
+/* Yellow bottom stripe — scene bottom edge */
+.smile-stripe {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--yellow);
+  box-shadow: 0 0 10px var(--yellow);
 }

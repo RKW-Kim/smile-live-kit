@@ -1,51 +1,55 @@
 import type { Metadata } from "next";
-import { Geist, JetBrains_Mono } from "next/font/google";
+import { Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
+  weight: ["500", "700", "800"],
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "700", "800"],
+  weight: ["500", "700", "800"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Smile Live Kit — W21 Broadcast Console",
+  title: "Smile Live Kit — Broadcast Console",
   description:
-    "W21 Broadcast Suite — an OBS-focused live-streaming scene & overlay kit for the World 21 ecosystem (smile.co.ke).",
+    "Smile Live Kit — a warm, friendly OBS-focused broadcast & streaming scene kit for the smile.co.ke hub. Channels, 24/7 streaming, education — good vibes under one Smile desk.",
   keywords: [
-    "W21",
-    "World 21",
+    "Smile",
     "smile.co.ke",
+    "W21",
     "OBS",
     "Broadcast",
     "Live Stream",
     "Trading",
+    "Education",
+    "Channels",
     "Scene Kit",
+    "Kenya",
   ],
-  authors: [{ name: "W21 Broadcast Suite" }],
+  authors: [{ name: "Smile Live Kit" }],
   icons: {
     icon: "/logo.svg",
   },
   openGraph: {
-    title: "Smile Live Kit — W21 Broadcast Console",
+    title: "Smile Live Kit — Broadcast Console",
     description:
-      "OBS-focused live-streaming scene & overlay kit for the World 21 ecosystem.",
+      "A warm, friendly OBS-focused broadcast & streaming scene kit for the smile.co.ke hub.",
     siteName: "Smile Live Kit",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Smile Live Kit — W21 Broadcast Console",
+    title: "Smile Live Kit — Broadcast Console",
     description:
-      "OBS-focused live-streaming scene & overlay kit for the World 21 ecosystem.",
+      "A warm, friendly OBS-focused broadcast & streaming scene kit for the smile.co.ke hub.",
   },
 };
 
@@ -57,7 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${manrope.variable} ${inter.variable} antialiased`}
       >
         {children}
         <Toaster />
