@@ -11,7 +11,16 @@ You are continuing the **Smile Live Kit** project — an OBS-focused live-stream
 
 ## CRITICAL CONTEXT
 
-Smile Live Kit is a v2 foundation: git remote + legacy branch + W21 identity system + this documentation are all in place. The first scene route (`/scenes/trading-live`) + the control console at `/` + the market-data + ticker wiring are being built in parallel. The full documentation is in `docs/handoff/` (17 numbered files + AI_BRIEFING + CURRENT_STATE). **Read them in order before writing any code.**
+Smile Live Kit is a v2 foundation: git remote + legacy branch + W21 identity system + this documentation are all in place. The first scene route (`/scenes/trading-live`) + the control console at `/` + the market-data + ticker wiring are being built in parallel. The full documentation is in `docs/handoff/` (17 numbered files + AI_BRIEFING + CURRENT_STATE + NO_SANDBOX_PROTOCOL). **Read them in order before writing any code.**
+
+### ⚠️ SANDBOX vs CHAT-ONLY — KNOW WHICH YOU ARE
+
+**If you have a sandbox** (can write files + `git push`): follow the normal workflow below.
+
+**If you are chat-only** (no filesystem access): **Read `docs/handoff/NO_SANDBOX_PROTOCOL.md` NOW.** You must deliver changes as a single Python script the human runs. Rules:
+- Assume the human is in the repo root (`./smile-live-kit`). Never use `cd` commands.
+- NO inline comments in commands (they break the console). Explain in prose before/after.
+- One script per feature. The script is surgical, idempotent, prints what it changed.
 
 ## WHAT TO DO FIRST (in order)
 

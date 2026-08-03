@@ -8,6 +8,17 @@
 
 This project has been engineered for seamless AI-to-AI handoff. The worklog (`/worklog.md` at repo root) is the non-rollbackable memory. The docs (`docs/handoff/` + `docs/brand/` + `docs/verticals/`) are the frozen architecture. The code (`src/`) is the artifact. When you start, you inherit ALL of it. You are continuing, not starting.
 
+### ⚠️ FIRST: Are You a Sandbox AI or a Chat-Only AI?
+
+**Before you write a single line, determine your environment:**
+
+- **Sandbox AI** (you can write files + run `git push`): Follow the normal workflow in `AGENTS.md`. You edit, commit, push, open PRs directly.
+- **Chat-only AI** (no filesystem access — you can only output text): **Read [`NO_SANDBOX_PROTOCOL.md`](NO_SANDBOX_PROTOCOL.md) immediately.** You must deliver changes as a single Python script the human runs with one command. Rules:
+  - Assume the human is in the repo root (`./smile-live-kit`). No `cd` commands.
+  - NO inline comments in any command you give the human (they trigger console quote mode). Explain in prose before/after.
+  - The script is surgical, idempotent, and prints what it changed.
+  - One script per feature — the human runs one command, not ten manual edits.
+
 **The 3 Sacred Rules (non-negotiable):**
 1. **The worklog is non-rollbackable** — append before AND after every task. Never delete.
 2. **The W21 mark (`src/components/w21/W21Mark.tsx`) is never touched** — it is the universal brand mark. The ONLY variable is color (per channel). The full spec is in `docs/brand/IDENTITY_SYSTEM.md`.

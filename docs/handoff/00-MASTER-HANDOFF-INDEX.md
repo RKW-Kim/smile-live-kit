@@ -31,6 +31,7 @@ Read in this order if you're new to the project:
 | 14 | **WORKLOG_FULL.md** | Reference to the canonical worklog at `/worklog.md` (repo root) |
 | 15 | **CONTINUATION_PROMPT.md** | Copy-paste prompt for the next AI/chat |
 | 16 | **WORKFLOW_FEASIBILITY.md** | Sandbox capability assessment + GitHub/Vercel workflow |
+| — | **NO_SANDBOX_PROTOCOL.md** | **CRITICAL for chat-only AIs** — how to deliver changes via Python scripts if you can't push to git |
 | — | **AI_BRIEFING.md** | The single-source-of-truth briefing — read ONCE, know everything |
 | — | **CURRENT_STATE.md** | What's done, what's next — update at the end of every session |
 
@@ -40,6 +41,7 @@ Read in this order if you're new to the project:
 
 If you are an AI/chat continuing this project, do this **in order**:
 
+0. **Determine your environment FIRST** — do you have a sandbox (can write files + `git push`)? Or are you a chat-only AI (can only output text)? If chat-only, **read [`NO_SANDBOX_PROTOCOL.md`](NO_SANDBOX_PROTOCOL.md) immediately** — you must deliver changes as Python scripts, not manual edit instructions.
 1. **Read** [`AI_BRIEFING.md`](AI_BRIEFING.md) — the single-source-of-truth briefing.
 2. **Read** [`CURRENT_STATE.md`](CURRENT_STATE.md) — what's done, what's next.
 3. **Read** [`15-CONTINUATION_PROMPT.md`](15-CONTINUATION_PROMPT.md) — copy-paste-ready briefing for handoff.

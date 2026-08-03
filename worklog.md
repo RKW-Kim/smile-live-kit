@@ -215,3 +215,21 @@ Stage Summary:
 - The previous React SmileMark/SmileBrand/SmileScene system is GONE. The real smiley face is the v1 SVG (`smile-mark.svg`) upgraded by `smile-mark.js` — both served verbatim. No React reinterpretation.
 - The v1 Python WebSocket backends (`/api/control`, `/api/autotalk/state`, `/api/market/ws`) are NOT ported — those scenes render their static visual design but don't receive live state. That's a future mini-services milestone (ports 3001-3003 with Caddyfile gateway routing). The Binance REST polling in `live-feed.js` (mini-chart.html) works out-of-the-box.
 - Next agent: the user will verify pixel-fidelity against the originals before any refinement. DO NOT modify the files in `/public/scenes/` — they are the source of truth. Any "improvement" must happen in the React control panel at `/` only, or in NEW files. If the user asks for a new scene, copy an existing v1 HTML file and modify the COPY, not the original. See `/agent-ctx/PORT-1-zai-code.md` for the full handoff.
+
+---
+Task ID: DOCS-2
+Agent: zai-code (opus, orchestrator)
+Task: Document the No-Sandbox Protocol for future AIs that can't push to git directly.
+
+Work Log:
+- User requested: future AIs without a sandbox should deliver changes as a complete Python script (surgical file edits) rather than asking the user to copy-paste. Key constraints: assume the user is in the repo root (./smile-live-kit, no cd commands), NO inline comments in commands (they trigger console quote mode), explain what commands do before/after not inline.
+- Created docs/handoff/NO_SANDBOX_PROTOCOL.md — the complete protocol: the problem (chat-only AIs can't push), the rule (deliver one Python script), the 4 script contract rules (assume repo root, no inline comments, self-contained+surgical+idempotent, group related changes), a template script, an example message format, and a quick-reference table.
+- Updated AGENTS.md — added a prominent "READ THIS FIRST" section at the very top (before the 3 Sacred Rules) directing AIs to determine their environment: sandbox AI (follow normal workflow) vs chat-only AI (read NO_SANDBOX_PROTOCOL.md, use Python scripts). This is the first thing any AI sees.
+- Updated docs/handoff/00-MASTER-HANDOFF-INDEX.md — added NO_SANDBOX_PROTOCOL.md to the documentation table (marked "CRITICAL for chat-only AIs") + added step 0 to the Quick Start ("Determine your environment FIRST").
+- Updated docs/handoff/AI_BRIEFING.md — added a "FIRST: Are You a Sandbox AI or a Chat-Only AI?" subsection in section 0 with the rules summarized.
+- Updated docs/handoff/15-CONTINUATION_PROMPT.md — added a "SANDBOX vs CHAT-ONLY — KNOW WHICH YOU ARE" section in CRITICAL CONTEXT with the rules.
+
+Stage Summary:
+- The no-sandbox protocol is now documented in 5 places: the dedicated NO_SANDBOX_PROTOCOL.md doc, AGENTS.md (top), master index (table + step 0), AI_BRIEFING.md (section 0), CONTINUATION_PROMPT.md (critical context). Any AI that reads ANY entry point will encounter it.
+- The 4 key rules for chat-only AIs: (1) deliver a single Python script, (2) assume repo root — no cd, (3) no inline comments in commands, (4) surgical + idempotent + prints what it changed.
+- This protects the user from manual copy-paste errors and console quote-mode issues when working with non-sandbox AIs (Claude, GPT, Gemini, etc.).

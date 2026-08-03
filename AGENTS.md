@@ -4,6 +4,17 @@
 
 ---
 
+## ⚠️ READ THIS FIRST — Are You a Sandbox AI or a Chat-Only AI?
+
+**Before you do anything, determine your environment:**
+
+- **Sandbox AI** (you can write files, run `git push`, execute commands) → Follow the full workflow below (Steps 1–8). You edit, commit, and push directly.
+- **Chat-only AI** (no filesystem access, no git push — you can only output text) → **STOP. Read [`docs/handoff/NO_SANDBOX_PROTOCOL.md`](docs/handoff/NO_SANDBOX_PROTOCOL.md) NOW.** You must deliver changes as a single Python script the human runs. Do NOT ask the human to manually edit files. Do NOT include inline comments in commands (they break the console). Assume the human is in the repo root (`./smile-live-kit`) — no `cd` commands.
+
+This distinction is critical. If you're a chat-only AI and you try to follow the sandbox workflow, you'll produce instructions the human can't safely execute. If you're a sandbox AI and you use the script protocol, you're wasting your own capabilities. Know which one you are.
+
+---
+
 ## The 3 Sacred Rules
 
 ### Rule 1: The Worklog is Non-Rollbackable
