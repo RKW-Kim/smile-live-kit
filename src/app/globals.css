@@ -6,9 +6,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
-  --font-display: var(--font-manrope);
-  --font-mono: var(--font-inter);
+  --font-sans: var(--font-mono);
+  --font-display: var(--font-disp);
+  --font-mono: var(--font-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -43,7 +43,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* ─── Smile brand tokens (exposed as Tailwind utilities) ─── */
+  /* ─── Smile + Control palette (exposed as Tailwind utilities) ─── */
   --color-yellow: var(--yellow);
   --color-yellow-hot: var(--yellow-hot);
   --color-ink: var(--ink);
@@ -54,16 +54,21 @@
   --color-paper: var(--paper);
   --color-up: var(--up);
   --color-down: var(--down);
-  --color-up-soft: var(--up-soft);
-  --color-down-soft: var(--down-soft);
   --color-sky: var(--sky);
   --color-live: var(--live);
+  --color-live-dk: var(--live-dk);
+  --color-amb: var(--amb);
+  --color-red: var(--red);
+  --color-cyan: var(--cyan);
+  --color-bg: var(--bg);
+  --color-panel-solid: var(--panel-solid);
+  --color-line-hi: var(--line-hi);
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.375rem;
 
-  /* shadcn light-mode mirrors (kept for theme parity) */
+  /* shadcn light-mode mirrors (kept for theme parity, unused in dark default) */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -96,72 +101,82 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
-  /* Smile brand truth (smile.co.ke) — light-mode mirrors */
-  --yellow: #FFC107;
-  --yellow-hot: #F5A623;
+  /* ─── control.html palette (the SMILE // CONTROL dashboard) ─── */
+  --bg: #0a0f0d;
+  --panel-solid: #101714;
+  --line: #1e2b25;
+  --line-hi: #2c3f36;
   --ink: #0a0a0a;
   --panel: #141414;
   --panel-2: #1b1b1b;
-  --line: #2a2a2a;
-  --muted: #8c8c8c;
+  --amb: #ffb454;
+  --red: #ff5c5c;
+  --cyan: #5ad1e6;
+  --live: #3ddc84;
+  --live-dk: #12351f;
   --paper: #ffffff;
+  --muted: #7d918a;
+  --yellow: #FFC107;
+  --yellow-hot: #F5A623;
   --up: #0ECB81;
   --down: #F6465D;
-  --up-soft: #5BE9B0;
-  --down-soft: #FF8A98;
   --sky: #3FB6FF;
-  --live: #3ddc84;
 }
 
 .dark {
-  /* Smile default — warm dark canvas, yellow accents. */
-  --background: var(--ink);
-  --foreground: var(--paper);
-  --card: var(--panel);
-  --card-foreground: var(--paper);
-  --popover: var(--panel);
-  --popover-foreground: var(--paper);
-  --primary: var(--yellow);
-  --primary-foreground: var(--ink);
-  --secondary: var(--panel-2);
-  --secondary-foreground: var(--paper);
-  --muted: var(--panel-2);
+  /* SMILE // CONTROL — dark green-tinted console canvas */
+  --background: var(--bg);
+  --foreground: #e8f1ec;
+  --card: var(--panel-solid);
+  --card-foreground: #e8f1ec;
+  --popover: var(--panel-solid);
+  --popover-foreground: #e8f1ec;
+  --primary: var(--live);
+  --primary-foreground: var(--bg);
+  --secondary: #131c18;
+  --secondary-foreground: #e8f1ec;
+  --muted: #0d1411;
   --muted-foreground: var(--muted);
-  --accent: var(--panel-2);
-  --accent-foreground: var(--paper);
-  --destructive: var(--down);
+  --accent: #131c18;
+  --accent-foreground: #e8f1ec;
+  --destructive: var(--red);
   --border: var(--line);
-  --input: var(--panel-2);
-  --ring: var(--yellow);
-  --chart-1: var(--yellow);
-  --chart-2: var(--sky);
-  --chart-3: var(--up);
-  --chart-4: var(--down);
-  --chart-5: #8B5CF6;
-  --sidebar: #0d0d0d;
-  --sidebar-foreground: var(--paper);
-  --sidebar-primary: var(--yellow);
-  --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--panel-2);
-  --sidebar-accent-foreground: var(--paper);
+  --input: #0d1411;
+  --ring: var(--live);
+  --chart-1: var(--live);
+  --chart-2: var(--cyan);
+  --chart-3: var(--amb);
+  --chart-4: var(--red);
+  --chart-5: var(--yellow);
+  --sidebar: var(--bg);
+  --sidebar-foreground: #e8f1ec;
+  --sidebar-primary: var(--live);
+  --sidebar-primary-foreground: var(--bg);
+  --sidebar-accent: #0d1411;
+  --sidebar-accent-foreground: #e8f1ec;
   --sidebar-border: var(--line);
-  --sidebar-ring: var(--yellow);
+  --sidebar-ring: var(--live);
 
-  /* Smile brand truth — the only source of color truth */
-  --yellow: #FFC107;
-  --yellow-hot: #F5A623;
+  /* Smile + Control palette — single source of truth */
+  --bg: #0a0f0d;
+  --panel-solid: #101714;
+  --line: #1e2b25;
+  --line-hi: #2c3f36;
   --ink: #0a0a0a;
   --panel: #141414;
   --panel-2: #1b1b1b;
-  --line: #2a2a2a;
-  --muted: #8c8c8c;
+  --amb: #ffb454;
+  --red: #ff5c5c;
+  --cyan: #5ad1e6;
+  --live: #3ddc84;
+  --live-dk: #12351f;
   --paper: #ffffff;
+  --muted: #7d918a;
+  --yellow: #FFC107;
+  --yellow-hot: #F5A623;
   --up: #0ECB81;
   --down: #F6465D;
-  --up-soft: #5BE9B0;
-  --down-soft: #FF8A98;
   --sky: #3FB6FF;
-  --live: #3ddc84;
 }
 
 @layer base {
@@ -170,259 +185,357 @@
   }
   html,
   body {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--bg);
+    color: #e8f1ec;
+    min-height: 100%;
   }
   body {
     @apply antialiased;
-    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  }
-  /* Display / heading utility */
-  .font-display,
-  [data-display] {
-    font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  }
-  /* Numbers always tabular-nums (Inter supports tnum + zero) */
-  .tabular-nums,
-  [data-mono] {
-    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-    font-feature-settings: "tnum" 1, "zero" 1;
+    font-family: var(--font-mono), ui-monospace, monospace;
   }
 }
 
 /* ════════════════════════════════════════════════════════════════
-   SMILE UTILITIES — warm, friendly, personality-driven
+   SMILE // CONTROL — control panel styling (matches control.html)
+   The control panel at `/` is the only React code. Scene HTML files
+   in /public/scenes/ bring their own smile.css — they are untouched.
    ════════════════════════════════════════════════════════════════ */
 
-/* ─── Chip — pill-shaped label (display font, uppercase) ─── */
-.chip {
+/* Ambient console background — green radial glow + scanlines + inset vignette */
+.smile-console-bg {
+  background:
+    radial-gradient(1200px 600px at 80% -10%, rgba(61, 220, 132, 0.06), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(90, 209, 230, 0.05), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.015) 0 1px, transparent 1px 3px),
+    var(--bg);
+  color: #e8f1ec;
+  position: relative;
+  min-height: 100vh;
+}
+.smile-console-bg::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 180px rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+
+/* Brand lockup — "SMILE//CONTROL" in Chakra Petch with green // */
+.smile-brand {
+  font-family: var(--font-disp), sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: #e8f1ec;
+}
+.smile-brand em {
+  font-style: normal;
+  color: var(--live);
+}
+.smile-brand small {
+  display: block;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-weight: 400;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.32em;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+/* Pill — status badge with dot */
+.smile-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 18px;
-  border-radius: 999px;
-  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.05em;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  line-height: 1.1;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: var(--panel-solid);
+  color: var(--muted);
   white-space: nowrap;
 }
-.chip.dark {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  color: var(--paper);
-}
-.chip.ghost {
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid var(--yellow);
-  color: var(--yellow);
-}
-.chip.solid {
-  background: var(--yellow);
-  color: var(--ink);
-}
-
-/* ─── Spark — floating animated dot (background personality) ─── */
-.spark {
-  position: absolute;
-  width: 6px;
-  height: 6px;
+.smile-pill .dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: var(--yellow);
-  box-shadow: 0 0 12px var(--yellow);
-  pointer-events: none;
-  animation: floatSpark 4s infinite ease-in-out var(--d, 0s);
+  background: #3a4a43;
 }
-.spark.green {
-  background: var(--up);
-  box-shadow: 0 0 12px var(--up);
+.smile-pill.on {
+  color: var(--live);
+  border-color: var(--live-dk);
 }
-.spark.red {
-  background: var(--down);
-  box-shadow: 0 0 12px var(--down);
+.smile-pill.on .dot {
+  background: var(--live);
+  box-shadow: 0 0 10px var(--live);
+  animation: smile-pill-pulse 1.6s infinite;
 }
-.spark.sky {
-  background: var(--sky);
-  box-shadow: 0 0 12px var(--sky);
+.smile-pill.warn {
+  color: var(--amb);
+  border-color: #3d2f1a;
 }
-@keyframes floatSpark {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.3;
-  }
+.smile-pill.warn .dot {
+  background: var(--amb);
+}
+@keyframes smile-pill-pulse {
   50% {
-    transform: translateY(-30px) scale(1.5);
-    opacity: 0.8;
+    opacity: 0.4;
   }
 }
 
-/* ─── Orbit — dashed rotating ring (decorative) ─── */
-.orbit {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px dashed color-mix(in srgb, var(--yellow) 40%, transparent);
-  animation: orbitSpin 24s linear infinite;
-  pointer-events: none;
-}
-@keyframes orbitSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+/* Clock — Chakra Petch tabular */
+.smile-clock {
+  font-family: var(--font-disp), sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 0.06em;
+  color: #e8f1ec;
+  font-variant-numeric: tabular-nums;
 }
 
-/* ─── Face container — wraps SmileMark with optional ring ─── */
-.face {
+/* Panel — bordered card with green top-left corner bracket */
+.smile-panel {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-solid);
+  position: relative;
+  padding: 16px 16px 18px;
+  transition: border-color 0.25s;
+}
+.smile-panel:hover {
+  border-color: var(--line-hi);
+}
+.smile-panel::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid var(--live);
+  border-left: 2px solid var(--live);
+  opacity: 0.7;
+}
+.smile-panel h2 {
+  font-family: var(--font-disp), sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.smile-panel h2::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+/* Button — Chakra Petch uppercase, hairline border, green hover */
+.smile-btn {
+  font-family: var(--font-disp), sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #e8f1ec;
+  background: #131c18;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.18s;
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-/* ─── Ticker — smile-style marquee ─── */
-@keyframes smile-ticker-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.smile-ticker__track {
-  display: inline-flex;
-  align-items: center;
-  height: 100%;
+  gap: 8px;
   white-space: nowrap;
-  animation: smile-ticker-scroll 38s linear infinite;
+  text-decoration: none;
 }
-.smile-ticker:hover .smile-ticker__track {
-  animation-play-state: paused;
+.smile-btn:hover {
+  border-color: var(--live);
+  color: var(--live);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(61, 220, 132, 0.12);
 }
-
-/* ─── LED pulse — soft radial throb (live dots) ─── */
-@keyframes smile-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.08); }
+.smile-btn:active {
+  transform: translateY(0);
 }
-.smile-led {
-  animation: smile-pulse 2.4s ease-in-out infinite;
+.smile-btn:focus-visible {
+  outline: 2px solid var(--live);
+  outline-offset: 2px;
 }
-
-/* ─── Blink — slow ambient blink for "LIVE" tags ─── */
-@keyframes smile-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.45; }
+.smile-btn.active {
+  background: var(--live-dk);
+  border-color: var(--live);
+  color: var(--live);
+  box-shadow: 0 0 0 1px var(--live), 0 0 18px rgba(61, 220, 132, 0.25);
 }
-.smile-blink {
-  animation: smile-blink 1.6s steps(2, end) infinite;
+.smile-btn.danger:hover {
+  border-color: var(--red);
+  color: var(--red);
+  box-shadow: 0 4px 14px rgba(255, 92, 92, 0.15);
 }
-
-/* ─── Slide-in — for alert boxes ─── */
-@keyframes smile-slide-in {
-  0% { opacity: 0; transform: translateY(-12px); }
-  100% { opacity: 1; transform: translateY(0); }
+.smile-btn.danger.active {
+  background: #2a1414;
+  border-color: var(--red);
+  color: var(--red);
+  box-shadow: 0 0 0 1px var(--red), 0 0 18px rgba(255, 92, 92, 0.25);
 }
-.smile-slide-in {
-  animation: smile-slide-in 0.5s ease-out both;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   SmileMark mood animations
-   The mark shape NEVER changes — these animate eyes/mouth/transform
-   ════════════════════════════════════════════════════════════════ */
-.smile-mark__svg {
-  transition: transform 0.2s ease-out;
+.smile-btn.amb:hover {
+  border-color: var(--amb);
+  color: var(--amb);
 }
 
-/* idle: nothing — the SVG renders as drawn */
-
-/* blink: both eyes scale Y to 0.08 */
-.smile-mark--blink .smile-mark__eyes ellipse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: smile-eye-blink 0.16s ease-in-out;
+/* Scene card — clickable panel entry in the scene grid */
+.smile-scene {
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: #0d1411;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+  color: inherit;
 }
-@keyframes smile-eye-blink {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(0.08); }
+.smile-scene:hover {
+  border-color: var(--line-hi);
+  transform: translateY(-1px);
 }
-
-/* wink: only the right eye blinks */
-.smile-mark--wink .smile-mark__eye--right {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: smile-eye-blink 0.22s ease-in-out;
+.smile-scene.active {
+  border-color: var(--live);
+  box-shadow: 0 0 0 1px var(--live), 0 0 22px rgba(61, 220, 132, 0.28);
 }
-
-/* smirk: the mouth skews slightly */
-.smile-mark--smirk .smile-mark__mouth {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: skewX(-12deg) translateY(-1px);
-  transition: transform 0.25s ease;
+.smile-scene .nm {
+  font-family: var(--font-disp), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: #e8f1ec;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-
-/* look: eyes translate horizontally (peek right) */
-.smile-mark--look .smile-mark__eyes ellipse {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: smile-look 1.4s ease-in-out infinite;
+.smile-scene .tag {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  font-family: var(--font-mono), ui-monospace, monospace;
 }
-@keyframes smile-look {
-  0%, 100% { transform: translateX(0); }
-  30%, 70% { transform: translateX(3px); }
-}
-
-/* nod: whole SVG bounces vertically */
-.smile-mark--nod .smile-mark__svg {
-  animation: smile-nod 0.7s ease-in-out;
-}
-@keyframes smile-nod {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8%); }
+.smile-scene.active .tag {
+  color: var(--live);
 }
 
-/* spin: whole SVG rotates 360 */
-.smile-mark--spin .smile-mark__svg {
-  animation: smile-spin 0.7s ease-in-out;
+/* Preview viewport — scaled iframe container */
+.smile-viewport {
+  position: relative;
+  background: #050807;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
 }
-@keyframes smile-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.smile-viewport::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 14px;
+  height: 14px;
+  border-top: 2px solid var(--live);
+  border-left: 2px solid var(--live);
+  opacity: 0.7;
+  z-index: 2;
+  pointer-events: none;
 }
-
-/* bounce: whole SVG bounces up */
-.smile-mark--bounce .smile-mark__svg {
-  animation: smile-bounce 0.6s ease-out;
+.smile-iframe-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-@keyframes smile-bounce {
-  0%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-22%); }
-  60% { transform: translateY(-22%); }
-}
-
-/* celebrate: rotate + scale */
-.smile-mark--celebrate .smile-mark__svg {
-  animation: smile-celebrate 0.8s ease-in-out;
-}
-@keyframes smile-celebrate {
-  0% { transform: rotate(0deg) scale(1); }
-  30% { transform: rotate(-12deg) scale(1.18); }
-  60% { transform: rotate(10deg) scale(1.12); }
-  100% { transform: rotate(0deg) scale(1); }
-}
-
-/* shake: horizontal wobble */
-.smile-mark--shake .smile-mark__svg {
-  animation: smile-shake 0.5s ease-in-out;
-}
-@keyframes smile-shake {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-8%); }
-  40% { transform: translateX(8%); }
-  60% { transform: translateX(-6%); }
-  80% { transform: translateX(6%); }
+.smile-iframe {
+  border: 0;
+  background: transparent;
+  transform-origin: top left;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   Custom scrollbar — friendly but tidy
-   ════════════════════════════════════════════════════════════════ */
+/* URL bar — OBS source URL display */
+.smile-urlbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #0d1411;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+.smile-urlbar code {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #e8f1ec;
+  font-family: inherit;
+}
+.smile-urlbar .smile-btn {
+  padding: 7px 10px;
+  font-size: 10px;
+}
+
+/* Toast — bottom center pill */
+@keyframes smile-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+.smile-toast {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--panel-solid);
+  border: 1px solid var(--live);
+  color: var(--live);
+  font-family: var(--font-disp), sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 3px;
+  z-index: 60;
+  animation: smile-toast-in 0.3s ease-out;
+  pointer-events: none;
+}
+
+/* Custom scrollbar */
 .smile-scroll::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -435,97 +548,17 @@
   border-radius: 3px;
 }
 .smile-scroll::-webkit-scrollbar-thumb:hover {
-  background: color-mix(in srgb, var(--yellow) 35%, var(--line));
+  background: var(--line-hi);
 }
 .smile-scroll {
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
 }
 
-/* ════════════════════════════════════════════════════════════════
-   1920×1080 scene viewport — used by OBS Browser Sources
-   ════════════════════════════════════════════════════════════════ */
-.smile-scene-root {
-  width: 1920px;
-  height: 1080px;
-  overflow: hidden;
-  position: relative;
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-}
-
-/* Frame slot — rectangular scene zone with hairline border */
-.smile-frame {
-  position: absolute;
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  border-radius: 6px;
-  background: rgba(20, 20, 20, 0.6);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-.smile-frame--active {
-  border-color: rgba(61, 220, 132, 0.75);
-  box-shadow:
-    0 0 0 1px rgba(61, 220, 132, 0.25),
-    0 0 28px rgba(61, 220, 132, 0.35),
-    inset 0 0 24px rgba(61, 220, 132, 0.06);
-}
-
-/* Corner bracket — green accent at the top-left of a panel */
-.smile-corner {
-  position: relative;
-}
-.smile-corner::before,
-.smile-corner::after {
-  content: "";
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  pointer-events: none;
-  z-index: 2;
-}
-.smile-corner::before {
-  top: 8px;
-  left: 8px;
-  border-top: 2px solid var(--live);
-  border-left: 2px solid var(--live);
-  border-top-left-radius: 3px;
-}
-.smile-corner::after {
-  bottom: 8px;
-  right: 8px;
-  border-bottom: 2px solid color-mix(in srgb, var(--yellow) 65%, transparent);
-  border-right: 2px solid color-mix(in srgb, var(--yellow) 65%, transparent);
-  border-bottom-right-radius: 3px;
-}
-
-/* Panel card with bracket accent (control console) */
-.smile-panel {
-  position: relative;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-.smile-panel--bracket::before {
-  content: "";
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 18px;
-  height: 18px;
-  border-top: 2px solid var(--live);
-  border-left: 2px solid var(--live);
-  border-top-left-radius: 10px;
-  pointer-events: none;
-}
-
-/* Yellow bottom stripe — scene bottom edge */
-.smile-stripe {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--yellow);
-  box-shadow: 0 0 10px var(--yellow);
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .smile-pill.on .dot,
+  .smile-toast {
+    animation: none !important;
+  }
 }

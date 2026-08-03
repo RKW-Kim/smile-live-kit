@@ -1,47 +1,56 @@
 import type { Metadata } from "next";
-import { Manrope, Inter } from "next/font/google";
+import { Chakra_Petch, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+/**
+ * Fonts — match control.html exactly:
+ *   --disp = 'Chakra Petch' (500/600/700) — display / labels
+ *   --mono = 'IBM Plex Mono' (400/500/600) — body / numbers
+ *
+ * The scene HTML files in /public/scenes/ load their own Google Fonts
+ * (Manrope + Inter + Chakra Petch) via <link> tags inside the iframe —
+ * they are self-contained. The control panel at `/` only needs the two
+ * control.html fonts.
+ */
+const chakraPetch = Chakra_Petch({
+  variable: "--font-disp",
   subsets: ["latin"],
-  weight: ["500", "700", "800"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-mono",
   subsets: ["latin"],
-  weight: ["500", "700", "800"],
+  weight: ["400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Smile Live Kit — Broadcast Console",
   description:
-    "Smile Live Kit — a warm, friendly OBS-focused broadcast & streaming scene kit for the smile.co.ke hub. Channels, 24/7 streaming, education — good vibes under one Smile desk.",
+    "SMILE // CONTROL — live kit command centre. Pick a scene, preview it live, send the URL to OBS. The original smile.co.ke v1 broadcast suite, served verbatim.",
   keywords: [
     "Smile",
     "smile.co.ke",
-    "W21",
+    "SmileSquad",
     "OBS",
     "Broadcast",
     "Live Stream",
     "Trading",
-    "Education",
-    "Channels",
     "Scene Kit",
     "Kenya",
+    "Nairobi Desk",
   ],
   authors: [{ name: "Smile Live Kit" }],
   icons: {
-    icon: "/logo.svg",
+    icon: "/scenes/smile-mark.svg",
   },
   openGraph: {
     title: "Smile Live Kit — Broadcast Console",
     description:
-      "A warm, friendly OBS-focused broadcast & streaming scene kit for the smile.co.ke hub.",
+      "SMILE // CONTROL — live kit command centre. The original smile.co.ke v1 broadcast suite.",
     siteName: "Smile Live Kit",
     type: "website",
   },
@@ -49,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Smile Live Kit — Broadcast Console",
     description:
-      "A warm, friendly OBS-focused broadcast & streaming scene kit for the smile.co.ke hub.",
+      "SMILE // CONTROL — live kit command centre. The original smile.co.ke v1 broadcast suite.",
   },
 };
 
@@ -61,7 +70,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${manrope.variable} ${inter.variable} antialiased`}
+        className={`${chakraPetch.variable} ${ibmPlexMono.variable} antialiased`}
       >
         {children}
         <Toaster />

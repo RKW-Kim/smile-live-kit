@@ -168,3 +168,50 @@ Stage Summary:
 - The SmileBrand theming system (tokens + handles + wordmark + tagline) is smarter than the W21 ChannelConfig: it supports text find-replace (#SmileSquad → #TradeSquad) AND CSS-variable overrides, so one component kit serves 6+ channels without forking the mark.
 - The control console (`/`) and the hero scene (`/scenes/trading-live`) are both production-clean: lint passes, routes return 200, SSR contains expected strings, DOM has the right classes, no runtime errors.
 - Next agent: the SmileMark is sacred (Rule 2 of AGENTS.md should be updated to "The SmileMark is sacred" — that's a docs change, not in scope here). To add a new channel: add an entry to `brands` in `src/lib/smile/channels.ts` (id, wordmark, tokens, handles, tagline, accent). To add a new scene: copy `trading-live/page.tsx` as a template, swap the brand + frame layout. Use `applyBrandTokens(brand)` on a wrapper div to theme all descendants.
+
+---
+Task ID: PORT-1
+Agent: zai-code (opus, main orchestrator)
+Task: Port the EXACT original v1 HTML/CSS/JS/SVG source files into the Next.js 16 app — pixel-fidelity absolute priority. Serve the original HTML verbatim; do NOT re-implement as React components.
+
+Work Log:
+- User feedback: previous REVERT-1 attempt (React SmileMark + smile-scene rebuilt in TSX) was still a reinterpretation. User wants the EXACT original smile.co.ke v1 source served verbatim — "Ensure you're using the exact html of the original even the svg and stuff." Pixel-fidelity is the absolute priority.
+- Read all 15 v1 source files in `/tmp/v1-extract/core/`: 11 HTML scenes (00-bg, 01-starting-soon, 02-countdown, 03-live, 04-brb, 05-ending, 08-alerts, control, market-ticker, mini-chart, test-cam) + smile.css + smile-mark.js + smile-mark.svg + live-feed.js.
+- Approach: **Option A** from the brief — copy all v1 files to `public/scenes/` so they're served as static assets at `/scenes/{filename}`. The HTML files use relative paths (`href="smile.css"`, `src="smile-mark.js"`, `fetch('brand.json')`) which resolve to `/scenes/{filename}` when served from `/scenes/*.html` — works perfectly with zero modifications.
+- COPIED (exact): `cp /tmp/v1-extract/core/*.{html,css,js,svg} public/scenes/` + `git show legacy/v1-python-static:core/brand.json > public/scenes/brand.json`. Verified byte-for-byte identical via `diff` (5 spot checks: 03-live.html, 01-starting-soon.html, control.html, smile.css, smile-mark.js — all IDENTICAL to /tmp/v1-extract/core/).
+- DELETED the previous React reinterpretation:
+  • `src/components/smile/` (6 files: SmileMark.tsx, SmileLockup.tsx, SignalCard.tsx, Ticker.tsx, Chip.tsx, index.ts) — the React smiley face + components.
+  • `src/lib/smile/channels.ts` (the SmileBrand theming system).
+  • `src/app/scenes/trading-live/page.tsx` (the React hero scene).
+- REWROTE `src/app/layout.tsx`:
+  • Swapped Manrope/Inter → **Chakra_Petch** (500/600/700) + **IBM_Plex_Mono** (400/500/600) via next/font/google. CSS vars `--font-disp` + `--font-mono`.
+  • Metadata updated: title "Smile Live Kit — Broadcast Console", keywords (SmileSquad, OBS, Nairobi Desk), icon `/scenes/smile-mark.svg` (the real v1 SVG).
+  • Kept `dark` default + Toaster. The scene HTML files load their own Google Fonts inside their iframes (Manrope + Inter + Chakra Petch) — they're self-contained.
+- REWROTE `src/app/globals.css`:
+  • Replaced ALL smile/W21 React-utility classes (.smile-mark--blink, .smile-frame, .smile-panel--bracket, .spark, .orbit, mood animations, .smile-ticker__track, .smile-led, etc.) — those lived in the React SmileMark which is now deleted.
+  • Added the `control.html` palette as `:root` + `.dark` variables: `--bg:#0a0f0d`, `--panel-solid:#101714`, `--line:#1e2b25`, `--line-hi:#2c3f36`, `--amb:#ffb454`, `--red:#ff5c5c`, `--cyan:#5ad1e6`, `--live:#3ddc84`, `--live-dk:#12351f`. Kept the smile.css palette (`--yellow`, `--up`, `--down`, `--sky`, etc.).
+  • shadcn `@theme inline` block kept intact (UI components depend on it), `--primary: var(--live)`, `--ring: var(--live)`.
+  • Added new control-panel CSS classes that match `control.html` 1:1: `.smile-console-bg` (green radial glow + scanlines + vignette), `.smile-brand` (Chakra Petch 30px with green `<em>//</em>`), `.smile-pill` (+`.on`/`.warn`), `.smile-clock`, `.smile-panel` (with green corner bracket `::before`), `.smile-btn` (+`.active`/`.danger`/`.amb`), `.smile-scene`, `.smile-viewport` + `.smile-iframe-wrap` + `.smile-iframe`, `.smile-urlbar`, `.smile-toast`, `.smile-scroll`. Respects `prefers-reduced-motion`.
+- REBUILT `src/app/page.tsx` as the SMILE // CONTROL console:
+  • 11-scene catalog (starting-soon, countdown, live, brb, ending, alerts, ticker, chart, bg, cam, control) with exact w×h per scene.
+  • Header: `.smile-brand` (SMILE//CONTROL + "live kit command centre · v1") + OBS pill (STANDBY/BROADCASTING) + CANVAS pill (1920×1080) + live clock.
+  • Main grid (Tailwind grid-cols-12): Left col-span-4 = `.smile-panel` "Scenes · 11" with scrollable scene cards (SmileMarkMini SVG + title + status pill + tagline + w×h + path). Right col-span-8 = preview `.smile-panel` (16:9 viewport + scaled iframe + scale %) + URL `.smile-panel` (monospace URL + COPY + OPEN FULLSCREEN). Below: Quick Actions `.smile-panel` (5 quick-links) + Diagnostics `.smile-panel` (table).
+  • Footer (sticky via `mt-auto`): GO LIVE/ON AIR toggle + STOP + REFRESH SCENE + date + clock + SmileMarkMini.
+  • iframe auto-fit: ResizeObserver on the viewport computes `scale = min(cw/sceneW, ch/sceneH)`, sets iframe `width`/`height` to native pixels + `transform: scale(s)` with `transform-origin: top left`. Centers via flexbox. Handles 1920×1080 (16:9 fill), 1920×76 (fits width), 460×300, 1240×900, 1280×720.
+  • `SmileMarkMini` — tiny inline SVG (22×22) matching `smile-mark.svg` exactly (yellow disc + 2 eyes + smile path). Used in scene cards + footer. NOT the React SmileMark — just static SVG, since the real `smile-mark.js` auto-upgrades elements inside the iframed scenes.
+- Lint fixes during dev:
+  • `src/app/page.tsx:282` — JSX `<em>//</em>` parsed as comment opener (same issue as REVERT-1). Wrapped in braces: `<em>{"//"}</em>`.
+- Verification:
+  • `bun run lint` → 0 errors, 0 warnings.
+  • All 17 routes return 200: `/`, `/scenes/{11 HTML files}`, `/scenes/{smile.css, smile-mark.js, smile-mark.svg, brand.json, live-feed.js}`.
+  • `diff` confirms `/scenes/03-live.html`, `/scenes/01-starting-soon.html`, `/scenes/control.html`, `/scenes/smile.css`, `/scenes/smile-mark.js` are byte-for-byte IDENTICAL to originals in `/tmp/v1-extract/core/`.
+  • SSR output of `/` contains: `SMILE // CONTROL`, `live kit command centre · v1`, `STANDBY`, `CANVAS`, `1920×1080`, `GO LIVE`, `REFRESH SCENE`, `OPEN FULLSCREEN`, `COPY`, `OBS Browser Source URL`, `Quick Actions`, `Diagnostics`, all 11 scene titles, and `/scenes/*.html` paths.
+  • DOM has the right classes: `.smile-console-bg`, `.smile-brand`, `.smile-pill.on`, `.smile-panel`, `.smile-scene.active`, `.smile-viewport`, `.smile-iframe`, `.smile-urlbar`, `.smile-btn.active`.
+  • Dev log: clean after the lint fix (initial transient error from intermediate page.tsx state with `@/components/smile` import resolved itself once the rewrite was complete).
+
+Stage Summary:
+- The original smile.co.ke v1 broadcast suite is now served VERBATIM from `/public/scenes/` — 11 HTML scenes + smile.css + smile-mark.js + smile-mark.svg + live-feed.js + brand.json. The user can verify pixel-fidelity by visiting `/scenes/03-live.html`, `/scenes/01-starting-soon.html`, `/scenes/control.html` etc. — every byte matches the v1 originals.
+- The React control panel at `/` is the ONLY custom code — it matches `control.html`'s aesthetic 1:1 (dark `#0a0f0d` canvas, Chakra Petch + IBM Plex Mono, SMILE//CONTROL brand lockup with green `//`, hairline panels with green corner brackets, status pills, scaled preview iframe, sticky footer with GO LIVE/STOP/REFRESH). It links to all 11 scenes via the preview iframe + COPY URL + OPEN FULLSCREEN.
+- The previous React SmileMark/SmileBrand/SmileScene system is GONE. The real smiley face is the v1 SVG (`smile-mark.svg`) upgraded by `smile-mark.js` — both served verbatim. No React reinterpretation.
+- The v1 Python WebSocket backends (`/api/control`, `/api/autotalk/state`, `/api/market/ws`) are NOT ported — those scenes render their static visual design but don't receive live state. That's a future mini-services milestone (ports 3001-3003 with Caddyfile gateway routing). The Binance REST polling in `live-feed.js` (mini-chart.html) works out-of-the-box.
+- Next agent: the user will verify pixel-fidelity against the originals before any refinement. DO NOT modify the files in `/public/scenes/` — they are the source of truth. Any "improvement" must happen in the React control panel at `/` only, or in NEW files. If the user asks for a new scene, copy an existing v1 HTML file and modify the COPY, not the original. See `/agent-ctx/PORT-1-zai-code.md` for the full handoff.

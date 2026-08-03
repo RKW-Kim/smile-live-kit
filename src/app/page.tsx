@@ -1,33 +1,23 @@
 "use client";
 
 /**
- * Smile Live Kit — Broadcast Console (control panel at `/`)
- * ─────────────────────────────────────────────────────────────
+ * Smile Live Kit — SMILE // CONTROL console (control panel at `/`)
+ * ─────────────────────────────────────────────────────────────────
  * The ONLY screen a human touches during a stream.
- * Grandma-operable: pick a scene → see live preview → go live.
+ * Grandma-operable: pick a scene → see live preview → send URL to OBS.
  *
- *  ┌─ Header ─────────────────────────────────────────────┐
- *  │ [😊 smile]   SMILE // CONTROL · ON AIR · clock        │
- *  ├──────────────┬───────────────────────────────────────┤
- *  │ Scene list   │  Live preview (1920×1080 → scaled)    │
- *  │ (left)       │  + OBS URL bar + Copy + Fullscreen    │
- *  │              │                                       │
- *  ├──────────────┴───────────────────────────────────────┤
- *  │ Footer: [Go Live] [Stop] [Refresh] · clock · mark    │
- *  └───────────────────────────────────────────────────────┘
+ * The aesthetic is a 1:1 match of the original v1 `control.html`:
+ *   • Dark `#0a0f0d` canvas with green radial glow + scanlines + vignette
+ *   • "SMILE//CONTROL" brand lockup in Chakra Petch (green `//`)
+ *   • Hairline `--line` borders, `--panel-solid` cards, green corner brackets
+ *   • Status pills, scene cards, scaled preview iframe, sticky footer
  *
- * Aesthetic: warm, friendly, dark green-tinted bg with subtle
- * radial glows + corner-bracket panels. Manrope for display,
- * Inter for body/numbers. Yellow accents, green live, red stop.
+ * The actual broadcast scenes are served VERBATIM from /public/scenes/
+ * — the original v1 HTML/CSS/SVG/JS, untouched. This control panel only
+ * links to them and embeds them in a scaled preview iframe.
  */
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { SmileLockup, SmileMark } from "@/components/smile";
-import type { SmileBrandId } from "@/lib/smile/channels";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useClock } from "@/hooks/use-clock";
 import { cn } from "@/lib/utils";
 import {
@@ -38,703 +28,600 @@ import {
   Copy,
   Check,
   Radio,
-  Sparkles,
 } from "lucide-react";
 
-/* ─── Scene catalog ─────────────────────────────────────────── */
+/* ─── Scene catalog ─────────────────────────────────────────────── */
 type SceneStatus = "live" | "ready" | "soon";
 
-interface SceneEntry {
+type Scene = {
   id: string;
   title: string;
-  brand: SmileBrandId;
-  /** Route to the actual scene page, if built. */
-  route?: string;
+  file: string;
   status: SceneStatus;
-  /** Short tagline shown under the title in the card. */
   tagline: string;
-}
+  w: number;
+  h: number;
+};
 
-const SCENES: SceneEntry[] = [
+const SCENES: Scene[] = [
   {
     id: "starting-soon",
     title: "Starting Soon",
-    brand: "smile",
-    status: "soon",
-    tagline: "Looping intro · countdown",
+    file: "01-starting-soon.html",
+    status: "ready",
+    tagline: "Pre-market loading screen",
+    w: 1920,
+    h: 1080,
   },
   {
-    id: "trading-live",
-    title: "Trading Live",
-    brand: "w21trading",
-    route: "/scenes/trading-live",
+    id: "countdown",
+    title: "Countdown",
+    file: "02-countdown.html",
+    status: "ready",
+    tagline: "Opening bell countdown",
+    w: 1920,
+    h: 1080,
+  },
+  {
+    id: "live",
+    title: "Live",
+    file: "03-live.html",
     status: "live",
-    tagline: "Main broadcast desk · 1920×1080",
+    tagline: "Main broadcast overlay",
+    w: 1920,
+    h: 1080,
   },
   {
-    id: "break",
-    title: "Break / BRB",
-    brand: "smile",
-    status: "soon",
-    tagline: "Intermission card · music bed",
-  },
-  {
-    id: "news",
-    title: "News",
-    brand: "w21news",
-    status: "soon",
-    tagline: "Headline ticker · anchor frame",
-  },
-  {
-    id: "interview",
-    title: "Interview",
-    brand: "w21culture",
-    status: "soon",
-    tagline: "Two-shot · lower-third name",
-  },
-  {
-    id: "education",
-    title: "Education",
-    brand: "w21education",
-    status: "soon",
-    tagline: "Lesson deck · code window",
+    id: "brb",
+    title: "BRB",
+    file: "04-brb.html",
+    status: "ready",
+    tagline: "Be right back card",
+    w: 1920,
+    h: 1080,
   },
   {
     id: "ending",
     title: "Ending",
-    brand: "smile",
+    file: "05-ending.html",
+    status: "ready",
+    tagline: "Session closed outro",
+    w: 1920,
+    h: 1080,
+  },
+  {
+    id: "alerts",
+    title: "Alerts",
+    file: "08-alerts.html",
+    status: "ready",
+    tagline: "Alert popup overlay",
+    w: 1920,
+    h: 1080,
+  },
+  {
+    id: "ticker",
+    title: "Market Ticker",
+    file: "market-ticker.html",
+    status: "ready",
+    tagline: "Scrolling price ticker",
+    w: 1920,
+    h: 76,
+  },
+  {
+    id: "chart",
+    title: "Mini Chart",
+    file: "mini-chart.html",
+    status: "ready",
+    tagline: "Live candlestick widget",
+    w: 460,
+    h: 300,
+  },
+  {
+    id: "bg",
+    title: "Ambient BG",
+    file: "00-bg.html",
+    status: "ready",
+    tagline: "Background layer",
+    w: 1920,
+    h: 1080,
+  },
+  {
+    id: "cam",
+    title: "Camera Test",
+    file: "test-cam.html",
     status: "soon",
-    tagline: "Outro card · social handles",
+    tagline: "Simulated camera feed",
+    w: 1280,
+    h: 720,
+  },
+  {
+    id: "control",
+    title: "Control Panel",
+    file: "control.html",
+    status: "ready",
+    tagline: "The SMILE // CONTROL dashboard",
+    w: 1240,
+    h: 900,
   },
 ];
 
-/* ─── Time helpers ──────────────────────────────────────────── */
-function pad(n: number) {
-  return n.toString().padStart(2, "0");
+/* ─── Status pill metadata ──────────────────────────────────────── */
+const STATUS_META: Record<
+  SceneStatus,
+  { label: string; className: string }
+> = {
+  live: { label: "LIVE", className: "on" },
+  ready: { label: "READY", className: "" },
+  soon: { label: "SOON", className: "warn" },
+};
+
+/* ─── Clock helpers ─────────────────────────────────────────────── */
+function pad(n: number): string {
+  return String(n).padStart(2, "0");
 }
-function fmtClock(d: Date) {
+function fmtClock(d: Date | null): string {
+  if (!d) return "--:--:--";
   return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
-function fmtDate(d: Date) {
-  const days = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
-  const months = [
-    "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
-  ];
-  return `${days[d.getDay()]} ${pad(d.getDate())} ${months[d.getMonth()]} ${d.getFullYear()}`;
+function fmtDate(d: Date | null): string {
+  if (!d) return "—";
+  return d.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
-/* ─── Page ──────────────────────────────────────────────────── */
-export default function Home() {
-  const [selectedId, setSelectedId] = useState<string>("trading-live");
-  const now = useClock(1000);
-  const [live, setLive] = useState(false);
-  const [refreshKey, setRefreshKey] = useState(0);
-  const [copied, setCopied] = useState(false);
-  const previewWrapRef = useRef<HTMLDivElement>(null);
+/* ─── Page ──────────────────────────────────────────────────────── */
+export default function Page() {
+  const clock = useClock(1000);
+  const [activeId, setActiveId] = useState<string>("live");
+  const [isLive, setIsLive] = useState<boolean>(false);
+  const [copied, setCopied] = useState<boolean>(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const [iframeKey, setIframeKey] = useState<number>(0);
 
-  // Scale factor for the 1920×1080 iframe inside the preview wrapper.
-  // Measured at runtime via ResizeObserver for a perfect fit.
-  const [scale, setScale] = useState(0.25);
+  const activeScene = useMemo<Scene>(
+    () => SCENES.find((s) => s.id === activeId) ?? SCENES[2],
+    [activeId],
+  );
+
+  /* Preview iframe auto-fit: ResizeObserver computes scale so the
+     scene's native w×h fits inside the viewport container. */
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [scale, setScale] = useState<number>(0.5);
+
   useEffect(() => {
-    const el = previewWrapRef.current;
-    if (!el) return;
-    const measure = () =>
-      Math.min(el.clientWidth / 1920, el.clientHeight / 1080);
+    const vp = viewportRef.current;
+    const iframe = iframeRef.current;
+    if (!vp || !iframe) return;
+
     const apply = () => {
-      const s = measure();
-      setScale(s > 0 ? s : 0.25);
+      const cw = vp.clientWidth;
+      const ch = vp.clientHeight;
+      if (cw === 0 || ch === 0) return;
+      const s = Math.min(cw / activeScene.w, ch / activeScene.h);
+      const next = s > 0 ? s : 0.1;
+      setScale(next);
+      iframe.style.width = `${activeScene.w}px`;
+      iframe.style.height = `${activeScene.h}px`;
+      iframe.style.transform = `scale(${next})`;
     };
+
+    apply();
     const ro = new ResizeObserver(apply);
-    ro.observe(el);
-    const raf = requestAnimationFrame(apply);
-    return () => {
-      ro.disconnect();
-      cancelAnimationFrame(raf);
-    };
+    ro.observe(vp);
+    return () => ro.disconnect();
+  }, [activeScene]);
+
+  /* Toast auto-dismiss */
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 1900);
+    return () => clearTimeout(t);
+  }, [toast]);
+
+  /* Derived URL — relative path the user pastes into OBS */
+  const scenePath = useMemo(
+    () => `/scenes/${activeScene.file}`,
+    [activeScene.file],
+  );
+  const sceneUrl = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? scenePath
+        : `${window.location.origin}${scenePath}`,
+    [scenePath],
+  );
+
+  /* Actions */
+  const handleSceneSelect = useCallback((id: string) => {
+    setActiveId(id);
+    setIframeKey((k) => k + 1);
   }, []);
 
-  const selected = useMemo(
-    () => SCENES.find((s) => s.id === selectedId) ?? SCENES[0],
-    [selectedId],
-  );
-
-  const obsUrl = selected.route
-    ? `${typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"}${selected.route}`
-    : null;
-
-  const clock = now ? fmtClock(now) : "--:--:--";
-  const dateStr = now ? fmtDate(now) : "—";
-
-  function copyObsUrl() {
-    if (!obsUrl) return;
-    navigator.clipboard?.writeText(obsUrl).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
+  const handleGoLive = useCallback(() => {
+    setIsLive((prev) => {
+      const next = !prev;
+      setToast(next ? "ON AIR · LIVE" : "STANDBY");
+      return next;
     });
-  }
+  }, []);
+
+  const handleStop = useCallback(() => {
+    setIsLive(false);
+    setToast("STOPPED");
+  }, []);
+
+  const handleRefresh = useCallback(() => {
+    setIframeKey((k) => k + 1);
+    setToast("SCENE REFRESHED");
+  }, []);
+
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(sceneUrl);
+      setCopied(true);
+      setToast("URL COPIED");
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setToast("COPY FAILED — SELECT MANUALLY");
+    }
+  }, [sceneUrl]);
+
+  const activeStatus = STATUS_META[activeScene.status];
 
   return (
-    <div
-      className="min-h-screen flex flex-col text-[var(--paper)] relative"
-      style={{
-        background:
-          "radial-gradient(circle at 18% 12%, rgba(14,203,129,0.08) 0%, transparent 40%), radial-gradient(circle at 88% 92%, rgba(255,193,7,0.06) 0%, transparent 42%), var(--ink)",
-      }}
-    >
-      {/* Subtle scanline texture overlay */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(to bottom, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px)",
-        }}
-      />
-
-      {/* ════════════ HEADER ════════════ */}
-      <header
-        className="relative z-10 flex items-center justify-between gap-4 px-5 py-3.5 border-b border-[var(--line)]"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(20,20,20,0.95) 0%, rgba(10,10,10,0.95) 100%)",
-        }}
-      >
-        <div className="flex items-center gap-5">
-          <SmileLockup brand="smile" size={36} pulse />
-          <Separator orientation="vertical" className="h-9 bg-[var(--line)]!" />
-          <div className="flex flex-col leading-tight">
-            <h1
-              className="font-display font-extrabold tracking-tight"
-              style={{ fontSize: 16 }}
-            >
-              <span style={{ color: "var(--paper)" }}>SMILE</span>
-              <span style={{ color: "var(--live)" }}>{" // "}</span>
-              <span style={{ color: "var(--paper)" }}>CONTROL</span>
-            </h1>
-            <span
-              className="uppercase tracking-widest text-[var(--muted)]"
-              style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-            >
-              live kit command centre · v1
-            </span>
+    <div className="smile-console-bg flex flex-col">
+      <div className="relative z-10 mx-auto w-full max-w-[1240px] flex-1 px-[22px] pb-[60px] pt-[22px]">
+        {/* ─── Header ─────────────────────────────────────────────── */}
+        <header className="mb-5 flex flex-wrap items-end gap-[18px] border-b border-[var(--line)] pb-4">
+          <div className="smile-brand">
+            SMILE<em>{"//"}</em>CONTROL
+            <small>live kit command centre · v1</small>
           </div>
-        </div>
-
-        <div className="flex items-center gap-2.5">
-          <Badge
-            variant="outline"
-            className="uppercase tracking-widest gap-1.5 border-[var(--line)]"
-            style={{
-              fontSize: 10,
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              padding: "4px 10px",
-              color: live ? "var(--live)" : "var(--yellow)",
-              borderColor: live
-                ? "color-mix(in srgb, var(--live) 45%, transparent)"
-                : "color-mix(in srgb, var(--yellow) 35%, transparent)",
-              background: live
-                ? "color-mix(in srgb, var(--live) 10%, transparent)"
-                : "color-mix(in srgb, var(--yellow) 10%, transparent)",
-            }}
+          <div className="flex-1" />
+          <span
+            className={cn(
+              "smile-pill",
+              isLive ? "on" : "warn",
+            )}
           >
-            <span
-              className={cn(
-                "inline-block rounded-full",
-                live ? "smile-led" : "",
-              )}
-              style={{
-                width: 6,
-                height: 6,
-                background: live ? "var(--live)" : "var(--yellow)",
-              }}
-            />
-            {live ? "ON AIR" : "STANDBY"}
-          </Badge>
-          <Badge
-            variant="outline"
-            className="uppercase tracking-widest border-[var(--line)] text-[var(--muted)]"
-            style={{
-              fontSize: 10,
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              padding: "4px 10px",
-            }}
-          >
-            {dateStr}
-          </Badge>
-        </div>
-      </header>
-
-      {/* ════════════ MAIN AREA ════════════ */}
-      <main className="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4 p-4 min-h-0">
-        {/* ── LEFT: Scene list ── */}
-        <section className="flex flex-col rounded-lg border border-[var(--line)] overflow-hidden smile-panel--bracket">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--line)]">
-            <div className="flex items-center gap-2">
-              <Sparkles className="size-3.5 text-[var(--yellow)]" />
-              <span
-                className="font-display font-bold uppercase tracking-widest text-[var(--paper)]"
-                style={{ fontSize: 12 }}
-              >
-                Scenes
-              </span>
-            </div>
-            <span
-              className="uppercase tracking-widest text-[var(--muted)]"
-              style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-            >
-              {SCENES.length} total
-            </span>
+            <span className="dot" />
+            OBS <b className="ml-1 font-semibold">
+              {isLive ? "BROADCASTING" : "STANDBY"}
+            </b>
+          </span>
+          <span className="smile-pill on">
+            <span className="dot" />
+            CANVAS <b className="ml-1 font-semibold">1920×1080</b>
+          </span>
+          <div className="smile-clock" aria-label="Live clock">
+            {fmtClock(clock)}
           </div>
-          <ScrollArea className="flex-1 smile-scroll">
-            <div className="flex flex-col gap-2 p-2.5">
-              {SCENES.map((scene) => (
-                <SceneButton
-                  key={scene.id}
-                  scene={scene}
-                  selected={scene.id === selectedId}
-                  onSelect={() => setSelectedId(scene.id)}
-                />
-              ))}
-            </div>
-          </ScrollArea>
-        </section>
+        </header>
 
-        {/* ── RIGHT: Preview + URL hint ── */}
-        <section className="flex flex-col gap-3 min-h-0">
-          {/* Preview frame */}
-          <div
-            className="flex-1 relative rounded-lg border border-[var(--line)] overflow-hidden min-h-0 smile-panel--bracket"
-            style={{ background: "#000" }}
+        {/* ─── Main grid: scenes (left) + preview (right) ─────────── */}
+        <div className="grid grid-cols-12 gap-4">
+          {/* Scenes list */}
+          <section
+            className="smile-panel col-span-12 md:col-span-5 lg:col-span-4"
+            aria-label="Scene list"
           >
-            {/* Header strip above the preview */}
-            <div
-              className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-4 py-2.5"
-              style={{
-                background:
-                  "linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%)",
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <SmileMark size={22} pulse />
-                <span
-                  className="font-display font-extrabold tracking-tight text-[var(--paper)]"
-                  style={{ fontSize: 13 }}
-                >
-                  {selected.title}
+            <h2>Scenes · {SCENES.length}</h2>
+            <div className="grid max-h-[68vh] grid-cols-1 gap-2 overflow-y-auto smile-scroll pr-1">
+              {SCENES.map((scene) => {
+                const meta = STATUS_META[scene.status];
+                const active = scene.id === activeId;
+                return (
+                  <button
+                    key={scene.id}
+                    type="button"
+                    className={cn("smile-scene", active && "active")}
+                    onClick={() => handleSceneSelect(scene.id)}
+                    aria-pressed={active}
+                  >
+                    <div className="nm">
+                      <SmileMarkMini />
+                      <span className="flex-1">{scene.title}</span>
+                      <span
+                        className={cn("smile-pill !px-2 !py-1 !text-[9px]", meta.className)}
+                      >
+                        <span className="dot" />
+                        {meta.label}
+                      </span>
+                    </div>
+                    <div className="tag">{scene.tagline}</div>
+                    <div className="mt-1 font-mono text-[9px] text-[var(--muted)]">
+                      {scene.w}×{scene.h} · /scenes/{scene.file}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Preview viewport */}
+          <section
+            className="col-span-12 flex flex-col gap-3 md:col-span-7 lg:col-span-8"
+            aria-label="Live preview"
+          >
+            <div className="smile-panel !p-3">
+              <div className="mb-2 flex items-center gap-3 px-1">
+                <h2 className="!mb-0 !flex-row">
+                  <span>Preview</span>
+                </h2>
+                <span className="smile-pill on">
+                  <span className="dot" />
+                  {activeScene.title.toUpperCase()}
                 </span>
-                <span
-                  className="uppercase tracking-widest text-[var(--muted)]"
-                  style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-                >
-                  · 1920 × 1080
+                <div className="flex-1" />
+                <span className="font-mono text-[10px] text-[var(--muted)]">
+                  {activeScene.w}×{activeScene.h} · {(scale * 100).toFixed(0)}%
                 </span>
               </div>
-              {selected.route ? (
-                <Badge
-                  variant="outline"
-                  className="uppercase tracking-widest gap-1.5"
-                  style={{
-                    fontSize: 10,
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    padding: "3px 9px",
-                    color: "var(--live)",
-                    borderColor:
-                      "color-mix(in srgb, var(--live) 40%, transparent)",
-                    background:
-                      "color-mix(in srgb, var(--live) 8%, transparent)",
-                  }}
-                >
-                  <span
-                    className="smile-led inline-block rounded-full"
-                    style={{
-                      width: 5,
-                      height: 5,
-                      background: "var(--live)",
-                    }}
-                  />
-                  LIVE PREVIEW
-                </Badge>
-              ) : (
-                <Badge
-                  variant="outline"
-                  className="uppercase tracking-widest border-[var(--line)] text-[var(--muted)]"
-                  style={{
-                    fontSize: 10,
-                    fontFamily: "var(--font-display)",
-                    fontWeight: 700,
-                    padding: "3px 9px",
-                  }}
-                >
-                  COMING SOON
-                </Badge>
-              )}
-            </div>
 
-            {/* The preview viewport — aspect locked to 16:9 */}
-            <div
-              ref={previewWrapRef}
-              className="absolute inset-0 flex items-center justify-center"
-              style={{ top: 44, bottom: 28 }}
-            >
-              {selected.route ? (
-                <div
-                  className="relative"
-                  style={{
-                    width: 1920 * scale,
-                    height: 1080 * scale,
-                  }}
-                >
+              {/* 16:9 viewport (most scenes). The iframe is scaled to fit. */}
+              <div
+                ref={viewportRef}
+                className="smile-viewport aspect-[16/9] w-full"
+              >
+                <div className="smile-iframe-wrap">
                   <iframe
-                    key={`${selected.route}-${refreshKey}`}
-                    src={selected.route}
-                    title={`${selected.title} preview`}
-                    className="absolute top-0 left-0 origin-top-left border-0"
-                    style={{
-                      width: 1920,
-                      height: 1080,
-                      transform: `scale(${scale})`,
-                      background: "var(--ink)",
-                    }}
-                    allow="autoplay; clipboard-write"
+                    ref={iframeRef}
+                    key={iframeKey}
+                    src={scenePath}
+                    title={`Preview: ${activeScene.title}`}
+                    className="smile-iframe"
+                    loading="eager"
+                    allow="autoplay; clipboard-write; microphone; camera"
                   />
                 </div>
-              ) : (
-                <ComingSoon scene={selected} />
-              )}
+              </div>
             </div>
 
-            {/* Bottom info bar */}
-            <div
-              className="absolute left-0 right-0 bottom-0 z-10 flex items-center justify-between px-4 py-1.5"
-              style={{
-                background:
-                  "linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 100%)",
-              }}
-            >
-              <span
-                className="uppercase tracking-widest text-[var(--muted)]"
-                style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-              >
-                Scale {(scale * 100).toFixed(0)}%
-              </span>
-              <span
-                className="tabular-nums text-[var(--paper)]"
-                style={{
-                  fontSize: 11,
-                  fontFamily: "var(--font-body)",
-                  opacity: 0.85,
-                }}
-              >
-                {clock}
-              </span>
+            {/* URL bar — OBS Browser Source URL */}
+            <div className="smile-panel !p-3">
+              <h2>OBS Browser Source URL</h2>
+              <div className="smile-urlbar">
+                <span className="text-[var(--live)]">▸</span>
+                <code>{sceneUrl}</code>
+                <button
+                  type="button"
+                  className="smile-btn"
+                  onClick={handleCopy}
+                  aria-label="Copy URL to clipboard"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="h-3 w-3" /> COPIED
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3 w-3" /> COPY
+                    </>
+                  )}
+                </button>
+                <a
+                  href={scenePath}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="smile-btn"
+                  aria-label="Open scene in new tab"
+                >
+                  <ExternalLink className="h-3 w-3" /> OPEN FULLSCREEN
+                </a>
+              </div>
+              <p className="mt-2 px-1 font-mono text-[10px] leading-relaxed text-[var(--muted)]">
+                Paste this URL into an OBS Browser Source at{" "}
+                {activeScene.w}×{activeScene.h} to broadcast this scene.
+              </p>
             </div>
-          </div>
+          </section>
 
-          {/* URL + actions row */}
-          <div
-            className="flex items-center gap-2.5 rounded-lg border border-[var(--line)] px-3.5 py-2.5"
-            style={{ background: "var(--panel)" }}
+          {/* ─── Quick actions panel ──────────────────────────────── */}
+          <section
+            className="smile-panel col-span-12 md:col-span-5 lg:col-span-4"
+            aria-label="Quick actions"
           >
-            <span
-              className="uppercase tracking-widest text-[var(--muted)] shrink-0"
-              style={{ fontSize: 10, fontFamily: "var(--font-display)", fontWeight: 700 }}
-            >
-              OBS URL
-            </span>
-            <Separator orientation="vertical" className="h-5 bg-[var(--line)]!" />
-            <code
-              className="flex-1 truncate tabular-nums"
-              style={{
-                fontSize: 11,
-                fontFamily: "var(--font-body)",
-                color: "var(--paper)",
-                opacity: 0.92,
-              }}
-            >
-              {obsUrl ?? "— no route — select a built scene —"}
-            </code>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={copyObsUrl}
-              disabled={!obsUrl}
-              className="uppercase tracking-widest h-7 gap-1.5 border-[var(--line)] text-[var(--paper)] hover:bg-[var(--panel-2)] hover:text-[var(--paper)] hover:border-[var(--yellow)]"
-              style={{
-                fontSize: 10,
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-              }}
-            >
-              {copied ? <Check className="size-3" /> : <Copy className="size-3" />}
-              {copied ? "Copied" : "Copy"}
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              asChild
-              disabled={!selected.route}
-              className="uppercase tracking-widest h-7 gap-1.5 border-[var(--line)] text-[var(--paper)] hover:bg-[var(--panel-2)] hover:text-[var(--paper)] hover:border-[var(--yellow)]"
-              style={{
-                fontSize: 10,
-                fontFamily: "var(--font-display)",
-                fontWeight: 700,
-              }}
-            >
+            <h2>Quick Actions</h2>
+            <div className="flex flex-wrap gap-2">
               <a
-                href={selected.route ?? "#"}
+                href="/scenes/01-starting-soon.html"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="smile-btn"
               >
-                <ExternalLink className="size-3" />
-                Open Fullscreen
+                STARTING SOON
               </a>
-            </Button>
-          </div>
-        </section>
-      </main>
+              <a
+                href="/scenes/03-live.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="smile-btn"
+              >
+                LIVE
+              </a>
+              <a
+                href="/scenes/04-brb.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="smile-btn"
+              >
+                BRB
+              </a>
+              <a
+                href="/scenes/05-ending.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="smile-btn"
+              >
+                ENDING
+              </a>
+              <a
+                href="/scenes/control.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="smile-btn amb"
+              >
+                CONTROL.HTML
+              </a>
+            </div>
+          </section>
 
-      {/* ════════════ FOOTER (sticky bottom) ════════════ */}
-      <footer
-        className="relative z-10 mt-auto flex flex-wrap items-center justify-between gap-4 px-5 py-3 border-t border-[var(--line)]"
-        style={{ background: "var(--panel)" }}
-      >
-        {/* Quick actions */}
-        <div className="flex items-center gap-2">
-          <Button
-            size="sm"
-            onClick={() => setLive((v) => !v)}
-            className={cn(
-              "uppercase tracking-widest h-9 gap-2 border font-display font-bold",
-            )}
-            style={{
-              fontSize: 11,
-              background: live ? "var(--down)" : "var(--up)",
-              color: live ? "#fff" : "var(--ink)",
-              borderColor: live ? "var(--down)" : "var(--up)",
-            }}
+          {/* ─── Diagnostics panel ────────────────────────────────── */}
+          <section
+            className="smile-panel col-span-12 md:col-span-7 lg:col-span-8"
+            aria-label="Diagnostics"
           >
-            {live ? <Square className="size-3.5" /> : <Play className="size-3.5" />}
-            {live ? "Stop" : "Go Live"}
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            disabled={!live}
-            onClick={() => setLive(false)}
-            className="uppercase tracking-widest h-9 gap-2 border-[var(--line)] text-[var(--paper)] hover:bg-[var(--panel-2)] hover:text-[var(--paper)] font-display font-bold"
-            style={{ fontSize: 11 }}
-          >
-            <Square className="size-3.5" />
-            Stop
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setRefreshKey((k) => k + 1)}
-            className="uppercase tracking-widest h-9 gap-2 border-[var(--line)] text-[var(--paper)] hover:bg-[var(--panel-2)] hover:text-[var(--paper)] font-display font-bold"
-            style={{ fontSize: 11 }}
-          >
-            <RefreshCw className="size-3.5" />
-            Refresh Scene
-          </Button>
+            <h2>Diagnostics</h2>
+            <table className="w-full border-collapse font-mono text-xs">
+              <thead>
+                <tr>
+                  {["source", "w", "h", "scale", "status"].map((th) => (
+                    <th
+                      key={th}
+                      className="border-b border-[var(--line)] px-2 py-1.5 text-left font-display text-[10px] uppercase tracking-[0.2em] text-[var(--muted)]"
+                    >
+                      {th}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="hover:bg-[#0e1613]">
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[#e8f1ec]">
+                    {activeScene.title}
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    {activeScene.w}
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    {activeScene.h}
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    {(scale * 100).toFixed(0)}%
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5">
+                    <span className="text-[var(--live)]">
+                      {isLive ? "BROADCASTING" : "PREVIEW"}
+                    </span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-[#0e1613]">
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[#e8f1ec]">
+                    SmileMark Engine
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    100
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    100
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    100%
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5">
+                    <span className="text-[var(--live)]">LOADED</span>
+                  </td>
+                </tr>
+                <tr className="hover:bg-[#0e1613]">
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[#e8f1ec]">
+                    Live Feed (Binance)
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    —
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    —
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5 text-[var(--cyan)]">
+                    —
+                  </td>
+                  <td className="border-b border-[#141d18] px-2 py-1.5">
+                    <span className="text-[var(--amb)]">STANDBY</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
         </div>
+      </div>
 
-        {/* Clock + mark */}
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Radio className="size-3.5 text-[var(--live)]" />
-            <span
-              className="uppercase tracking-widest text-[var(--muted)]"
-              style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-            >
-              ON AIR
-            </span>
-            <span
-              className={cn(
-                "inline-block rounded-full",
-                live ? "smile-led" : "",
-              )}
-              style={{
-                width: 6,
-                height: 6,
-                background: live ? "var(--live)" : "var(--muted)",
-              }}
-            />
-          </div>
-          <Separator orientation="vertical" className="h-6 bg-[var(--line)]!" />
-          <div className="flex items-center gap-2">
-            <span
-              className="font-display font-extrabold tabular-nums"
-              style={{
-                fontSize: 16,
-                color: "var(--yellow)",
-                fontFeatureSettings: '"tnum" 1, "zero" 1',
-              }}
-            >
-              {clock}
-            </span>
-            <span
-              className="uppercase tracking-widest text-[var(--muted)]"
-              style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-            >
-              EAT
-            </span>
-          </div>
-          <Separator orientation="vertical" className="h-6 bg-[var(--line)]!" />
-          <SmileMark size={24} pulse />
+      {/* ─── Footer (sticky) ─────────────────────────────────────── */}
+      <footer className="relative z-10 mt-auto border-t border-[var(--line)] bg-[var(--panel-solid)]">
+        <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center gap-3 px-[22px] py-3">
+          <button
+            type="button"
+            className={cn("smile-btn", isLive && "active")}
+            onClick={handleGoLive}
+            aria-pressed={isLive}
+          >
+            {isLive ? (
+              <>
+                <Radio className="h-3.5 w-3.5" /> ON AIR
+              </>
+            ) : (
+              <>
+                <Play className="h-3.5 w-3.5" /> GO LIVE
+              </>
+            )}
+          </button>
+          <button
+            type="button"
+            className={cn("smile-btn danger", isLive && "active")}
+            onClick={handleStop}
+            disabled={!isLive}
+          >
+            <Square className="h-3.5 w-3.5" /> STOP
+          </button>
+          <button
+            type="button"
+            className="smile-btn"
+            onClick={handleRefresh}
+          >
+            <RefreshCw className="h-3.5 w-3.5" /> REFRESH SCENE
+          </button>
+
+          <div className="flex-1" />
+
+          <span className="font-mono text-[11px] text-[var(--muted)]">
+            {fmtDate(clock)}
+          </span>
+          <div className="smile-clock !text-[18px]">{fmtClock(clock)}</div>
+          <SmileMarkMini />
         </div>
       </footer>
+
+      {/* ─── Toast ───────────────────────────────────────────────── */}
+      {toast && <div className="smile-toast">{toast}</div>}
     </div>
   );
 }
 
-/* ════════════════════════════════════════════════════════════
-   Sub-components
-   ════════════════════════════════════════════════════════════ */
-
-function SceneButton({
-  scene,
-  selected,
-  onSelect,
-}: {
-  scene: SceneEntry;
-  selected: boolean;
-  onSelect: () => void;
-}) {
+/* ─── SmileMark mini (static inline SVG, matches smile-mark.svg) ─── */
+function SmileMarkMini() {
   return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={selected}
-      className={cn(
-        "group relative flex items-center gap-3 rounded-lg border px-3 py-2.5 text-left transition-all",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--yellow)_40%,transparent)]",
-        selected
-          ? "border-[color-mix(in_srgb,var(--live)_55%,transparent)] bg-[var(--panel-2)]"
-          : "border-[var(--line)] bg-[color-mix(in_srgb,var(--ink)_40%,transparent)] hover:border-[color-mix(in_srgb,var(--yellow)_40%,transparent)] hover:bg-[var(--panel)]",
-      )}
-      style={
-        selected
-          ? {
-              boxShadow:
-                "0 0 0 1px color-mix(in srgb, var(--live) 25%, transparent), 0 0 18px color-mix(in srgb, var(--live) 20%, transparent)",
-            }
-          : undefined
-      }
+    <svg
+      viewBox="0 0 100 100"
+      width="22"
+      height="22"
+      aria-hidden="true"
+      className="inline-block shrink-0"
     >
-      <SmileMark
-        size={28}
-        mood={selected ? "bounce" : "idle"}
-        pulse={selected}
+      <circle cx="50" cy="50" r="48" fill="#FFC800" />
+      <circle cx="31" cy="35" r="5.5" fill="#000000" />
+      <circle cx="69" cy="35" r="5.5" fill="#000000" />
+      <path
+        d="M 20 48 A 30 30 0 0 0 80 48"
+        fill="none"
+        stroke="#000000"
+        strokeWidth="7.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <span
-            className="font-display font-bold tracking-tight text-[var(--paper)] truncate"
-            style={{ fontSize: 13 }}
-          >
-            {scene.title}
-          </span>
-          <StatusPill status={scene.status} />
-        </div>
-        <span
-          className="text-[var(--muted)] truncate block mt-0.5"
-          style={{ fontSize: 10, fontFamily: "var(--font-body)" }}
-        >
-          {scene.tagline}
-        </span>
-      </div>
-    </button>
-  );
-}
-
-function StatusPill({ status }: { status: SceneStatus }) {
-  const map = {
-    live: { label: "LIVE", color: "var(--live)" },
-    ready: { label: "READY", color: "var(--sky)" },
-    soon: { label: "SOON", color: "var(--muted)" },
-  } as const;
-  const { label, color } = map[status];
-  return (
-    <span
-      className="uppercase tracking-widest shrink-0"
-      style={{
-        fontSize: 9,
-        color,
-        border: `1px solid color-mix(in srgb, ${color} 40%, transparent)`,
-        background: `color-mix(in srgb, ${color} 12%, transparent)`,
-        padding: "1px 7px",
-        borderRadius: 999,
-        letterSpacing: "0.1em",
-        fontFamily: "var(--font-display)",
-        fontWeight: 700,
-      }}
-    >
-      {label}
-    </span>
-  );
-}
-
-function ComingSoon({ scene }: { scene: SceneEntry }) {
-  return (
-    <div className="flex flex-col items-center justify-center gap-4 text-center px-8">
-      <div className="relative">
-        <SmileMark size={72} pulse mood="look" />
-        <div
-          className="orbit"
-          aria-hidden
-          style={{
-            width: 120,
-            height: 120,
-            top: -24,
-            left: -24,
-          }}
-        />
-      </div>
-      <div className="flex flex-col items-center gap-1.5">
-        <span
-          className="font-display font-extrabold uppercase tracking-tight text-[var(--paper)]"
-          style={{ fontSize: 16 }}
-        >
-          {scene.title}
-        </span>
-        <span
-          className="uppercase tracking-widest text-[var(--muted)]"
-          style={{ fontSize: 11, fontFamily: "var(--font-body)" }}
-        >
-          Scene route not yet built
-        </span>
-      </div>
-      <p
-        className="text-[var(--muted)] max-w-md leading-relaxed"
-        style={{ fontSize: 12, fontFamily: "var(--font-body)" }}
-      >
-        This scene is on the build roadmap. The composition spec, brand
-        accent, and lockup are already wired — only the 1920×1080 route
-        is pending. Use the Smile design tokens &{" "}
-        <code style={{ color: "var(--yellow)" }}>
-          @/components/smile/*
-        </code>{" "}
-        kit to scaffold it.
-      </p>
-      <div
-        className="mt-2 flex items-center gap-2 uppercase tracking-widest"
-        style={{
-          fontSize: 10,
-          fontFamily: "var(--font-display)",
-          fontWeight: 700,
-          color: "var(--yellow)",
-        }}
-      >
-        <span className="smile-blink" aria-hidden>
-          ●
-        </span>
-        <span>Coming soon</span>
-      </div>
-    </div>
+    </svg>
   );
 }
