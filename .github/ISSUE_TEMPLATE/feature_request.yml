@@ -1,0 +1,50 @@
+name: Feature Request
+description: Propose a new scene, overlay, console feature, or improvement (check OBS parity first)
+labels: ["feature", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What operator/viewer pain point does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Be concrete — which route, which panel, which behavior? Reference the W21 brand rules if a color or layout is involved.
+    validations:
+      required: true
+  - type: dropdown
+    id: parity
+    attributes:
+      label: OBS / community plugin parity?
+      description: Smile Live Kit is OBS-focused — every feature traces to OBS or a proven community plugin (AGENTS.md Rule 3).
+      options:
+        - OBS Studio has this feature (core)
+        - OBS community plugin has this (e.g., OBS WebSocket, StreamFX, Advanced Scene Switcher, Source Record, Move Transition)
+        - No direct parity — unique to Smile Live Kit (justify below)
+        - Not sure — needs research
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - New scene route (/scenes/*)
+        - New overlay route (/overlays/*)
+        - Control console (/)
+        - W21 brand system
+        - Ticker / market data
+        - Realtime / transport
+        - Docs
+        - Infra / CI / deploy
+    validations:
+      required: true
+  - type: textarea
+    id: research
+    attributes:
+      label: Research / references
+      description: Link to docs/verticals/w21-trading/, docs/research/, OBS docs, or community plugins that informed this proposal.

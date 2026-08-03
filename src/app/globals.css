@@ -7,7 +7,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-jetbrains-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -41,6 +41,28 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* ─────────── W21 System Tokens ─────────── */
+  --color-terminal: var(--terminal);
+  --color-grid-white: var(--grid-white);
+  --color-zinc-panel: var(--zinc-panel);
+  --color-alert: var(--alert);
+  --color-bull: var(--bull);
+  --color-bear: var(--bear);
+
+  /* Channel signature colors (exposed as Tailwind utilities) */
+  --color-ch-parent: var(--ch-parent);
+  --color-ch-trading: var(--ch-trading);
+  --color-ch-news: var(--ch-news);
+  --color-ch-politics: var(--ch-politics);
+  --color-ch-agriculture: var(--ch-agriculture);
+  --color-ch-innovation: var(--ch-innovation);
+  --color-ch-impact: var(--ch-impact);
+  --color-ch-health: var(--ch-health);
+  --color-ch-education: var(--ch-education);
+  --color-ch-culture: var(--ch-culture);
+  --color-ch-sports: var(--ch-sports);
+  --color-ch-tech: var(--ch-tech);
 }
 
 :root {
@@ -76,47 +98,244 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* W21 System — light mode mirrors (kept for theme parity) */
+  --terminal: #0A0A0A;
+  --grid-white: #F5F5F5;
+  --zinc-panel: #27272A;
+  --alert: #FF006E;
+  --bull: #22C55E;
+  --bear: #DC2626;
+  --ch-parent: #F5A623;
+  --ch-trading: #00F0FF;
+  --ch-news: #FF8C00;
+  --ch-politics: #DC2626;
+  --ch-agriculture: #22C55E;
+  --ch-innovation: #6366F1;
+  --ch-impact: #F0EDE5;
+  --ch-health: #14B8A6;
+  --ch-education: #3B82F6;
+  --ch-culture: #F97316;
+  --ch-sports: #84CC16;
+  --ch-tech: #8B5CF6;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* W21 default — Terminal Black is the canvas. */
+  --background: #0A0A0A;
+  --foreground: #F5F5F5;
+  --card: #161616;
+  --card-foreground: #F5F5F5;
+  --popover: #161616;
+  --popover-foreground: #F5F5F5;
+  --primary: #F5F5F5;
+  --primary-foreground: #0A0A0A;
+  --secondary: #27272A;
+  --secondary-foreground: #F5F5F5;
+  --muted: #1F1F22;
+  --muted-foreground: #8B8B8E;
+  --accent: #27272A;
+  --accent-foreground: #F5F5F5;
+  --destructive: #DC2626;
+  --border: #27272A;
+  --input: #1F1F22;
+  --ring: #F5A623;
+  --chart-1: #F5A623;
+  --chart-2: #00F0FF;
+  --chart-3: #22C55E;
+  --chart-4: #DC2626;
+  --chart-5: #8B5CF6;
+  --sidebar: #0F0F0F;
+  --sidebar-foreground: #F5F5F5;
+  --sidebar-primary: #F5A623;
+  --sidebar-primary-foreground: #0A0A0A;
+  --sidebar-accent: #27272A;
+  --sidebar-accent-foreground: #F5F5F5;
+  --sidebar-border: #27272A;
+  --sidebar-ring: #F5A623;
+
+  /* W21 channel + system palette */
+  --terminal: #0A0A0A;
+  --grid-white: #F5F5F5;
+  --zinc-panel: #27272A;
+  --alert: #FF006E;
+  --bull: #22C55E;
+  --bear: #DC2626;
+  --ch-parent: #F5A623;
+  --ch-trading: #00F0FF;
+  --ch-news: #FF8C00;
+  --ch-politics: #DC2626;
+  --ch-agriculture: #22C55E;
+  --ch-innovation: #6366F1;
+  --ch-impact: #F0EDE5;
+  --ch-health: #14B8A6;
+  --ch-education: #3B82F6;
+  --ch-culture: #F97316;
+  --ch-sports: #84CC16;
+  --ch-tech: #8B5CF6;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html,
   body {
-    @apply bg-background text-foreground;
+    background: var(--terminal);
+    color: var(--grid-white);
   }
+  body {
+    @apply antialiased;
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+  /* Numbers and code always monospaced */
+  .font-mono,
+  [data-mono],
+  .w21-num {
+    font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+    font-feature-settings: "tnum" 1, "zero" 1;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   W21 UTILITIES — the grid never sleeps (Rule 6)
+   ════════════════════════════════════════════════════════════════ */
+
+/* Faint 12-column structural grid. Use on a full-bleed wrapper. */
+.w21-grid {
+  background-image:
+    linear-gradient(to right, #151515 1px, transparent 1px);
+  background-size: calc(100% / 12) 100%;
+  background-position: 0 0;
+}
+.w21-grid-dense {
+  background-image:
+    linear-gradient(to right, rgba(245, 245, 245, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 245, 245, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px, 80px 80px;
+}
+
+/* Cross-hair + markers at major grid intersections (7% opacity) */
+.w21-crosshairs {
+  position: relative;
+}
+.w21-crosshairs::before,
+.w21-crosshairs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, rgba(245, 245, 245, 0.07) 1px, transparent 1.5px);
+  background-size: 160px 160px;
+  background-position: 0 0;
+}
+
+/* Scan lines — 2% opacity CRT veil */
+.w21-scanlines {
+  position: relative;
+}
+.w21-scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(245, 245, 245, 0.02) 0px,
+    rgba(245, 245, 245, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 50;
+}
+
+/* Noise grain — 2% opacity film texture */
+.w21-noise {
+  position: relative;
+}
+.w21-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 60;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   W21 ANIMATIONS
+   ════════════════════════════════════════════════════════════════ */
+
+/* LED status dot — soft radial pulse */
+@keyframes w21-led-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+  50% { opacity: 0.75; box-shadow: 0 0 6px 1px currentColor; }
+}
+.w21-led {
+  animation: w21-led-pulse 2.4s ease-in-out infinite;
+}
+
+/* Slow ambient blink for "LIVE" indicators */
+@keyframes w21-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+.w21-blink {
+  animation: w21-blink 1.6s steps(2, end) infinite;
+}
+
+/* Scrolling ticker — infinite left marquee */
+@keyframes w21-ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.w21-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: w21-ticker-scroll 38s linear infinite;
+}
+.w21-ticker-wrap:hover .w21-ticker-track {
+  animation-play-state: paused;
+}
+
+/* Subtle caret blink for terminal cursor */
+@keyframes w21-caret {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.w21-caret {
+  animation: w21-caret 1.05s step-end infinite;
+}
+
+/* Custom scrollbar — terminal feel */
+.w21-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.w21-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.w21-scroll::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 3px;
+}
+.w21-scroll::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
+.w21-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #27272A transparent;
+}
+
+/* 1920×1080 scene viewport — used by OBS Browser Sources */
+.w21-scene-root {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: relative;
+  background: #0A0A0A;
+  color: #F5F5F5;
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
 }

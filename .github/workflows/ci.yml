@@ -1,0 +1,103 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop, 'feat/**', 'fix/**', 'chore/**', 'docs/**']
+  pull_request:
+    branches: [main, develop]
+
+env:
+  DATABASE_URL: "file:./prisma/test.db"
+
+jobs:
+  # ── Lint ──────────────────────────────────────────────────────────
+  # Project standard: 0 ESLint errors. Blocking.
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+
+  # ── Type Check ────────────────────────────────────────────────────
+  # 0 TypeScript errors. Blocking. No "sacred error" carve-out —
+  # Smile Live Kit has no frozen subsystem (unlike WBS's AudioSuite).
+  typecheck:
+    name: Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Type check (0 errors required)
+        run: |
+          bunx tsc --noEmit 2>&1 | tee tsc-output.txt || true
+          ERROR_COUNT=$(grep -c "error TS" tsc-output.txt || echo "0")
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "TypeScript errors found: $ERROR_COUNT (allowed: 0)"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          if [ "$ERROR_COUNT" -gt 0 ]; then
+            echo ""
+            echo "❌ TypeScript errors detected:"
+            grep "error TS" tsc-output.txt
+            exit 1
+          fi
+          echo "✅ 0 errors — clean"
+
+  # ── Build ─────────────────────────────────────────────────────────
+  # Full production build. Blocking.
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Generate Prisma client
+        run: bunx prisma generate
+      - name: Push DB schema
+        run: bun run db:push
+      - name: Build
+        run: bun run build
+
+  # ── Dev Server Smoke Test ─────────────────────────────────────────
+  # Starts `next dev`, polls until GET / returns 200, then kills it.
+  # This is the check AI agents can't always run in their sandboxes.
+  dev-server:
+    name: Dev Server Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Generate Prisma client
+        run: bunx prisma generate
+      - name: Push DB schema
+        run: bun run db:push
+      - name: Start dev server and verify GET / 200
+        run: |
+          echo "Starting dev server..."
+          bunx next dev -p 3000 &
+          DEV_PID=$!
+
+          echo "Waiting for server (PID $DEV_PID)..."
+          READY=false
+          for i in $(seq 1 60); do
+            if curl -sf -o /dev/null http://localhost:3000 2>/dev/null; then
+              echo "✅ GET / returned 200 after ${i}s"
+              READY=true
+              break
+            fi
+            sleep 1
+          done
+
+          kill $DEV_PID 2>/dev/null || true
+          wait $DEV_PID 2>/dev/null || true
+
+          if [ "$READY" = false ]; then
+            echo "❌ Dev server did not respond within 60s"
+            exit 1
+          fi

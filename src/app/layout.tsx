@@ -1,37 +1,51 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Z.ai Code Scaffold - AI-Powered Development",
-  description: "Modern Next.js scaffold optimized for AI-powered development with Z.ai. Built with TypeScript, Tailwind CSS, and shadcn/ui.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  title: "Smile Live Kit — W21 Broadcast Console",
+  description:
+    "W21 Broadcast Suite — an OBS-focused live-streaming scene & overlay kit for the World 21 ecosystem (smile.co.ke).",
+  keywords: [
+    "W21",
+    "World 21",
+    "smile.co.ke",
+    "OBS",
+    "Broadcast",
+    "Live Stream",
+    "Trading",
+    "Scene Kit",
+  ],
+  authors: [{ name: "W21 Broadcast Suite" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.svg",
   },
   openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
+    title: "Smile Live Kit — W21 Broadcast Console",
+    description:
+      "OBS-focused live-streaming scene & overlay kit for the World 21 ecosystem.",
+    siteName: "Smile Live Kit",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
+    title: "Smile Live Kit — W21 Broadcast Console",
+    description:
+      "OBS-focused live-streaming scene & overlay kit for the World 21 ecosystem.",
   },
 };
 
@@ -41,9 +55,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${jetbrainsMono.variable} antialiased`}
       >
         {children}
         <Toaster />
